@@ -1,0 +1,114 @@
+<mat-dialog-content>
+
+  @if(loading) {
+    <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
+
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">{{ title }}</span>
+    <div matRipple class="close" (click)="onCancel()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form" class="row">
+
+    <div class="col-md-6 mb-3">
+      <span class="fw-bolder">Pedido *</span>
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="order_id" placeholder="Obra">
+          <mat-option *ngFor="let order of orders" [value]="order.id">
+            {{ order.description }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <span class="fw-bolder">Solicitante *</span>
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="user_id" placeholder="Solicitante">
+          <mat-option *ngFor="let user of users" [value]="user.id">
+            {{ user.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <span class="fw-bolder">Fornecedor *</span>
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="supplier_id" placeholder="Fornecedor">
+          <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+            {{ supplier.fantasy_name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <span class="fw-bolder">Obra *</span>
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="construction_id" placeholder="Obra">
+          <mat-option *ngFor="let construction of constructions" [value]="construction.id">
+            {{ construction.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <span class="fw-bolder">Tipo de Solicitação *</span>
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="solicitation_type" placeholder="Tipo de Solicitação" >
+          @for (status of requestTypeSelection; track status) {
+            <mat-option [value]="status">{{ status | status }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
+    <div class="col-md-6 mb-3">
+      <span class="fw-bolder">Valor *</span>
+      <mat-form-field appearance="outline">
+        <input type="text" formControlName="total_value" matInput currencyMask placeholder="R$ 0,00" />
+      </mat-form-field>
+    </div>
+
+    <ng-container *ngIf="isAdmin">
+      <div class="col-md-6 mb-3">
+        <span class="fw-bolder">Status *</span>
+        <mat-form-field appearance="outline">
+          <mat-select formControlName="status" placeholder="Status" >
+            @for (status of requestStatusSelection; track status) {
+              <mat-option [value]="status">{{ status | status }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </ng-container>
+    
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="w-100 me-2">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button yellow" (click)="!loading ? onConfirm() : null">{{
+            isNewRequest ? 'Criar' : 'Salvar'
+          }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>

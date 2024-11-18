@@ -1,0 +1,13 @@
+<div class="mb-4 d-flex justify-content-end">
+  <button matRipple class="button yellow" (click)="openDialogTask()">
+    <i class="fa-solid fa-circle-plus"></i> Nova tarefa
+  </button>
+</div>
+
+<app-kanban
+  [status]="status"
+  [data]="data"
+  (taskMoved)="taskMoved($event)"
+  (taskClicked)="openDialogTask($event)"
+  (taskDeleted)="deleteTask($event)"
+></app-kanban>

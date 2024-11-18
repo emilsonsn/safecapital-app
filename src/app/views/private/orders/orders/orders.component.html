@@ -1,0 +1,43 @@
+<div class="row mt-4">
+  @for (item of itemsRequests(); track item) {
+    <div class="col-lg-4 col-md-6">
+      <app-small-information-card [data]="item"></app-small-information-card>
+    </div>
+  }
+</div>
+
+<div id="componentHeaderTemplate">
+  <div id="componentHeader">
+
+    <div>
+      <!-- <app-search-input
+        (onSearchInputChanged)="handleSearchTerm($event)">
+      </app-search-input> -->
+    </div>
+
+    <div id="options">
+      @if (true) {
+        <div id="filter" matRipple (click)="openOrderFilterDialog()">
+          <i class="fa-solid fa-filter"></i>
+        </div>
+      }
+
+      <div id="buttons">
+        <button matRipple class="button yellow" (click)="openOrderDialog()">
+          <i class="fa-solid fa-plus"></i> Novo Pedido
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="componentTable" class="col-12 mt-4">
+  <app-table-orders
+    (onViewOrder)="openOrderDialog($event)"
+    (onEditOrder)="openOrderDialog($event)"
+    (onDeleteOrder)="onDeleteOrder($event)"
+    [loading]="loading"
+    [filters]="filters">
+  </app-table-orders>
+</div>

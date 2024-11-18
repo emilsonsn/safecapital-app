@@ -1,0 +1,14 @@
+<div class="mt-5 d-flex justify-content-end">
+  <button matRipple class="button yellow" (click)="openDialogService()">
+    <i class="fa-solid fa-circle-plus"></i> Novo serviço
+  </button>
+</div>
+
+
+<div id="componentTable" class="col-12 mt-4">
+  <app-table-service
+    [loading]="loading"
+    (onServiceClick)="openDialogService($event)"
+    (onDeleteServiceClick)="onDeleteService($event)">
+  </app-table-service>
+</div>

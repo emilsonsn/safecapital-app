@@ -1,0 +1,129 @@
+@import "variables";
+
+$header-height: 80px;
+$header-background: '';
+$header-button-box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(244, 140, 54, 0.4);
+
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // padding: 2rem;
+  height: $header-height;
+  width: 100%;
+  background-color: $header-background;
+
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    h3 {
+      margin: 0;
+      color: $gray-600;
+    }
+
+    #toggleSidebar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50px;
+
+      i {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .container-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 2;
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+
+      button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        border: none;
+        border-radius: 4px;
+        padding: 14px 20px;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        background-color: $primary;
+        color: $black-600;
+        box-shadow: $header-button-box-shadow;
+
+        &:hover {
+          background-color: $primary;
+          color: $black-600;
+          opacity: .9;
+        }
+
+      }
+
+      @media only screen and (max-width: 800px) {
+        .dropdown-btn {
+          min-width: auto !important;
+
+          span {
+            display: none;
+          }
+        }
+
+        .dropdown-content{
+          min-width: auto !important;
+        }
+      }
+
+      .dropdown-btn {
+        min-width: 180px;
+      }
+
+      .dropdown-content {
+        min-width: 180px;
+        position: absolute;
+        display: none;
+        background-color: $white-400;
+        z-index: 1;
+        margin-top: 20px;
+        border-radius: 4px;
+        padding: 0.5rem;
+        border-bottom: 2px solid $primary;
+        box-shadow: $header-button-box-shadow;
+
+        .dropdown-item {
+          cursor: pointer;
+          color: $black-300;
+          padding: 15px 16px;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          border-radius: 8px;
+
+          &:hover {
+            background-color: $primary;
+            color: $black-600;
+            box-shadow: 0 0 10px 0 rgba(223, 198, 255, 0.37);
+          }
+
+        }
+      }
+
+      .show-dropdown {
+        display: block;
+      }
+    }
+  }
+
+}

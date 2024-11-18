@@ -1,0 +1,24 @@
+<nav [ngClass]="{ 'mobile': _sidebarService.mobile(), 'show-sidebar': _sidebarService.showSidebar() }">
+  <div class="logo">
+    <img src="./assets/images/logo.png" alt="logo">
+
+    @if(_sidebarService.mobile()) {
+      <div matRipple (click)="toggleShowSidebar()">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+    }
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <ul class="components">
+    @for (item of menuItem; track item) {
+      <li routerLinkActive="active" [routerLink]="item.route">
+        <a [routerLink]="item.route">
+          <i [class]="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</nav>

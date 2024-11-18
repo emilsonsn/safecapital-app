@@ -1,0 +1,35 @@
+<div class="row mt-4">
+  @for (item of itemsShopping(); track item) {
+    <div class="col-lg-3 col-md-6">
+      <app-small-information-card [data]="item"></app-small-information-card>
+    </div>
+  }
+</div>
+
+<mat-divider class="mb-4"></mat-divider>
+
+<div class="row">
+  <div class="col-lg-6 col-md-12 mb-4">
+    <div class="card w-100 p-3" style="height: 400px">
+      <app-table-orders
+        [home]="true"
+        [filters]="filters">
+      </app-table-orders>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-12 mb-4">
+    <div class="card w-100 h-100 p-3" style="height: 400px!important">
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<mat-divider class="mb-4"></mat-divider>
+
+<div class="row mt-4">
+  @for (item of itemsRequests(); track item) {
+    <div class="col-lg-3 col-md-6">
+      <app-small-information-card [data]="item"></app-small-information-card>
+    </div>
+  }
+</div>

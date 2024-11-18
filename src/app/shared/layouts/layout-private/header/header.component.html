@@ -1,0 +1,35 @@
+<header>
+  <div class="title">
+    @if (!isSidebarOpen && isMobile) {
+      <div matRipple id="toggleSidebar" (click)="onToggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+    }
+    <h3>{{ activeLabel }}</h3>
+  </div>
+  <div class="container-buttons">
+    <div class="dropdown">
+      <button class="dropdown-btn" (click)="toggleDropdown($event)">
+        <i class="fa-solid fa-user"></i>
+        <!--<span>{{ user?.name }}</span>-->
+        <span>{{user?.name}}</span>
+        @if (show_dropdown) {
+          <i class="fa-solid fa-angle-up"></i>
+        } @else {
+          <i class="fa-solid fa-chevron-down"></i>
+        }
+      </button>
+
+      <div class="dropdown-content" [ngClass]="show_dropdown ? 'show-dropdown' : ''">
+        <!--<div class="dropdown-item" (click)="openUserModal()">
+          <i class="fa-solid fa-user"></i>
+          Perfil
+        </div>-->
+        <div class="dropdown-item" (click)="logout()">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          Sair
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

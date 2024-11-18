@@ -1,0 +1,15 @@
+<main>
+  <app-sidebar
+    [menuItem]="permitedMenuItem">
+  </app-sidebar>
+  <section id="template">
+    <app-header
+      [menuItem]="menuItem"
+      [user]="user"
+    ></app-header>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+  </section>
+</main>

@@ -1,0 +1,92 @@
+<div class="table-container">
+  <div class="overflow-auto">
+    <table class="table table-responsive">
+      <thead>
+        @for(col of columns; track col) {
+          <th [class.hasorder]="col.order"
+              [class.active-order]="pageControl.orderField === col.slug"
+              (click)="onClickOrderBy(col.slug, col.order)">
+            <div class="d-flex {{col.classes}}">
+              {{ col.title }}
+              <i class="material-icons" *ngIf="pageControl.orderField === col.slug">
+                {{ pageControl.order === 'DESC' ? 'arrow_downward' : 'arrow_upward' }}
+              </i>
+            </div>
+          </th>
+        }
+      </thead>
+      <tbody>
+        @if(loading) {
+          <tr>
+            <td [attr.colspan]="columns.length + 1">
+              <div id="mat-loading">
+                <mat-spinner></mat-spinner>
+              </div>
+            </td>
+          </tr>
+        }
+        @else {
+          @if(!requests?.length) {
+            <tr>
+              <td [attr.colspan]="columns.length + 1" class="text-center">
+                <div>Nenhum resultado encontrado</div>
+              </td>
+            </tr>
+          }
+          @else {
+            @for (order of requests; track order) {
+              <tr class="table-line-hover" style="outline: none;">
+                <td>
+                  <div>
+                    {{ order.solicitation_type | solicitationStatus}}
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    {{ order.total_value | currency }}
+                  </div>
+                </td>
+                <td>
+                  <div [ngClass]="order?.status?.toLowerCase()">
+                    {{ order.status | status }}
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex justify-content-end" *ngIf="isFinancial">
+                    <div matRipple class="buttonTemplate" (click)="onOrderModal.emit(order)">
+                      <i class="fa-solid fa-folder"></i>
+                    </div>
+
+                    <div matRipple class="buttonTemplate" (click)="onViewOrder.emit(order)">
+                      <i class="fa-solid fa-eye"></i>
+                    </div>
+
+                    <div matRipple class="buttonTemplate" (click)="onViewOrder.emit(order)">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </div>
+
+                    <div matRipple class="buttonTemplate" (click)="onDeleteOrder.emit(order)">
+                      <i class="fa-solid fa-trash"></i>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            }
+          }
+        }
+
+      </tbody>
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="pageControl.itemCount"
+    [pageSize]="pageControl.take"
+    [showFirstLastButtons]="true"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    [hidePageSize]="false"
+    [pageIndex]="pageControl.page"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>

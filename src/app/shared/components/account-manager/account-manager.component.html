@@ -1,0 +1,29 @@
+<main>
+  <section class="form-section">
+    <div class="form-main">
+      <img src="./assets/images/logo.png" alt="logo">
+      <div class="form-container">
+        <h2>{{ primary_text }}</h2>
+        <ng-content></ng-content>
+      </div>
+    </div>
+    <footer>
+      <p>Siga-nos nas redes sociais</p>
+      <a class="ball-to-icon">
+        <i class="fa-brands fa-facebook-f"></i>
+      </a>
+      <a class="ball-to-icon">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
+      <a class="ball-to-icon">
+        <i class="fa-brands fa-linkedin"></i>
+      </a>
+    </footer>
+  </section>
+  <section class="display-animation">
+    <ng-lottie
+      width="500px"
+      containerClass="moving-box"
+      [options]="options"/>
+  </section>
+</main>

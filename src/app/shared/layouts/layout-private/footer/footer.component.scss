@@ -1,0 +1,15 @@
+@import "variables";
+
+footer {
+  p {
+    text-align: center;
+    margin: 1rem 0 0;
+    font-size: 0.9rem;
+    color: #666;
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+  }
+}

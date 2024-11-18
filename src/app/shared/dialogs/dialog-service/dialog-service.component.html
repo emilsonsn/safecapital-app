@@ -1,0 +1,59 @@
+<mat-dialog-content>
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">{{title}}</span>
+    <div matRipple class="close" (click)="onCancel()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput type="text" formControlName="name">
+        </mat-form-field>
+      </div>
+      <div class="col-12 mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de fornecedor</mat-label>
+            <mat-select formControlName="service_type_id">
+              <mat-option *ngFor="let type of servicesTypeEnum" [value]="type.id">
+                {{ type.type }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div matRipple class="plusButton" (click)="openDialogTypeService()">
+            <i class="fa-solid fa-plus"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="container">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      @if(loading) {
+        <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+          <mat-spinner></mat-spinner>
+        </div>
+      }
+
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button yellow" (click)="onSubmit(form)">{{isNewService ? 'Criar' :
+            'Salvar'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>

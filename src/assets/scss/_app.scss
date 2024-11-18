@@ -1,0 +1,46 @@
+@import 'ngx-toastr/toastr';
+@import "variables";
+@import "globals";
+
+img {
+  -webkit-user-drag: none; /* Para navegadores baseados em WebKit (Chrome, Safari) */
+  -moz-user-drag: none; /* Para Firefox */
+  -ms-user-drag: none; /* Para Internet Explorer e Edge */
+  user-drag: none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Myriad Pro', sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 2px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handler */
+
+::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+  background: $gray-500;
+}
+
+/* Handler on Hover */
+
+::-webkit-scrollbar-track:hover {
+  /*background: #555;*/
+}

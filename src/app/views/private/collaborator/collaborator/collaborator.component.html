@@ -1,0 +1,21 @@
+<div class="row mt-4">
+  @for (item of itemsRequests; track item) {
+    <div class="col-md-4 col-12">
+      <app-small-information-card [data]="item"></app-small-information-card>
+    </div>
+  }
+</div>
+
+<div class="mt-5 d-flex justify-content-end">
+  <button matRipple class="button yellow" (click)="openDialogCollaborator()">
+    <i class="fa-solid fa-circle-plus"></i> Novo Colaborador
+  </button>
+</div>
+
+<div id="componentTable" class="col-12 mt-4">
+  <app-table-users
+    [loading]="loading"
+    (onUserClick)="openDialogCollaborator($event)"
+    (onDeleteUserClick)="onDeleteCollaborator($event)">
+  </app-table-users>
+</div>

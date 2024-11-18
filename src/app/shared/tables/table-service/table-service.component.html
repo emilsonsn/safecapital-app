@@ -1,0 +1,95 @@
+<div class="table-container">
+  <div class="overflow-auto">
+    <table class="table table-responsive">
+      <thead>
+        @for (col of columns; track col) {
+          <th
+            [class.hasorder]="col.order"
+            [ngStyle]="{ cursor: 'pointer' }"
+            [class.active-order]="pageControl.orderField === col.slug"
+          >
+            <!--(click)="onClickOrderBy(col.slug, col.order)" -->
+            <div
+              class="{{col.align}}"
+              style="color: #a2a1a8"
+            >
+              {{ col.title }}
+              <i class="material-icons" *ngIf="pageControl.orderField === col.slug">
+                {{
+                  pageControl.order === "DESC" ? "arrow_downward" : "arrow_upward"
+                }}
+              </i>
+            </div>
+          </th>
+        }
+      </thead>
+      <tbody>
+      <tr *ngIf="loading">
+        <td [attr.colspan]="columns.length + 1">
+          <div id="mat-loading">
+            <mat-spinner></mat-spinner>
+          </div>
+        </td>
+      </tr>
+        @if (!loading) {
+          <tr *ngIf="!services.length">
+            <td [attr.colspan]="columns.length + 1" class="text-center">
+              <div>Nenhum resultado encontrado</div>
+            </td>
+          </tr>
+          @for (service of services; track service.id) {
+            <tr
+              class="table-line-hover"
+              style="outline: none; cursor: pointer"
+            >
+              <td>
+                <div
+                  class="d-flex align-items-center gap-2"
+                  style="white-space: nowrap"
+                >
+                  {{ service?.id }}
+                </div>
+              </td>
+              <td>
+                <div class="text-center">
+                  {{ service?.name }}
+                </div>
+              </td>
+              <td>
+                <div class="text-center">
+                  {{ service?.type?.type }}
+                </div>
+              </td>
+
+              <td>
+                <div class="d-flex justify-content-end">
+                  <div matRipple class="buttonTemplate" (click)="onServiceClick.emit(service)">
+                    <i class="fa-solid fa-eye"></i>
+                  </div>
+
+                  <div matRipple class="buttonTemplate" (click)="onServiceClick.emit(service)">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </div>
+
+                  <div matRipple class="buttonTemplate" (click)="onDeleteServiceClick.emit(service?.id)">
+                    <i class="fa-solid fa-trash"></i>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+  <mat-paginator
+    [length]="pageControl.itemCount"
+    [pageSize]="pageControl.take"
+    [showFirstLastButtons]="true"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    [hidePageSize]="false"
+    [pageIndex]="pageControl.page - 1"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>

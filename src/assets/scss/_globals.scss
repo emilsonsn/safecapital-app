@@ -1,0 +1,382 @@
+@import 'variables';
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  line-height: 1.6;
+  font-family: 'Open Sans', sans-serif !important;
+  scroll-behavior: smooth;
+}
+
+.table-container{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  // background: $white-100;
+  // border-radius: 4px;
+  // box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.11), 0 7px 10px -5px rgba(0, 0, 0, 0.06);
+}
+
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+.loading{
+  pointer-events: none;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999; /* Certifique-se de que o z-index esteja alto o suficiente para cobrir outros elementos */
+  background: rgba(255, 255, 255, 0.5); /* Opcional: fundo semi-transparente */
+}
+
+hr {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  height: 0;
+}
+
+select,
+button,
+textarea,
+input {
+  vertical-align: baseline;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  &[dir='rtl'],
+  &[dir='ltr'] {
+    unicode-bidi: embed;
+  }
+}
+
+bdo[dir='rtl'] {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+
+bdo[dir='ltr'] {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+img {
+  max-width: 100%;
+}
+
+a,
+a:focus,
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+blockquote {
+  border-left: 2px solid $grey4;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.01625rem;
+}
+
+.close:not(:disabled):not(.disabled):hover,
+.close:not(:disabled):not(.disabled):focus {
+  outline: none;
+}
+
+.o-hidden {
+  overflow: hidden;
+}
+
+.separator-breadcrumb {
+  margin-bottom: 2rem;
+}
+
+@for $i from 1 through 5 {
+  .line-height-#{$i} {
+    line-height: #{$i};
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.mat-mdc-menu-panel {
+  min-width: fit-content !important;
+  max-width: none !important;
+}
+
+// Granatum
+
+.plusButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  background-color: $yellow_opacity;
+}
+
+.button {
+  padding: 0.5rem 1.2rem;
+  white-space: nowrap;
+  border-radius: 3px;
+  border: none;
+  color: $white-100;
+
+  &.yellow {
+    background-color: $primary;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &.cancel {
+    color: $grey1;
+    // border: 1px solid;
+
+    &:hover {
+      background-color: $grey4;
+    }
+  }
+
+}
+
+.carton {
+  background-color: $white-100;
+  box-shadow: 0px 0px 10px $grey2;
+}
+
+#componentHeaderTemplate {
+
+  width: 100%;
+  overflow-x: auto;
+  min-height: 1.6rem;
+
+  #componentHeader {
+    display: flex;
+    justify-content: space-between;
+    min-width: fit-content;
+    gap: 1rem;
+    height: 3rem;
+
+    #options {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-left: 0.5rem;
+
+      #filter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1.5px solid $grey1;
+        border-radius: 5px;
+        cursor: pointer;
+
+        i {
+          color: $grey1;
+          font-size: 1.3rem;
+          padding: 0.5rem;
+        }
+
+        &:hover {
+          i {
+            animation: pop 1.3s infinite;
+          }
+        }
+      }
+
+    }
+
+  }
+
+}
+
+#componentTable {
+  background: #ffffff;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.11), 0 7px 10px -5px rgba(0, 0, 0, 0.06);
+  padding: 1vw;
+
+  table {
+    thead {
+      background-color: $grey5;
+      height: 2.5rem;
+
+      th {
+        height: 4rem;
+        background-color: $grey5;
+
+        div {
+          display: flex;
+          align-items: center;
+          height: 100%;
+          color: $black2;
+          background-color: $grey5;
+        }
+      }
+
+    }
+
+    tbody {
+      td {
+        div {
+          font-weight: 500;
+        }
+
+        #buttons {
+          gap: 0.5rem;
+
+          .button {
+            padding: 4px 5px;
+            background: $grey4;
+            border-radius: 5px;
+            border: 1px solid $grey4;
+
+            i {
+              color: $black2;
+            }
+          }
+
+
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+#content {
+
+  #containerTemplate {
+
+    #container {
+
+
+
+    }
+
+  }
+
+  #footerTemplate {
+    position: sticky;
+    top: 100vh;
+  }
+
+}
+
+@keyframes pop {
+  0%, 100% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.buttonTemplate {
+  display: flex;
+  width: 2.3rem;
+  height: 2.3rem;
+  min-width: 2.3rem;
+  min-height: 2.3rem;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(45deg, #e5df15 0%, #ff9700 51%, #bf9a2b 100%);
+  border-radius: 5px;
+  background-color: $grey4;
+  font-size: larger;
+  cursor: pointer;
+  margin-right: 0.5rem;
+
+  i {
+    color: $white-100;
+    font-size: 1rem;
+  }
+}
+
+.close {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1rem;
+  height: 1rem;
+  padding: 1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+
+.mat-mdc-dialog-surface {
+  border-radius: 5px !important;
+  box-shadow: 0px 0px 6px $grey2;
+
+  #actionsDialog {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+
+    #buttonsDialog {
+      display: flex;
+      justify-content: end;
+      width: 100%;
+      gap: 0.8rem;
+
+      .button {
+        min-width: 7rem;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.mat-mdc-menu-content {
+  padding: 0 !important;
+}
+
+.mat-datepicker-content .mat-calendar {
+  background-color: $white-100 !important;
+}
+
+#mat-loading {
+  display: flex;
+  justify-content: center;
+
+  mat-spinner {
+    height: 4.5rem!important;
+  }
+}
+
+// Retirar após setar o tema do material
+
+.mat-mdc-menu-panel {
+  background-color: $white-100 !important;
+}
+
+.mat-mdc-paginator {
+  background-color: transparent !important;
+}

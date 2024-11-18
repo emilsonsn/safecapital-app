@@ -1,0 +1,104 @@
+@import "variables";
+
+:host {
+  height: 100%;
+}
+
+.kanban-main {
+  display: flex;
+  overflow-x: auto;
+  gap: 0rem;
+  height: 100%;
+}
+
+.kanban-container {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  vertical-align: top;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    font-size: 1.2rem;
+    padding: 1rem;
+    color: $gray-600;
+    border-bottom: 1px solid $secondary;
+  }
+}
+
+.kanban-list {
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  //padding-left: 1rem;
+  //padding-right: 1rem;
+  padding-bottom: 1rem;
+  min-height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+  /* Garante que o placeholder ocupe o espaço necessário */
+  position: relative;
+}
+
+
+.kanban-box {
+  padding: 20px 10px;
+  padding-top: 0;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: $white-100;
+  font-size: 14px;
+  border-radius: 4px;
+  border-left: 3px solid $secondary;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.1);
+
+  h4 {
+    font-size: 1rem;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  p {
+    font-size: 0.8rem;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.cdk-drag-placeholder {
+  background: gray;
+  border-radius: 4px;
+  opacity: 0.3;
+  /* Garante que o placeholder ocupe o espaço dentro da coluna */
+  position: relative;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  /* Ajuste para garantir que a sombra seja exibida corretamente */
+  transform: translateX(0) translateY(0);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.kanban-list.cdk-drop-list-dragging .kanban-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

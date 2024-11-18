@@ -1,0 +1,282 @@
+<mat-dialog-content>
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">{{ title }}</span>
+
+    <div class="d-flex align-items-center gap-2">
+      @if(!isNewOrder) {
+        <div id="headerButtons">
+          @if(_data.order.purchase_date && hasGranatum && !_data.order.has_granatum) {
+            <div matRipple class="headerBtn" (click)="throwToGranatum()">Lançar no Granatum</div>
+          }
+
+          @if(_data.order.has_granatum) {
+            <div matRipple class="btn btn-success">
+              <i class="fa-solid fa-circle-check"></i>
+              Já lançado no granatum
+            </div>
+          }
+          <div matRipple class="headerBtn" (click)="onSolicitation()" *ngIf="!_data.order.has_granatum" >Solicitar ao Financeiro</div>
+        </div>
+      }
+
+      <div matRipple class="close" (click)="onCancel()">
+        <i class="fa-solid fa-close"></i>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form" class="row">
+
+    <div class="col-md-6 mb-3">
+      <span class="fw-bolder">Solicitante *</span>
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="user_id" placeholder="Solicitante" >
+          <mat-option *ngFor="let user of users" [value]="user.id">
+            {{ user.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <span class="fw-bolder">Fornecedor *</span>
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="supplier_id" placeholder="Fornecedor" >
+          <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+            {{ supplier.fantasy_name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
+    <div class="col-md-4 col-12 mb-3">
+      <span class="fw-bolder">Tipo de Solicitação *</span>
+      <mat-form-field>
+        <mat-select [formControl]="order_type" placeholder="Tipo de Solicitação" >
+          @for (type of requestTypeSelection; track type) {
+            <mat-option [value]="type">{{ type | requestOrderType }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <span class="fw-bolder">Obra *</span>
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="construction_id" placeholder="Obra">
+          <mat-option *ngFor="let construction of constructions" [value]="construction.id">
+            {{ construction.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <span class="fw-bolder">Data *</span>
+      <mat-form-field appearance="outline">
+        <input matInput [matDatepicker]="picker" formControlName="date" placeholder="DD/MM/YYYY" readonly >
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    
+    @if (isAdmin) {
+      <div class="col-md-6 mb-3">
+        <span class="fw-bolder">Banco *</span>
+        <mat-form-field appearance="outline">
+          <mat-select formControlName="bank_id" placeholder="Banco" >
+            <mat-option *ngFor="let banco of bancos()" [value]="banco.id">
+              {{ banco.descricao }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <span class="fw-bolder">Categoria *</span>
+        <mat-form-field appearance="outline">
+          <mat-select formControlName="category_id" placeholder="Categoria" >
+            <mat-option *ngFor="let category of categories()" [value]="category.id">
+              {{ category.descricao }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    }
+
+    <!-- Itens -->
+    <div class="col-12" formArrayName="items">
+      <span class="fw-bolder">Itens *</span>
+      @for(item of items.controls; track item) {
+        <div class="d-flex flex-row gap-4 mt-3" [formGroupName]="$index">
+          <div class="d-flex flex-md-row flex-column gap-2 w-75 ">
+            <div class=" col-md-4 col-12">
+              <mat-form-field appearance="outline">
+                <input matInput type="text" formControlName="name" placeholder="Nome">
+              </mat-form-field>
+            </div>
+            <div class=" col-md-4 col-12">
+              <mat-form-field appearance="outline">
+                <input type="text" formControlName="quantity" matInput placeholder="Quantidade" mask="0*" />
+              </mat-form-field>
+            </div>
+            <div class=" col-md-4 col-12">
+              <mat-form-field appearance="outline">
+                <input type="text" formControlName="unit_value" matInput placeholder="R$ 0,00" currencyMask />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            @if(true) {
+              <button class="mt-1" color="warn" *ngIf="true " mat-icon-button (click)="onDeleteItem($index)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            }
+          </div>
+        </div>
+      }
+      <div class="col-auto my-2">
+        <div matRipple id="addItem">
+          <button color="primary" *ngIf="true" (click)="!isToEdit ? pushItem() : null">
+            Adicionar item <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!---->
+
+    <div class="col-md-6 mb-3">
+      <span class="fw-bolder">Valor Total *</span>
+      <mat-form-field appearance="outline">
+        <input type="text" formControlName="total_value" matInput currencyMask placeholder="R$ 0,00" />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <span class="fw-bolder">Quantidade de Itens *</span>
+      <mat-form-field appearance="outline">
+        <input type="text" formControlName="quantity_items" matInput mask="0*" [allowNegativeNumbers]="false" placeholder="0" />
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-12 mb-3">
+      <span class="fw-bolder">Forma de pagamento *</span>
+      <mat-form-field>
+        <mat-select [formControl]="payment_method" placeholder="Forma de Pagamento" >
+          @for (paymentMethod of requestOrderPaymentSelection; track paymentMethod) {
+            <mat-option [value]="paymentMethod">{{ paymentMethod | paymentForm }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 mb-3">
+      <span class="fw-bolder">Descrição</span>
+      <mat-form-field>
+        <textarea matInput
+          formControlName="description"
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="5"
+          [placeholder]="'Descrição'">
+        </textarea>
+      </mat-form-field>
+    </div>
+
+    @if(false) { <!-- Não implementado no back -->
+      <div class="col-md-6  mb-3">
+        <span class="fw-bolder">Aprovação *</span>
+        <mat-form-field>
+          <mat-select [formControl]="responsible" placeholder="Responsável" >
+            <mat-option (click)="resetResponsibleSelection()" class="no-checkbox">
+              <i class="fa-solid fa-trash me-2"></i>
+              Limpar seleção
+            </mat-option>
+            @for (responsible of requestResponsibleSelection; track responsible) {
+              <mat-option [value]="responsible">{{ responsible | orderResponsible}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    }
+    
+    <div class="col-md-12 mb-3">
+      <span class="fw-bolder">Status *</span>
+      <mat-form-field>
+        <mat-select [formControl]="purchase_status" placeholder="Status" >
+          @for (status of requestStatusSelection; track status) {
+            <mat-option [value]="status">{{ status | status }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
+    <div class="">
+      <span class="fw-bolder">Anexos</span>
+      <div id="files">
+        @for(img of filesFromBack; track img) {
+          <div class="file" matTooltip="{{img.name}}" (click)="openImgInAnotherTab(img.path)">
+            <div class="delete">
+              <i class="fa-solid fa-close" (click)="prepareFileToRemoveFromBack(img.id, $index);"></i>
+            </div>
+              <img [src]="img.path" alt="{{img.name}}" style="max-width: 100%; max-height: 100%;" />
+          </div>
+        }
+
+        @for(img of filesToSend; track img) {
+          <div class="file" matTooltip="{{img.file.name}}">
+            <div class="delete">
+              <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
+            </div>
+            @if(img.preview) {
+              <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
+            }
+            @else {
+              <i class="fa-solid fa-file"></i>
+            }
+          </div>
+        }
+      </div>
+      <div matRipple id="inputFileAdd" class="mt-2">
+        <div id="text">
+          <i class="fa-solid fa-plus"></i>
+          <span>Adicionar Arquivo</span>
+        </div>
+        @if(!isToEdit) {
+          <input type="file" (change)="onFileSelected($event)" [multiple]="true" title=" " />
+        }
+      </div>
+    </div>
+
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="w-100 me-2">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      @if(loading) {
+        <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+          <mat-spinner></mat-spinner>
+        </div>
+      }
+
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        @if(_data?.edit || isNewOrder) {
+          <div class="col-auto">
+            <button matRipple id="submit" class="button yellow" (click)="!loading ? onConfirm() : null">{{
+              isNewOrder ? 'Criar' : 'Salvar'
+            }}</button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>

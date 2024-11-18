@@ -1,0 +1,14 @@
+<div class="mt-5 d-flex justify-content-end">
+  <button matRipple class="button yellow" (click)="openDialogClient()">
+    <i class="fa-solid fa-circle-plus"></i> Novo cliente
+  </button>
+</div>
+
+
+<div id="componentTable" class="col-12 mt-4">
+  <app-table-client
+    [loading]="loading"
+    (onClientClick)="openDialogClient($event)"
+    (onDeleteClientClick)="onDeleteClient($event)">
+  </app-table-client>
+</div>

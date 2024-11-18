@@ -1,0 +1,71 @@
+<mat-dialog-content>
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">Filtrar Pedidos</span>
+    <div matRipple class="close" (click)="onCancel(false)">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form" class="row">
+
+    <div class="col-12 mb-3">
+      <p class="fw-bold fs-6 mb-2">Data</p>
+      <mat-form-field>
+        <mat-date-range-input [rangePicker]="picker">
+          <input formControlName="start_date" matStartDate  placeholder="Início" readonly >
+          <input formControlName="end_date" matEndDate placeholder="Fim" readonly >
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6 col-12 mb-3">
+      <p class="fw-bold fs-6 mb-2">Status</p>
+      <mat-form-field appearance="outline">
+        <mat-select [formControl]="status" multiple placeholder="Selecionar todos">
+          <mat-select-trigger>
+            {{ (status.value?.[0] | status ) || ''}}
+            @if ((status.value?.length || 0) > 1) {
+              <span>
+                (+{{(status.value?.length || 0) - 1}} {{status.value?.length === 2 ? 'outro' : 'outros'}})
+              </span>
+            }
+          </mat-select-trigger>
+
+          <mat-option (click)="resetStatusSelection()" class="no-checkbox">Limpar seleção</mat-option>
+          @for (status of filterStatus; track status) {
+            <mat-option [value]="status">{{ status | status}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 mb-3">
+      <p class="fw-bold fs-6 mb-2">Nome</p>
+      <mat-form-field appearance="outline">
+        <input type="text" formControlName="name" matInput placeholder="Nome"  />
+      </mat-form-field>
+    </div>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="container">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      <div matRipple class="buttonTemplate me-auto me-sm-0 mb-sm-0 mb-2" (click)="onCancel(true)">
+        <i class="fa-solid fa-trash"></i>
+      </div>
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel(false)">Cancelar</button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button yellow" (click)="onConfirm()">Pesquisar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>

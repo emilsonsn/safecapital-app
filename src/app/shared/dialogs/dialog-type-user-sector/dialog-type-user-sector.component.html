@@ -1,0 +1,47 @@
+<mat-dialog-content>
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">{{title}}</span>
+    <div matRipple class="close" (click)="onCancel()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-12 mb-3">
+        <div class="d-flex align-items-center gap-4">
+          <mat-form-field appearance="outline">
+            <mat-label>Nome</mat-label>
+            <input matInput type="text" formControlName="sector">
+          </mat-form-field>
+
+          <div matRipple class="plusButton" (click)="addTypeProvider()">
+            <i class="fa-solid fa-plus"></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+  <div>
+    <app-table-type-user-sector
+      [loading]="loading"
+      (onDeleteUserSector)="deleteServiceType($event)">
+    </app-table-type-user-sector>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="container">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>

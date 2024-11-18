@@ -1,0 +1,14 @@
+<div class="mt-5 d-flex justify-content-end">
+  <button matRipple class="button yellow" (click)="openDialogConstruction()">
+    <i class="fa-solid fa-circle-plus"></i> Nova Obra
+  </button>
+</div>
+
+
+<div id="componentTable" class="col-12 mt-4">
+  <app-table-construction
+    [loading]="loading"
+    (onConstructionClick)="openDialogConstruction($event)"
+    (onDeleteConstructionClick)="onDeleteConstruction($event)">
+  </app-table-construction>
+</div>

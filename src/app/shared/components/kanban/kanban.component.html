@@ -1,0 +1,34 @@
+<div cdkDropListGroup class="kanban-main">
+  @for (key of Object.keys(data); track key) {
+    <div class="kanban-container">
+      <h2>{{ getEmojiForStatus(key) }} {{ key }} {{ data[key].length }}</h2>
+      <div
+        cdkDropList
+        [cdkDropListData]="data[key]"
+        class="kanban-list"
+        (cdkDropListDropped)="drop($event)">
+        @for (item of data[key]; track item) {
+          <div class="kanban-box"
+               [ngStyle]="{ 'border-color': getBorderColor(item?.task_status_id) }"
+               cdkDrag
+               (click)="onBoxClick(item)">
+            <div
+              class="d-flex align-items-center justify-content-end w-100 pt-2"
+              style="color: red;">
+              <span><i style="cursor: pointer" class="fa-solid fa-trash" (click)="deleteTask($event, item)"></i></span>
+            </div>
+            <h4>
+              <strong>
+                {{ item?.user?.name }}
+              </strong>
+            </h4>
+            <h4>{{ item?.name }}</h4>
+            <p>{{ item?.description }}</p>
+          </div>
+        }
+        <!-- Placeholder: deve estar dentro do cdkDropList -->
+        <div class="kanban-box cdk-drag-placeholder" *cdkDragPlaceholder></div>
+      </div>
+    </div>
+  }
+</div>

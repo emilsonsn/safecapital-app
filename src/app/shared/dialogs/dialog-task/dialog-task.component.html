@@ -1,0 +1,133 @@
+<div class="d-flex align-items-center justify-content-between p-4 pb-1">
+  <span class="fw-bold fs-5">{{ data.task ? 'Editar Tarefa' : 'Criar Tarefa' }}</span>
+  <div matRipple class="close" (click)="onCancel()">
+    <i class="fa-solid fa-close"></i>
+  </div>
+</div>
+
+<mat-divider class="my-3"></mat-divider>
+
+<mat-dialog-content>
+  <form [formGroup]="taskForm">
+    <div class="row">
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="name">
+          <mat-error *ngIf="taskForm.get('name').hasError('required')">O nome é obrigatório</mat-error>
+          <mat-error *ngIf="taskForm.get('name').hasError('maxlength')">O nome deve ter menos de 255 caracteres
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Usuário</mat-label>
+          <mat-select formControlName="user_id">
+            @for (item of data.users; track item) {
+              <mat-option [value]="item.id">{{ item.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-error *ngIf="taskForm.get('user_id').hasError('required')">Usuário é obrigatório</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-12 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Status da Tarefa</mat-label>
+          <mat-select formControlName="task_status_id">
+            @for (item of data.status; track item) {
+              <mat-option [value]="item.id">{{ item.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-12 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+          <mat-error *ngIf="taskForm.get('description').hasError('required')">A descrição é obrigatória</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Concluído Em</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="concluded_at">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <h3>Subtarefas <i class="fa-solid fa-circle-plus" style="cursor: pointer" (click)="addSubTask()"></i></h3>
+      <div formArrayName="sub_tasks">
+        <div class="d-flex align-items-center mb-4" *ngFor="let subTask of subTasks.controls; let i = index"
+             [formGroupName]="i">
+          <mat-checkbox formControlName="status"></mat-checkbox>
+          <mat-form-field appearance="outline">
+            <mat-label>Descrição da Subtarefa</mat-label>
+            <input matInput formControlName="description">
+          </mat-form-field>
+          <button mat-icon-button color="warn" (click)="removeSubTask(i, subTask)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+
+      <div class="">
+        <span class="fw-bolder">Anexos</span>
+        <div id="files">
+          @for(img of filesFromBack; track img) {
+            <div class="file" matTooltip="{{img.name}}">
+              <div class="delete">
+                <i class="fa-solid fa-close" (click)="prepareFileToRemoveFromBack(img.id, $index)"></i>
+              </div>
+              <img [src]="img.path" alt="{{img.name}}" style="max-width: 100%; max-height: 100%;" />
+            </div>
+          }
+
+          @for(img of taskFilesList; track img) {
+            <div class="file" matTooltip="{{img.name}}">
+              <div class="delete">
+                <i class="fa-solid fa-close" (click)="removeFile($index)"></i>
+              </div>
+              @if(img.type.includes('image')) {
+                <img [src]="URL.createObjectURL(img)" alt="{{img.name}}" style="max-width: 100%; max-height: 100%;" />
+              }
+              @else {
+                <i class="fa-solid fa-file"></i>
+              }
+            </div>
+          }
+        </div>
+        <div matRipple id="inputFileAdd" class="mt-2">
+          <div id="text">
+            <i class="fa-solid fa-plus"></i>
+            <span>Adicionar Arquivo</span>
+          </div>
+          @if(!isToEdit) {
+            <input type="file" (change)="onFileChange($event)" [multiple]="true" title=" " />
+          }
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-divider class="my-3"></mat-divider>
+
+<mat-dialog-actions>
+  <div class="container">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button yellow" (click)="onSave()">
+            {{ data.task ? 'Salvar' : 'Criar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>

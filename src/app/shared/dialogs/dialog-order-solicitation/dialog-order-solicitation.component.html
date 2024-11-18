@@ -1,0 +1,46 @@
+<mat-dialog-content>
+
+    @if(loading) {
+      <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+  
+    <div class="d-flex align-items-center justify-content-between">
+      <span class="fw-bold fs-5">Solicitar ao financeiro</span>
+      <div matRipple class="close" (click)="onCancel()">
+        <i class="fa-solid fa-close"></i>
+      </div>
+    </div>
+  
+    <mat-divider class="my-3"></mat-divider>
+  
+    <form [formGroup]="form" class="row">
+      <div class="col-md-6 mb-3">
+        <span class="fw-bolder">Tipo de Solicitação *</span>
+        <mat-form-field appearance="outline">
+          <mat-select formControlName="solicitation_type" placeholder="Tipo de Solicitação" >
+            @for (status of requestTypeSelection; track status) {
+              <mat-option [value]="status">{{ status | status }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <div class="w-100 me-2">
+      <div id="actionsDialog" class="flex-sm-row flex-column">
+        <div id="buttonsDialog" class="flex-sm-row flex-column">
+          <div class="col-auto">
+            <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+          </div>
+          <div class="col-auto">
+            <button matRipple id="submit" class="button yellow" (click)="!loading ? onConfirm() : null">Criar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-actions>
+  

@@ -1,0 +1,32 @@
+<app-account-manager
+  [options]="options"
+  primary_text="Olá, Bem vindo!"
+>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <mat-form-field appearance="outline" class="mb-3">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" placeholder="Insira seu email">
+      <mat-error *ngIf="loginForm.get('email')?.invalid">
+        {{ getEmailErrorMessage() }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Senha</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" placeholder="Insira sua senha">
+      <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" [attr.aria-label]="hide ? 'Mostrar senha' : 'Ocultar senha'">
+        <mat-icon>{{ hide ? 'visibility' : 'visibility_off' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="loginForm.get('password')?.invalid">
+        {{ getPasswordErrorMessage() }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="forgot-password">
+      <p><a routerLink="/forgot-password">Esqueceu sua senha?</a></p>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
+  </form>
+
+</app-account-manager>

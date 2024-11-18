@@ -1,0 +1,64 @@
+.avatar-container {
+  border-radius: 50%;
+  position: relative;
+}
+
+
+.avatar-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 80%;
+  font-weight: bold;
+  color: #fff;
+}
+
+.mat-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.edit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.edit-text {
+  color: transparent;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.edit-overlay:hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9999;
+
+  .edit-text {
+    position: absolute;
+    top: 3px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+}
+

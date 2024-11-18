@@ -1,0 +1,144 @@
+<mat-dialog-content>
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">{{title}}</span>
+    <div matRipple class="close" (click)="onCancel()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput type="text" formControlName="name">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Razão social</mat-label>
+          <input matInput type="text" formControlName="fantasy_name">
+        </mat-form-field>
+      </div>
+      <div class="col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput type="email" formControlName="email" pattern="{{ utils.patternEmail }}">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>CNPJ</mat-label>
+          <input matInput type="text" formControlName="cnpj" mask="00.000.000/0000-00">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline" required>
+          <mat-label>Celular</mat-label>
+          <input type="text" formControlName="whatsapp" matInput mask="(00)00000-0000"
+            title="Digite um número de celular válido (xx)xxxxx-xxxx" required />
+          <mat-error *ngIf="form.get('whatsapp')?.value === '' || !validateCellphoneNumber(form.get('whatsapp'))">
+            Digite um número de celular válido (xx)xxxxx-xxxx
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone</mat-label>
+          <input type="text" formControlName="phone" matInput mask="(00)0000-0000"
+            title="Digite um número de telefone válido (xx)xxxx-xxxx ou (xx)xxxxx-xxxx" />
+          <mat-error *ngIf="form.get('phone')?.value === '' || !validatePhoneNumber(form.get('phone'))">O telefone deve
+            estar no formato válido
+            (xx)xxxx-xxxx.</mat-error>
+        </mat-form-field>
+      </div>
+      <div class=" col-md-6 col-12 mb-3">
+        <div class="d-flex align-items-center gap-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo de fornecedor</mat-label>
+            <mat-select formControlName="type_supplier_id">
+              <mat-option *ngFor="let type of providerTypeEnum" [value]="type.id">
+                {{ type.type }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div matRipple class="plusButton" (click)="openDialogTypeProvider()">
+            <i class="fa-solid fa-plus"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-3">
+        <span class="fw-bold fs-5 address">Endereço</span>
+      </div>
+      <div class="col-md-4 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>CEP</mat-label>
+          <input matInput type="text" mask="00000-000" [(ngModel)]="cep" (ngModelChange)="autocompleteCep()" [ngModelOptions]="{standalone: true}" >
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Rua</mat-label>
+          <input matInput type="text" formControlName="address">
+        </mat-form-field>
+      </div>
+      <div class="col-md-4 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Número</mat-label>
+          <input matInput type="text" formControlName="number">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12">
+        <mat-form-field>
+          <mat-select formControlName="state" placeholder="Estado" >
+            @for (state of states; track state) {
+              <mat-option [value]="state">{{ state }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12">
+        <mat-form-field>
+          <mat-select formControlName="city" placeholder="Cidade">
+            <mat-option>
+              <ngx-mat-select-search [formControl]="cityFilterCtrl"
+                placeholderLabel="Procure a cidade"
+                i18n-placeholderLabel
+                noEntriesFoundLabel="Cidade não encontrada"
+                i18n-noEntriesFoundLabel>
+              </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let city of filteredCitys | async" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="container">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      @if(loading) {
+        <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+          <mat-spinner></mat-spinner>
+        </div>
+      }
+
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button yellow" (click)="onSubmit(form)">{{isNewProvider ? 'Criar' :
+            'Salvar'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>
