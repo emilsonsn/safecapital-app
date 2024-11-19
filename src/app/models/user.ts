@@ -1,32 +1,39 @@
 export interface User {
-  id? : number;
+  id?: number;
   name : string;
-  email : string;
   phone : string;
-  cpf : string;
-  cpf_cnpj: string;
-  birth_date: Date;
-  company_position_id: string;
-  sector_id: string;
-  whatsapp: number;
-  status : UserStatus;
-  createdAt : string;
-  updatedAt : string;
-  admin?: boolean;
-  photo?: string;
+  surname : string;
+  company_name : string;
+  cnpj : string;
+  creci : string;
+  email : string;
+  password : string;
+  is_active : boolean;
+  role : UserRole;
+  attachments : Attachment[];
+  created_at? : string;
+  updated_at? : string;
+}
 
-  sector?: UserSector;
-  company_position?: UserPosition;
+interface Attachment {
+  category : string;
+  file : File | string
+}
+
+export enum UserRole {
+  Admin = 'Admin',
+  Manager = 'Manager',
+  Client = 'Client',
 }
 
 export interface UserPosition {
-  id? : string,
-  position : string
+  id?: string;
+  position: string;
 }
 
 export interface UserSector {
-  id? : number,
-  sector : string
+  id?: number;
+  sector: string;
 }
 
 export interface UserCards {
@@ -36,15 +43,14 @@ export interface UserCards {
 }
 
 export enum UserStatus {
-	ATIVO = 'ACTIVE',
-	INATIVO = 'INACTIVE',
-	BLOQUEADO = 'BLOCKED',
+  ATIVO = 'ACTIVE',
+  INATIVO = 'INACTIVE',
+  BLOQUEADO = 'BLOCKED',
 }
-
 
 export enum Positions { //Gerente/Gestor/Adm/Tiago
   Admin = 'Admin',
   Financial = 'Financial',
   Supplies = 'Supplies',
-  Requester = 'Requester'
+  Requester = 'Requester',
 }

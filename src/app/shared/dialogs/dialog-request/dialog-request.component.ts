@@ -84,9 +84,9 @@ export class DialogRequestComponent {
 
   public loadPermissions(){
     this._sessionQuery.user$.subscribe(user => {
-      if(user && user?.company_position.position !== 'Requester') {
-        this.isAdmin = true;
-      }
+      // if(user && user?.company_position.position !== 'Requester') {
+      //   this.isAdmin = true;
+      // }
     })
   }
 

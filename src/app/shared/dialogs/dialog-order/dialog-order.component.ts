@@ -65,8 +65,8 @@ export class DialogOrderComponent {
   public bancos = signal<Banco[]>([]);
   public categories = signal<any[]>([]);
 
-  public isAdmin = false; 
-  public hasGranatum = false; 
+  public isAdmin = false;
+  public hasGranatum = false;
   constructor(
     @Inject(MAT_DIALOG_DATA)
     protected readonly _data,
@@ -172,19 +172,19 @@ export class DialogOrderComponent {
 
   public loadPermissions(){
     this._sessionQuery.user$.subscribe(user => {
-      if(user && user?.company_position.position !== 'Requester') {
-        this.isAdmin = true;
-      }else{
-        this.form.get('purchase_status').disable();        
-      }
+      // if(user && user?.company_position.position !== 'Requester') {
+      //   this.isAdmin = true;
+      // }else{
+      //   this.form.get('purchase_status').disable();
+      // }
     })
   }
 
   public loadPermissionGranatum(){
     this._sessionQuery.user$.subscribe(user => {
-      if(user && (user?.company_position.position === 'Financial' || user?.company_position.position === 'Admin')) {
-        this.hasGranatum = true;
-      }
+      // if(user && (user?.company_position.position === 'Financial' || user?.company_position.position === 'Admin')) {
+      //   this.hasGranatum = true;
+      // }
     })
   }
 

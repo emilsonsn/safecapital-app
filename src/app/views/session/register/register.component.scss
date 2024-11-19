@@ -1,0 +1,202 @@
+@import "_variables";
+
+#template {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+
+  #leftSideTemplate {
+    width: 50%;
+    height: 100%;
+    flex: 1;
+    background-color: #50606e ;
+
+    #leftSideContent {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 1rem;
+
+      #formContent {
+        max-width: 40rem;
+        padding: 2rem;
+        border-radius: 6px;
+        background-color: $white-100;
+
+        .logo{
+          width: fit-content;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 6px;
+          padding: 1rem 3rem;
+
+          img{
+            width: 150px !important;
+          }
+        }
+
+      }
+    }
+  }
+
+  #rightSideTemplate {
+    width: 50%;
+    height: 100%;
+    flex: 1;
+    background-color: #8ff;
+
+    #rightSideContent {
+
+    }
+  }
+
+}
+
+
+//
+
+.profile-upload {
+  position: relative;
+  width: 100%;
+  max-width: 150px;
+  height: 150px;
+  margin: 0 auto;
+}
+
+.upload-container {
+  border: 2px dotted #ccc;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  border-radius: 8px;
+  position: relative;
+}
+
+.upload-container.drag-over {
+  border-color: #007bff;
+}
+
+.upload-placeholder {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.upload-placeholder i {
+  font-size: 24px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.uploaded-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.remove-image {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.remove-image i {
+  color: #fff;
+  font-size: 16px;
+}
+
+
+#addItem {
+  width: fit-content;
+  border-radius: 4px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.5rem;
+    color: $white-100;
+    background-color: $yellow;
+    border: none;
+    outline: none;
+
+    i {
+      font-size: 1em;
+    }
+  }
+}
+
+.loading{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+
+#mat-loading {
+  display: flex;
+  justify-content: center;
+
+  mat-spinner {
+    height: 4.5rem!important;
+  }
+}
+
+.template {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $secondary;
+  height: 100%;
+  flex-wrap: wrap;
+  overflow: auto;
+
+
+}
+
+.templateSuccess {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: $secondary;
+
+  .content {
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
+    max-width: 90%;
+    border-radius: 6px;
+    background-color: whitesmoke;
+
+    #icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      i {
+        font-size: 8rem;
+        color: green;
+      }
+    }
+  }
+}

@@ -48,38 +48,38 @@
                   class="d-flex align-items-center gap-2"
                   style="white-space: nowrap"
                 >
-                  <app-avatar
+                  <!-- <app-avatar
                     [imageUrl]="collaborator?.photo"
                     [altText]="collaborator?.name"
                     [color]="'#e7b403'"
                     [onCircle]="true"
-                  ></app-avatar>
+                  ></app-avatar> -->
                   {{ collaborator?.name }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ collaborator?.cpf_cnpj | cpfCnpjMask }}
+                  {{ collaborator?.email }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ collaborator?.birth_date | date: "dd/MM/YYYY" }}
+                  {{ collaborator?.email }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ collaborator?.company_position?.position }}
+                  {{ collaborator?.role }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ collaborator?.sector?.sector }}
+                  {{ collaborator?.email }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ collaborator?.whatsapp | phoneMask }}
+                  {{ collaborator?.email  }}
                 </div>
               </td>
               <td>

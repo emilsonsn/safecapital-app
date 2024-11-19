@@ -92,9 +92,9 @@ export class TableRequestComponent {
 
   public loadPermissions(){
     this._sessionQuery.user$.subscribe(user => {
-      if(user && (user?.company_position.position === 'Financial' || user?.company_position.position === 'Admin')) {
-        this.isFinancial = true;
-      }
+      // if(user && (user?.role === 'Financial' || user?.role === 'Admin')) {
+      //   this.isFinancial = true;
+      // }
     })
   }
 

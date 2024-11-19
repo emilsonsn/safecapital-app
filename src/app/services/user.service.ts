@@ -37,7 +37,7 @@ export class UserService {
     return this._http.get<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/${id}`);
   }
 
-  public postUser(user: User): Observable<ApiResponse<User>> {
+  public postUser(user: User | FormData): Observable<ApiResponse<User>> {
     return this._http.post<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/create`, user);
   }
 

@@ -35,11 +35,6 @@ export class LayoutPrivateComponent {
       route: '/painel/requests'
     },
     {
-      label: 'Colaboradores',
-      icon: 'fa-solid fa-users',
-      route: '/painel/collaborator'
-    },
-    {
       label: 'Fornecedores',
       icon: 'fa-solid fa-truck',
       route: '/painel/provider'
@@ -50,20 +45,30 @@ export class LayoutPrivateComponent {
       route: '/painel/construction'
     },
     {
-      label: 'Clientes/Contratantes',
+      label: 'Parceiros',
       icon: 'fa-solid fa-user-tie',
       route: '/painel/client'
-    },
-    {
-      label: 'Serviços',
-      icon: 'fa-solid fa-tools',
-      route: '/painel/services'
     },
     {
       label: 'Tarefas',
       icon: 'fa-solid fa-tasks',
       route: '/painel/tasks'
-    }
+    },
+    {
+      label: 'Serviços',
+      icon: 'fa-solid fa-tools',
+      route: '/painel/test'
+    },
+    {
+      label: 'Colaboradores',
+      icon: 'fa-solid fa-users',
+      route: '/painel/collaborator'
+    },
+    {
+      label: 'Configurações',
+      icon: 'fa-solid fa-gear',
+      route: '/painel/services'
+    },
   ]
 
   protected isMobile: boolean = window.innerWidth >= 1000;
@@ -90,14 +95,16 @@ export class LayoutPrivateComponent {
       if(user) {
         this.user = user;
 
-        if(user?.company_position.position == 'Requester')
+        if(user?.role == 'Admin' || user?.role == 'Manager') {
+          this.permitedMenuItem = this.menuItem;
+        }
+        else if(user?.role == 'Client') {
           this.permitedMenuItem = this.menuItem.filter(item =>
             item.label == 'Pedidos' ||
-            item.label == 'Solicitações' || 
+            item.label == 'Solicitações' ||
             item.label == 'Fornecedores'
           );
-        else
-          this.permitedMenuItem = this.menuItem;
+        }
       }
     })
 
