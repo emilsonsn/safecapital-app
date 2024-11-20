@@ -14,6 +14,10 @@ import { RegisterComponent } from './register/register.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { LottieComponent } from 'ngx-lottie';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -34,6 +38,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatDatepickerModule,
     MatDividerModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatCheckboxModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    LottieComponent,
     MatError,
     MatLabel,
     MatInput,

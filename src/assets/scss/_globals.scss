@@ -27,7 +27,6 @@ body {
 }
 
 .loading{
-  pointer-events: none;
   position: absolute;
   display: flex;
   justify-content: center;
@@ -143,7 +142,7 @@ mat-form-field {
   border: none;
   color: $white-100;
 
-  &.yellow {
+  &.primary {
     background-color: $primary;
 
     &:hover {
@@ -316,6 +315,10 @@ mat-form-field {
   i {
     color: $white-100;
     font-size: 1rem;
+  }
+
+  &.cancel {
+    background-color: red;
   }
 }
 

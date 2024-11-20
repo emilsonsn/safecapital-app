@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {TasksComponent} from "@app/views/private/tasks/tasks/tasks.component";
+import {PartnersComponent} from "@app/views/private/partners/partners/partners.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: TasksComponent
+    component: PartnersComponent
   }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TasksRoutingModule { }
+export class PartnersRoutingModule { }

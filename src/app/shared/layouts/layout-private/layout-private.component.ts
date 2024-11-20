@@ -24,51 +24,51 @@ export class LayoutPrivateComponent {
       route: '/painel/home',
       active: true
     },
+    // {
+    //   label: 'Pedidos',
+    //   icon: 'fa-solid fa-box',
+    //   route: '/painel/orders'
+    // },
+    // {
+    //   label: 'Fornecedores',
+    //   icon: 'fa-solid fa-truck',
+    //   route: '/painel/provider'
+    // },
+    // {
+    //   label: 'Obras',
+    //   icon: 'fa-solid fa-person-digging',
+    //   route: '/painel/construction'
+    // },
     {
-      label: 'Pedidos',
-      icon: 'fa-solid fa-box',
-      route: '/painel/orders'
-    },
-    {
-      label: 'Solicitações',
-      icon: 'fa-solid fa-bookmark',
-      route: '/painel/requests'
-    },
-    {
-      label: 'Fornecedores',
-      icon: 'fa-solid fa-truck',
-      route: '/painel/provider'
-    },
-    {
-      label: 'Obras',
-      icon: 'fa-solid fa-person-digging',
-      route: '/painel/construction'
-    },
-    {
-      label: 'Parceiros',
+      label: 'Clientes',
       icon: 'fa-solid fa-user-tie',
       route: '/painel/client'
     },
+    // {
+    //   label: 'Serviços',
+    //   icon: 'fa-solid fa-tools',
+    //   route: '/painel/test'
+    // },
     {
-      label: 'Tarefas',
-      icon: 'fa-solid fa-tasks',
+      label: 'Parceiros',
+      icon: 'fa-solid fa-user-tie',
       route: '/painel/tasks'
     },
-    {
-      label: 'Serviços',
-      icon: 'fa-solid fa-tools',
-      route: '/painel/test'
-    },
+    // {
+    //   label: 'Análise de Parceiro',
+    //   icon: 'fa-solid fa-bookmark',
+    //   route: '/painel/requests'
+    // },
     {
       label: 'Colaboradores',
       icon: 'fa-solid fa-users',
       route: '/painel/collaborator'
     },
-    {
-      label: 'Configurações',
-      icon: 'fa-solid fa-gear',
-      route: '/painel/services'
-    },
+    // {
+    //   label: 'Configurações',
+    //   icon: 'fa-solid fa-gear',
+    //   route: '/painel/services'
+    // },
   ]
 
   protected isMobile: boolean = window.innerWidth >= 1000;

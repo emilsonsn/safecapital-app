@@ -1,23 +1,30 @@
 export interface User {
   id?: number;
-  name : string;
-  phone : string;
-  surname : string;
-  company_name : string;
-  cnpj : string;
-  creci : string;
-  email : string;
-  password : string;
-  is_active : boolean;
-  role : UserRole;
-  attachments : Attachment[];
-  created_at? : string;
-  updated_at? : string;
+  name: string;
+  phone: string;
+  surname: string;
+  company_name: string;
+  cnpj: string;
+  creci: string;
+  email: string;
+  password: string;
+  is_active: boolean;
+  role: UserRole;
+  attachments: Attachment[];
+  validation : StatusUser;
+  created_at?: string;
+  updated_at?: string;
+}
+
+enum StatusUser {
+  Accepted = 'Accepted',
+  Pending = 'Pending',
+  Refused = 'Refused',
 }
 
 interface Attachment {
-  category : string;
-  file : File | string
+  category: string;
+  file: File | string;
 }
 
 export enum UserRole {
@@ -25,6 +32,8 @@ export enum UserRole {
   Manager = 'Manager',
   Client = 'Client',
 }
+
+// Old
 
 export interface UserPosition {
   id?: string;

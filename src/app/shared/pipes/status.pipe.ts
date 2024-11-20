@@ -26,6 +26,10 @@ export class StatusPipe implements PipeTransform {
         return 'Pagamento';
       case Status.Reimbursement:
         return 'Reembolso';
+      case 'Accepted':
+        return 'Aceito';
+      case 'Refused':
+        return 'Rejeitado';
 
       default:
         return 'Não encontrado';

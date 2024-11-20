@@ -28,7 +28,7 @@ export class TableClientComponent {
   onDeleteClientClick: EventEmitter<number> =
     new EventEmitter<number>();
 
-  public clients: Client[] = [];
+  public clients = [];
 
   public columns = [
     {
@@ -38,21 +38,21 @@ export class TableClientComponent {
       align: "start",
     },
     {
-      slug: "cnpj",
-      order: true,
-      title: "CNPJ",
-      align: "justify-content-center",
-    },
-    {
-      slug: "whatsapp",
+      slug: "phone",
       order: true,
       title: "Whatsapp",
       align: "justify-content-center",
     },
     {
-      slug: "email",
+      slug: "Telefone",
       order: true,
       title: "E-mail",
+      align: "justify-content-center",
+    },
+    {
+      slug: "cpf",
+      order: true,
+      title: "CPF",
       align: "justify-content-center",
     },
     {

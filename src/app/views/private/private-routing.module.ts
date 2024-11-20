@@ -68,7 +68,7 @@ const routes: Routes = [
       },
       {
         path: 'tasks',
-        loadChildren: () => import('./tasks/tasks.module').then(m => m.TasksModule),
+        loadChildren: () => import('./partners/partners.module').then(m => m.PartnersModule),
         canActivate: [permissionGuard],
         data: {
           page: 'tasks'

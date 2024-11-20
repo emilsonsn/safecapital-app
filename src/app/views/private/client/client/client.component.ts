@@ -36,49 +36,11 @@ export class ClientComponent {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          if (res.id) {
-            this._patchClient(res);
-            return;
-          }
-
-          this._postClient(res);
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+          }, 200);
         }
-      });
-  }
-
-  _patchClient(service: Client) {
-    this._initOrStopLoading();
-
-    this._clientService
-      .patchClient(service.id, service)
-      .pipe(finalize(() => this._initOrStopLoading()))
-      .subscribe({
-        next: (res) => {
-          if (res.status) {
-            this._toastr.success(res.message);
-          }
-        },
-        error: (err) => {
-          this._toastr.error(err.error.error);
-        },
-      });
-  }
-
-  _postClient(service: Client) {
-    this._initOrStopLoading();
-
-    this._clientService
-      .postClient(service)
-      .pipe(finalize(() => this._initOrStopLoading()))
-      .subscribe({
-        next: (res) => {
-          if (res.status) {
-            this._toastr.success(res.message);
-          }
-        },
-        error: (err) => {
-          this._toastr.error(err.error.error);
-        },
       });
   }
 

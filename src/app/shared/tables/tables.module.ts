@@ -13,13 +13,14 @@ import { TableProviderComponent } from './table-provider/table-provider.componen
 import { TableServiceComponent } from './table-service/table-service.component';
 import { TableConstructionComponent } from './table-construction/table-construction.component';
 import { TableClientComponent } from './table-client/table-client.component';
-import { TableRequestComponent } from './table-request/table-request.component';
 import { TableTypeProviderComponent } from './table-type-provider/table-type-provider.component';
 import { TableTypeServiceComponent } from './table-type-service/table-type-service.component';
 import { TableTypeUserSectorComponent } from './table-type-user-sector/table-type-user-sector.component';
 import { TableUserComponent } from './table-users/table-users.component';
 import {SharedModule} from "@shared/shared.module";
 import {AvatarModule} from "@shared/components/avatar/avatar.module";
+import { TableRequestsComponent } from './table-requests/table-requests.component';
+import { TablePartnersComponent } from './table-partners/table-partners.component';
 
 const tables = [
   TableOrdersComponent,
@@ -27,12 +28,13 @@ const tables = [
   TableServiceComponent,
   TableClientComponent,
   TableConstructionComponent,
-  TableRequestComponent,
   TableTypeProviderComponent,
   TableTypeProviderComponent,
   TableTypeServiceComponent,
   TableUserComponent,
   TableTypeUserSectorComponent,
+  TableRequestsComponent,
+  TablePartnersComponent,
 ]
 
 @NgModule({

@@ -57,24 +57,21 @@ export class CollaboratorComponent {
     this.loading = !this.loading;
   }
 
-  openDialogCollaborator(user?: User) {
+  openDialogCollaborator(user: User) {
     this._dialog
       .open(DialogCollaboratorComponent, {
-        data: {user},
+        data: {
+          isClient : false,
+          user
+        },
         width: '80%',
         maxWidth: '850px',
         maxHeight: '90%',
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
-          const id = +res.get('id');
-          if (id) {
-            this._patchCollaborator(res);
-            return;
-          }
+        if(res) {
 
-          this._postCollaborator(res);
         }
       });
   }
@@ -110,42 +107,6 @@ export class CollaboratorComponent {
               description: 'Colaboradores totais',
             },
           ]
-        },
-        error: (err) => {
-          this._toastr.error(err.error.error);
-        },
-      });
-  }
-
-  _patchCollaborator(collaborator: FormData) {
-    this._initOrStopLoading();
-    const id = +collaborator.get('id');
-    this._userService
-      .patchUser(id, collaborator)
-      .pipe(finalize(() => this._initOrStopLoading()))
-      .subscribe({
-        next: (res) => {
-          if (res.status) {
-            this._toastr.success(res.message);
-          }
-        },
-        error: (err) => {
-          this._toastr.error(err.error.error);
-        },
-      });
-  }
-
-  _postCollaborator(collaborator: User) {
-    this._initOrStopLoading();
-
-    this._userService
-      .postUser(collaborator)
-      .pipe(finalize(() => this._initOrStopLoading()))
-      .subscribe({
-        next: (res) => {
-          if (res.status) {
-            this._toastr.success(res.message);
-          }
         },
         error: (err) => {
           this._toastr.error(err.error.error);

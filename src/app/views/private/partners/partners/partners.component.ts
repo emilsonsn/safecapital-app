@@ -12,13 +12,14 @@ import dayjs from 'dayjs';
 import { requestCards } from '@models/requestOrder';
 import { ToastrService } from 'ngx-toastr';
 import { OrderService } from '@services/order.service';
+import { DialogCollaboratorComponent } from '@shared/dialogs/dialog-collaborator/dialog-collaborator.component';
 
 @Component({
-  selector: 'app-requests',
-  templateUrl: './requests.component.html',
-  styleUrl: './requests.component.scss',
+  selector: 'app-partners',
+  templateUrl: './partners.component.html',
+  styleUrl: './partners.component.scss',
 })
-export class RequestsComponent {
+export class PartnersComponent {
   cards = signal<requestCards>({
     solicitationFinished: 0,
     solicitationPending: 0,
@@ -65,7 +66,7 @@ export class RequestsComponent {
     private readonly _orderService: OrderService,
     private readonly _toastrService: ToastrService
   ) {
-    this._headerService.setTitle('Solicitações');
+    this._headerService.setTitle('Parceiros');
     this._headerService.setSubTitle('');
 
     // _requestService.getCards().subscribe({
@@ -76,6 +77,36 @@ export class RequestsComponent {
   }
 
   ngOnInit() {}
+
+  public openPartnerDialog(user) {
+    const dialogConfig: MatDialogConfig = {
+      width: '80%',
+      maxWidth: '1000px',
+      maxHeight: '90%',
+      hasBackdrop: true,
+      closeOnNavigation: true,
+    };
+
+    this._dialog
+      .open(DialogCollaboratorComponent, {
+        data: {
+          isClient: true,
+          user,
+        },
+        ...dialogConfig,
+      })
+      .afterClosed()
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.loading = true;
+            setTimeout(() => {
+              this.loading = false;
+            }, 200);
+          }
+        },
+      });
+  }
 
   public openRequestDialog(request) {
     const dialogConfig: MatDialogConfig = {
@@ -173,5 +204,4 @@ export class RequestsComponent {
         },
       });
   }
-
 }

@@ -1,7 +1,7 @@
 <div id="template">
   <div id="leftSideTemplate">
     <div id="leftSideContent">
-      <div id="formContent" [ngStyle]="{ display: !isSuccess ? 'block' : 'none' }">
+      <div id="formContent">
         <div class="d-flex flex-column align-items-center justify-content-center">
           <div class="logo">
             <img src="./assets/images/logo.png" alt="logo">
@@ -41,49 +41,49 @@
               </div>
             -->
 
-            <div class="col-12 mb-3">
+            <div class="col-md-6 mb-3">
               <mat-form-field appearance="outline">
-                <mat-label>Nome</mat-label>
+                <mat-label>Nome </mat-label>
                 <input matInput type="text" formControlName="name">
               </mat-form-field>
             </div>
-            <div class="col-12 mb-3">
+            <div class="col-md-6 mb-3">
               <mat-form-field appearance="outline">
-                <mat-label>E-mail</mat-label>
+                <mat-label>Sobrenome </mat-label>
+                <input matInput type="text" formControlName="surname">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 mb-3">
+              <mat-form-field appearance="outline">
+                <mat-label>E-mail </mat-label>
                 <input matInput type="text" formControlName="email" [pattern]="utils.patternEmail">
               </mat-form-field>
             </div>
-            <div class="col-md-6 col-12 mb-3">
+            <div class="col-md-6 mb-3">
               <mat-form-field appearance="outline">
-                <mat-label>CPF/CNPJ</mat-label>
-                <input matInput type="text" formControlName="cpf_cnpj" mask="000.000.000-00||00.000.000/0000-00">
-              </mat-form-field>
-            </div>
-            <div class=" col-md-6 col-12 mb-3">
-              <mat-form-field appearance="outline">
-                <mat-label>Data de nascimento</mat-label>
-                <input matInput type="text" [matDatepicker]="picker" formControlName="birth_date"
-                  placeholder="DD/MM/YYYY">
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-            </div>
-            <div class="col-md-6 col-12 mb-3">
-              <mat-form-field appearance="outline" required>
-                <mat-label>Celular</mat-label>
+                <mat-label>Telefone</mat-label>
                 <input type="text" formControlName="phone" matInput mask="(00) 0000-0000||(00) 00000-0000"
-                  title="Digite um número de celular válido (xx)xxxxx-xxxx" required />
+                  placeholder="(00) 0000-0000 ou (00) 00000-0000" />
               </mat-form-field>
             </div>
-            <!--
-              <div class="col-md-6 col-12 mb-3">
-                <mat-form-field appearance="outline">
-                  <mat-label>Whatsapp</mat-label>
-                  <input type="text" formControlName="whatsapp" matInput mask="(00) 0000-0000||(00) 00000-0000"
-                    title="Digite um número de telefone válido (xx)xxxx-xxxx ou (xx)xxxxx-xxxx" />
-                </mat-form-field>
-              </div>
-             -->
+            <div class="col-md-6 mb-3">
+              <mat-form-field appearance="outline">
+                <mat-label>CNPJ </mat-label>
+                <input matInput type="text" formControlName="cnpj" mask="00.000.000/0000-00">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 mb-3">
+              <mat-form-field appearance="outline">
+                <mat-label>Empresa </mat-label>
+                <input matInput type="text" formControlName="company_name">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 mb-3">
+              <mat-form-field appearance="outline">
+                <mat-label>CRECI </mat-label>
+                <input matInput type="text" formControlName="creci" mask="0*">
+              </mat-form-field>
+            </div>
 
             <div class="col-12"></div>
 
@@ -101,10 +101,41 @@
               </mat-form-field>
             </div>
           </div>
+          <div class="">
+            <span class="fw-bolder">Anexos</span>
+            <div id="files">
+              @for(img of filesToSend; track img) {
+              <div class="file" matTooltip="{{img.file.name}}" (click)="openFileInAnotherTab(img)">
+                <div class="delete">
+                  <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
+                </div>
+                @if(img.preview) {
+                <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
+                }
+                @else {
+                <i class="fa-solid fa-file"></i>
+                }
+              </div>
+              }
+            </div>
+            <div matRipple id="inputFileAdd" class="mt-2">
+              <div id="text">
+                <i class="fa-solid fa-plus"></i>
+                <span>Adicionar Arquivo</span>
+              </div>
+              <input type="file" (change)="onFileSelected($event)" [multiple]="true" title=" " />
+
+            </div>
+          </div>
         </form>
-        <div id="templateButtons">
+        <div id="templateButtons" class="mt-2">
 
           <div class="d-flex flex-sm-row flex-column justify-content-end gap-3">
+
+            <div>
+              <mat-checkbox color="primary" [(ngModel)]="accept_terms">Eu li e aceito os Termos de Uso e a Política de Privacidade.</mat-checkbox>
+            </div>
+
             <div class="d-flex flex-sm-row flex-column gap-2">
               <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
               <button matRipple id="submit" class="button primary" (click)="onSubmit()">Cadastrar</button>
@@ -117,9 +148,9 @@
       </div>
     </div>
   </div>
-  <div id="rightSideTemplate">
+  <div id="rightSideTemplate" class="d-md-flex d-none">
     <div id="rightSideContent">
-
+      <ng-lottie width="500px" containerClass="moving-box" [options]="options" />
     </div>
   </div>
 </div>

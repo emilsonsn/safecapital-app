@@ -1,186 +1,181 @@
-import {Component, Inject} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '@services/user.service';
+import { Component, Inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '@services/user.service';
 import dayjs from 'dayjs';
-import {Utils} from '@shared/utils';
+import { Utils } from '@shared/utils';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
+import { AnimationOptions } from 'ngx-lottie';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-// Utils
-public loading: boolean = false;
-public loadingSetting : boolean = false;
-public utils = Utils;
-protected isSuccess: boolean = true;
+  // Utils
+  public loading: boolean = false;
+  public utils = Utils;
+  protected isSuccess: boolean = true;
 
-// Form
-public form: FormGroup;
-protected confirm_password : String;
-protected limit : number = 5;
+  // Form
+  public form: FormGroup;
+  protected confirm_password: String;
+  protected accept_terms : boolean = false;
 
-// File
-public profileImageFile: File | null = null;
-public profileImage: string | ArrayBuffer = null;
-public isDragOver: boolean = false;
+  constructor(
+    private readonly _fb: FormBuilder,
+    private readonly _userService: UserService,
+    private readonly _router: Router,
+    private readonly _toastr: ToastrService
+  ) {}
 
-constructor(
-  private readonly _fb: FormBuilder,
-  private readonly _userService: UserService,
-  private readonly _router : Router,
-  private readonly _toastr : ToastrService,
-) {
-  // this.getSettings();
-}
+  ngOnInit(): void {
+    this.form = this._fb.group({
+      name: [null, [Validators.required]],
+      surname: [null, [Validators.required]],
+      email: [null, [Validators.required]],
+      cnpj: [null, [Validators.required]],
+      phone: [null, [Validators.required]],
+      company_name: [null, [Validators.required]],
+      creci: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+    });
+  }
 
-ngOnInit(): void {
-
-  this.form = this._fb.group({
-    id: [null],
-    name: [null, [Validators.required]],
-    cpf_cnpj: [null, [Validators.required]],
-    birth_date: [null, [Validators.required]],
-    password: [null, [Validators.required]],
-    phone: [null, [Validators.required]],
-    // whatsapp: [null, [Validators.required]],
-    email: [null, [Validators.required]],
-  })
-
-  this.form.get('birth_date').valueChanges.subscribe(data => {
-    const inputValue = data;
-    if (this.isValidDateFormat(data)) {
-      const [day, month, year] = inputValue.split('/').map(Number);
-      this.form.controls['birth_date'].setValue(new Date(year, month - 1, day));
+  public onSubmit(): void {
+    if (!this.form.valid || this.loading) {
+      this.form.markAllAsTouched();
+      return;
     }
-  });
 
-  this.isSuccess = false;
+    if(!this.filesToSend) {
+      this._toastr.error('Anexe pelo menos um arquivo!');
+      return;
+    }
 
-}
+    if(!this.accept_terms) {
+      this._toastr.error('Você precisa aceitar os termos de uso!');
+      return;
+    }
 
-public onSubmit(): void {
-  if (!this.form.valid || this.loading) {
-    this.form.markAllAsTouched();
-    return;
+    if (this.form.get('password').value != this.confirm_password) {
+      this._toastr.error('Senhas não coincidem!');
+      return;
+    }
+
+    this._initOrStopLoading();
+
+    this._userService
+      .postUser(this.prepareFormData({ ...this.form.getRawValue() }))
+      .pipe(
+        finalize(() => {
+          this._initOrStopLoading();
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this._toastr.success(res.message);
+          this.isSuccess = true;
+        },
+        error: (err) => {
+          this._toastr.error(err.error.error);
+        },
+      });
   }
 
-  if(this.loadingSetting) return;
+  protected prepareFormData(form) {
+    const formData = new FormData();
 
-  if(this.form.get('password').value != this.confirm_password) {
-    this._toastr.error("Senhas não coincidem!");
-    return;
+    Object.entries(form).forEach(([key, value]) => {
+      formData.append(key, value.toString());
+    });
+
+    this.filesToSend.map((file, index) => {
+      formData.append(`attachments[${index}]`, file.file);
+    });
+
+    formData.append('role', 'Client');
+
+    return formData;
   }
 
-  this._initOrStopLoading();
+  // Files
+  protected selectedFiles: File[] = [];
+  protected filesToSend: {
+    id: number;
+    preview: string;
+    file: File;
+  }[] = [];
 
-  this._userService.postUser(this.prepareFormData())
-    .pipe(finalize(() => {
-      this._initOrStopLoading();
-    }))
-    .subscribe({
-      next: (res) => {
-        this._toastr.success(res.message);
-        this.isSuccess = true;
-      },
-      error: (err) => {
-        this._toastr.error(err.error.error);
-      },
-    })
+  public allowedTypes = [
+    'image/png',
+    'image/jpeg',
+    'image/jpg',
+    'application/pdf',
+  ];
 
-}
+  public async convertFileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
 
-public onCancel(): void {
-  this._router.navigate(['/login']);
-}
-
-protected prepareFormData(user?) {
-
-  const formData = new FormData();
-
-  formData.append('id', this.form.get('id')?.value);
-  formData.append('name', this.form.get('name')?.value);
-  formData.append('cpf_cnpj', this.form.get('cpf_cnpj')?.value);
-  formData.append('birth_date', dayjs(this.form.get('birth_date')?.value).format('YYYY-MM-DD'));
-  formData.append('phone', this.form.get('phone')?.value);
-  // formData.append('whatsapp', this.form.get('whatsapp')?.value);
-  formData.append('email', this.form.get('email')?.value);
-  formData.append('password', this.form.get('password')?.value);
-  // formData.append('photo', this.profileImageFile);
-  // formData.append('is_active', "1");
-  // formData.append('is_admin', "0");
-  // formData.append('file_limit', this.limit.toString());
-
-  return formData;
-}
-
-// File
-onFileSelected(event: Event): void {
-  const file = (event.target as HTMLInputElement).files?.[0];
-  if (file) {
-    this.profileImageFile = file;
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.profileImage = reader.result;
-    };
-    reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
   }
-}
 
-triggerFileInput(): void {
-  const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-  fileInput.click();
-}
+  public async onFileSelected(event: any) {
+    const files: FileList = event.target.files;
+    const fileArray: File[] = Array.from(files);
 
-onDragOver(event: DragEvent): void {
-  event.preventDefault();
-  this.isDragOver = true;
-}
+    for (const file of fileArray) {
+      if (this.allowedTypes.includes(file.type)) {
+        let base64: string = null;
 
-onDragLeave(event: DragEvent): void {
-  this.isDragOver = false;
-}
+        if (file.type.startsWith('image/')) {
+          base64 = await this.convertFileToBase64(file);
+        }
 
-onDrop(event: DragEvent): void {
-  event.preventDefault();
-  this.isDragOver = false;
-
-  const file = event.dataTransfer?.files[0];
-  if (file) {
-    this.profileImageFile = file;
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.profileImage = reader.result;
-    };
-    reader.readAsDataURL(file);
+        this.filesToSend.push({
+          id: this.filesToSend.length + 1,
+          preview: base64,
+          file: file,
+        });
+      } else this._toastr.error(`${file.type} não é permitido`);
+    }
   }
-}
 
-removeImage(event: Event): void {
-  event.stopPropagation();
-  this.profileImage = null;
-}
+  public removeFileFromSendToFiles(index: number) {
+    if (index > -1) {
+      this.filesToSend.splice(index, 1);
+    }
+  }
 
-// Getters
+  public openFileInAnotherTab(e) {
+    const fileUrl = URL.createObjectURL(e.file);
 
-// Utils
-private _initOrStopLoading(): void {
-  this.loading = !this.loading;
-}
+    window.open(fileUrl, '_blank');
+  }
 
-private _initOrStopLoadingSetting(): void {
-  this.loadingSetting = !this.loadingSetting;
-}
+  // Getters
 
-protected goToLogin() {
-  this._router.navigate(['/login']);
-}
+  // Utils
+  private _initOrStopLoading(): void {
+    this.loading = !this.loading;
+  }
 
-protected isValidDateFormat(value: string): boolean {
-  return /^\d{2}\/\d{2}\/\d{4}$/.test(value);
-}
+  public onCancel(): void {
+    this._router.navigate(['/login']);
+  }
+
+  protected isValidDateFormat(value: string): boolean {
+    return /^\d{2}\/\d{2}\/\d{4}$/.test(value);
+  }
+
+  protected options: AnimationOptions = {
+    path: '/assets/json/register_animation.json',
+  };
+
 }

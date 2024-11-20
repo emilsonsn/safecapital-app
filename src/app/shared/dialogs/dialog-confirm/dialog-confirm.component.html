@@ -8,13 +8,17 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <div class="container">
-    <div id="actionsDialog" class="row justify-content-center">
-      <div class="col-auto">
-        <button id="cancel" mat-stroked-button (click)="onCancel()">Não</button>
-      </div>
-      <div class="col-auto">
-        <button id="submit" mat-flat-button color="primary" (click)="onConfirm()">Sim</button>
+  <div class="w-100 me-2">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button primary" (click)="onConfirm()">{{
+            'Salvar'
+            }}</button>
+        </div>
       </div>
     </div>
   </div>

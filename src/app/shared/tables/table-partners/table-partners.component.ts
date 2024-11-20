@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { Order, PageControl } from '@models/application';
 import { User } from '@models/user';
 import { UserService } from '@services/user.service';
@@ -6,11 +12,11 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 
 @Component({
-  selector: 'app-table-users',
-  templateUrl: './table-users.component.html',
-  styleUrl: './table-users.component.scss'
+  selector: 'app-table-partners',
+  templateUrl: './table-partners.component.html',
+  styleUrl: './table-partners.component.scss',
 })
-export class TableUserComponent {
+export class TablePartnersComponent {
   @Input()
   searchTerm?: string = '';
 
@@ -24,58 +30,73 @@ export class TableUserComponent {
   onUserClick: EventEmitter<User> = new EventEmitter<User>();
 
   @Output()
+  onRequestClick: EventEmitter<User> = new EventEmitter<User>();
+
+  @Output()
   onDeleteUserClick: EventEmitter<number> = new EventEmitter<number>();
 
   public users: User[] = [];
 
   public columns = [
     {
-      slug: "name",
+      slug: 'name',
       order: true,
-      title: "Nome",
-      align: "start",
+      title: 'Nome',
+      align: 'start',
     },
     {
-      slug: "cpf_cnpj",
+      slug: 'email',
       order: true,
-      title: "CPF/CNPJ",
-      align: "justify-content-center",
+      title: 'E-mail',
+      align: 'justify-content-center',
     },
     {
-      slug: "birth_date",
+      slug: 'company_name',
       order: true,
-      title: "Data de nascimento",
-      align: "justify-content-center",
+      title: 'Empresa',
+      align: 'justify-content-center',
     },
     {
-      slug: "position",
+      slug: 'cnpj',
       order: true,
-      title: "Cargo",
-      align: "justify-content-center",
+      title: 'CNPJ',
+      align: 'justify-content-center',
     },
     {
-      slug: "sector",
+      slug: 'creci',
       order: true,
-      title: "Setor",
-      align: "justify-content-center",
+      title: 'CRECI',
+      align: 'justify-content-center',
     },
     {
-      slug: "cellphone",
+      slug: 'phone',
       order: true,
-      title: "Whatsapp",
-      align: "justify-content-center",
+      title: 'Telefone',
+      align: 'justify-content-center',
     },
     {
-      slug: "email",
+      slug: 'created_at',
       order: true,
-      title: "E-mail",
-      align: "justify-content-center",
+      title: 'Data da Solicitação',
+      align: 'justify-content-center',
     },
     {
-      slug: "",
+      slug: 'status',
       order: true,
-      title: "Ações",
-      align: "justify-content-center",
+      title: 'Status',
+      align: 'justify-content-center',
+    },
+    {
+      slug: 'active',
+      order: true,
+      title: 'Ativo',
+      align: 'justify-content-center',
+    },
+    {
+      slug: '',
+      order: true,
+      title: 'Ações',
+      align: 'justify-content-center',
     },
   ];
 
@@ -84,28 +105,28 @@ export class TableUserComponent {
     page: 1,
     itemCount: 0,
     pageCount: 0,
-    orderField: "id",
+    orderField: 'id',
     order: Order.ASC,
   };
 
   constructor(
     private readonly _toastr: ToastrService,
-    private readonly _userService: UserService,
+    private readonly _userService: UserService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     const { filters, searchTerm, loading } = changes;
 
-    if ( searchTerm?.previousValue && searchTerm?.currentValue !== searchTerm?.previousValue ) {
+    if (
+      searchTerm?.previousValue &&
+      searchTerm?.currentValue !== searchTerm?.previousValue
+    ) {
+      this._onSearch();
+    } else if (!loading?.currentValue) {
+      this._onSearch();
+    } else if (filters?.previousValue && filters?.currentValue) {
       this._onSearch();
     }
-    else if (!loading?.currentValue) {
-      this._onSearch();
-    }
-    else if(filters?.previousValue && filters?.currentValue) {
-			this._onSearch();
-		}
-
   }
 
   private _initOrStopLoading(): void {
@@ -126,7 +147,7 @@ export class TableUserComponent {
     this._initOrStopLoading();
 
     this._userService
-      .getUsers(this.pageControl, {...this.filters, role : 'Admin,Manager'})
+      .getUsers(this.pageControl, { ...this.filters, role: 'Client' })
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe((res) => {
         this.users = res.data;

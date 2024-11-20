@@ -38,7 +38,7 @@
               <div>Nenhum resultado encontrado</div>
             </td>
           </tr>
-          @for (collaborator of users; track collaborator) {
+          @for (partner of users; track partner) {
             <tr
               class="table-line-hover"
               style="outline: none; cursor: pointer"
@@ -49,51 +49,68 @@
                   style="white-space: nowrap"
                 >
                   <!-- <app-avatar
-                    [imageUrl]="collaborator?.photo"
-                    [altText]="collaborator?.name"
+                    [imageUrl]="partner?.photo"
+                    [altText]="partner?.name"
                     [color]="'#e7b403'"
                     [onCircle]="true"
                   ></app-avatar> -->
-                  {{ collaborator?.name }}
+                  {{ partner?.name }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ collaborator?.email }}
+                  {{ partner?.email }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ collaborator?.email }}
+                  {{ partner?.company_name }}
+                </div>
+              </td>
+              <td>
+                <div class="text-center" style="text-wrap: nowrap;">
+                  {{ partner?.cnpj | cpfCnpjMask }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ collaborator?.role }}
+                  {{ partner?.creci }}
                 </div>
               </td>
               <td>
-                <div class="text-center">
-                  {{ collaborator?.email }}
+                <div class="text-center" style="text-wrap: nowrap;">
+                  {{ +partner?.phone | phoneMask }}
                 </div>
               </td>
               <td>
-                <div class="text-center">
-                  {{ collaborator?.email  }}
+                <div class="text-center" style="text-wrap: nowrap;">
+                  {{ partner?.created_at | date:"dd/MM/YYYY HH:mm:ss"  }}
                 </div>
               </td>
               <td>
-                <div class="text-center">
-                  {{ collaborator?.email }}
+                <div class="text-center" style="text-wrap: nowrap;">
+                  {{ partner?.validation | status  }}
                 </div>
               </td>
               <td>
-                <div class="d-flex justify-content-end">
-                  <div matRipple class="buttonTemplate" (click)="onUserClick.emit(collaborator)">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                  </div>
+                <div class="text-center" style="text-wrap: nowrap;">
+                  {{ partner?.is_active  }}
+                </div>
+              </td>
+              <td>
+                <div class="d-flex justify-content-center">
+                  @if(partner.validation == 'Pending') {
+                    <div matRipple class="buttonTemplate" (click)="onRequestClick.emit(partner)">
+                      <i class="fa-solid fa-check"></i>
+                    </div>
+                  }
+                  @else {
+                    <div matRipple class="buttonTemplate" (click)="onUserClick.emit(partner)">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </div>
+                  }
 
-                  <div matRipple class="buttonTemplate" (click)="onDeleteUserClick.emit(collaborator?.id)">
+                  <div matRipple class="buttonTemplate cancel" (click)="onDeleteUserClick.emit(partner?.id)">
                     <i class="fa-solid fa-trash"></i>
                   </div>
                 </div>
@@ -111,7 +128,7 @@
     [pageSizeOptions]="[10, 25, 50, 100]"
     [hidePageSize]="false"
     [pageIndex]="pageControl.page - 1"
-    aria-label="Select page"
+    (page)="pageEvent($event)"
   >
   </mat-paginator>
 

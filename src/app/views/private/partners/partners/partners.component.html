@@ -1,10 +1,10 @@
-<!-- <div class="row mt-4">
+<div class="row mt-4">
   @for (item of itemsRequests(); track item) {
     <div class="col-md-4 col-12">
       <app-small-information-card [data]="item"></app-small-information-card>
     </div>
   }
-</div> -->
+</div>
 
 <div id="componentHeaderTemplate">
   <div id="componentHeader">
@@ -22,9 +22,9 @@
       </div>
       }
       <div id="buttons">
-        <!-- <button matRipple class="button yellow" (click)="openRequestDialog()">
-          <i class="fa-solid fa-plus"></i> Nova Solicitação
-        </button> -->
+        <button matRipple class="button primary" (click)="openPartnerDialog(null)">
+          <i class="fa-solid fa-plus"></i> Novo Parceiro
+        </button>
       </div>
 
     </div>
@@ -32,11 +32,12 @@
 </div>
 
 <div id="componentTable" class="col-12 mt-4">
-  <app-table-requests
-    (onUserClick)="openRequestDialog($event)"
+  <app-table-partners
+    (onUserClick)="openPartnerDialog($event)"
+    (onRequestClick)="openRequestDialog($event)"
     (onDeleteUserClick)="deleteDialog($event)"
     [loading]="loading"
     [filters]="filters"
     >
-  </app-table-requests>
+  </app-table-partners>
 </div>

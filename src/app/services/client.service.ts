@@ -19,12 +19,12 @@ export class ClientService {
     return this._http.get<ApiResponsePageable<Client>>(`${environment.api}/client/search`);
   }
 
-  public postClient(client: Client): Observable<ApiResponse<Client>> {
+  public postClient(client: Client | FormData): Observable<ApiResponse<Client>> {
     return this._http.post<ApiResponse<Client>>(`${environment.api}/client/create`, client);
   }
 
-  public patchClient(id: number, client: Client): Observable<ApiResponse<Client>> {
-    return this._http.patch<ApiResponse<Client>>(`${environment.api}/client/${id}`, client);
+  public patchClient(id: number, client: Client | FormData | FormData): Observable<ApiResponse<Client>> {
+    return this._http.post<ApiResponse<Client>>(`${environment.api}/client/${id}?_method=PATCH`, client);
   }
 
   public deleteClient(id: number): Observable<DeleteApiResponse> {

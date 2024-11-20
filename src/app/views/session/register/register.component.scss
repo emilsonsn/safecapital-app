@@ -19,10 +19,12 @@
       padding: 1rem;
 
       #formContent {
-        max-width: 40rem;
-        padding: 2rem;
+        max-width: 43rem;
+        padding: 1.5rem;
         border-radius: 6px;
         background-color: $white-100;
+        max-height: 100%;
+        overflow: auto;
 
         .logo{
           width: fit-content;
@@ -45,10 +47,14 @@
     width: 50%;
     height: 100%;
     flex: 1;
-    background-color: #8ff;
+    background-color: #85b5b5;
+    overflow: hidden;
 
     #rightSideContent {
-
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 
@@ -56,6 +62,80 @@
 
 
 //
+
+#files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  max-width: 100%;
+  max-height: 10rem;
+  overflow: auto;
+
+  .file {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $white-200;
+    width: 9rem;
+    height: 9rem;
+    object-fit: contain;
+    cursor: pointer;
+
+    .delete {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: $red;
+      font-size: 1.2rem;
+      cursor: pointer;
+      background-color: $white-100;
+      height: fit-content;
+      border-radius: 50px;
+      width: 1.4rem;
+      height: 1.4rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .fa-file {
+      font-size: 2rem;
+    }
+  }
+
+}
+
+#inputFileAdd {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  height: 2rem;
+  width: 12rem;
+  background-color: $white-400;
+  cursor: pointer;
+
+  #text {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  input#file-upload-button {
+    display: none;
+  }
+}
 
 .profile-upload {
   position: relative;
@@ -162,18 +242,6 @@
   }
 }
 
-.template {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: $secondary;
-  height: 100%;
-  flex-wrap: wrap;
-  overflow: auto;
-
-
-}
-
 .templateSuccess {
   display: flex;
   justify-content: center;
@@ -199,4 +267,8 @@
       }
     }
   }
+}
+
+.button {
+  max-height: 3rem;
 }
