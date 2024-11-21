@@ -7,7 +7,7 @@
   }
 
   <div class="d-flex align-items-center justify-content-between">
-    <span class="fw-bold fs-5">{{title + (_data.isClient ? 'parceiro' : 'colaborador')}}</span>
+    <span class="fw-bold fs-5">{{title + (_data.isClient ? 'parceiro' : 'usuário')}}</span>
     <div matRipple class="close" (click)="onCancel()">
       <i class="fa-solid fa-close"></i>
     </div>
@@ -52,20 +52,19 @@
           <input matInput type="email" formControlName="email" pattern="{{ utils.patternEmail }}">
         </mat-form-field>
       </div>
-      <div class="col-12"></div>
-      <div class="col-md-6 col-12 mb-3">
+      <div class="col-md-6 col-12 mb-3" *ngIf="_data.isClient">
         <mat-form-field appearance="outline">
           <mat-label>CNPJ</mat-label>
           <input matInput type="text" formControlName="cnpj" mask="00.000.000/0000-00">
         </mat-form-field>
       </div>
-      <div class="col-md-6 col-12 mb-3">
+      <div class="col-md-6 col-12 mb-3" *ngIf="_data.isClient">
         <mat-form-field appearance="outline">
           <mat-label>Empresa</mat-label>
           <input matInput type="text" formControlName="company_name">
         </mat-form-field>
       </div>
-      <div class="col-md-6 col-12 mb-3">
+      <div class="col-md-6 col-12 mb-3" *ngIf="_data.isClient">
         <mat-form-field appearance="outline">
           <mat-label>CRECI</mat-label>
           <input matInput type="text" formControlName="creci">

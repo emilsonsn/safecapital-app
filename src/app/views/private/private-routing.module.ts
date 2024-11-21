@@ -19,51 +19,11 @@ const routes: Routes = [
         }
       },
       {
-        path: 'requests',
-        loadChildren: () => import('./requests/requests.module').then(m => m.RequestsModule),
-        canActivate: [permissionGuard],
-        data: {
-          page: 'requests'
-        }
-      },
-      {
-        path: 'orders',
-        loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule),
-        canActivate: [permissionGuard],
-        data: {
-          page: 'orders'
-        }
-      },
-      {
         path: 'collaborator',
         loadChildren: () => import('./collaborator/collaborator.module').then(m => m.CollaboratorModule),
         canActivate: [permissionGuard],
         data: {
           page: 'collaborator'
-        }
-      },
-      {
-        path: 'construction',
-        loadChildren: () => import('./construction/construction.module').then(m => m.ConstructionModule),
-        canActivate: [permissionGuard],
-        data: {
-          page: 'construction'
-        }
-      },
-      {
-        path: 'provider',
-        loadChildren: () => import('./provider/provider.module').then(m => m.ProviderModule),
-        canActivate: [permissionGuard],
-        data: {
-          page: 'provider'
-        }
-      },
-      {
-        path: 'services',
-        loadChildren: () => import('./services/services.module').then(m => m.ServicesModule),
-        canActivate: [permissionGuard],
-        data: {
-          page: 'services'
         }
       },
       {

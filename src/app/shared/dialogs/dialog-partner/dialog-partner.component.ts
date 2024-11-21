@@ -16,11 +16,11 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize, map, ReplaySubject } from 'rxjs';
 
 @Component({
-  selector: 'app-dialog-client',
-  templateUrl: './dialog-client.component.html',
-  styleUrl: './dialog-client.component.scss',
+  selector: 'app-dialog-partner',
+  templateUrl: './dialog-partner.component.html',
+  styleUrl: './dialog-partner.component.scss',
 })
-export class DialogClientComponent {
+export class DialogPartnerComponent {
   public isNewClient: boolean = true;
   public title: string = 'Novo cliente';
 
@@ -40,7 +40,7 @@ export class DialogClientComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     private readonly _data: { client: Client },
-    private readonly _dialogRef: MatDialogRef<DialogClientComponent>,
+    private readonly _dialogRef: MatDialogRef<DialogPartnerComponent>,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
     private readonly _utilsService: UtilsService,

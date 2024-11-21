@@ -22,22 +22,22 @@ export class CollaboratorComponent {
       icon: 'fa-solid fa-circle-check',
       background: '#4CA750',
       title: '0',
-      category: 'Colaboradores',
-      description: 'Colaboradores ativos',
+      category: 'Usuários',
+      description: 'Usuários ativos',
     },
     {
       icon: 'fa-solid fa-ban',
       background: '#dc3545',
       title: '0',
-      category: 'Colaboradores',
-      description: 'Colaboradores bloqueados',
+      category: 'Usuários',
+      description: 'Usuários bloqueados',
     },
     {
       icon: 'fa-solid fa-users',
       // background: '#dc3545',
       title: '0',
-      category: 'Colaboradores',
-      description: 'Colaboradores totais',
+      category: 'Usuários',
+      description: 'Usuários totais',
     },
   ]
 
@@ -58,6 +58,7 @@ export class CollaboratorComponent {
   }
 
   openDialogCollaborator(user: User) {
+    this._initOrStopLoading();
     this._dialog
       .open(DialogCollaboratorComponent, {
         data: {
@@ -69,9 +70,9 @@ export class CollaboratorComponent {
         maxHeight: '90%',
       })
       .afterClosed()
+      .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe((res) => {
         if(res) {
-
         }
       });
   }
@@ -89,22 +90,22 @@ export class CollaboratorComponent {
               icon: 'fa-solid fa-circle-check',
               background: '#4CA750',
               title: `${res.data.active}`,
-              category: 'Colaboradores',
-              description: 'Colaboradores ativos',
+              category: 'Usuários',
+              description: 'Usuários ativos',
             },
             {
               icon: 'fa-solid fa-ban',
               background: '#dc3545',
               title: `${res.data.inactive}`,
-              category: 'Colaboradores',
-              description: 'Colaboradores bloqueados',
+              category: 'Usuários',
+              description: 'Usuários bloqueados',
             },
             {
               icon: 'fa-solid fa-users',
               // background: '#dc3545',
               title: `${res.data.total}`,
-              category: 'Colaboradores',
-              description: 'Colaboradores totais',
+              category: 'Usuários',
+              description: 'Usuários totais',
             },
           ]
         },

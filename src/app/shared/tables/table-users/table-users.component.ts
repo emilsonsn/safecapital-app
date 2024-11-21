@@ -36,33 +36,15 @@ export class TableUserComponent {
       align: "start",
     },
     {
-      slug: "cpf_cnpj",
-      order: true,
-      title: "CPF/CNPJ",
-      align: "justify-content-center",
-    },
-    {
-      slug: "birth_date",
-      order: true,
-      title: "Data de nascimento",
-      align: "justify-content-center",
-    },
-    {
-      slug: "position",
+      slug: "role",
       order: true,
       title: "Cargo",
       align: "justify-content-center",
     },
     {
-      slug: "sector",
+      slug: "phone",
       order: true,
-      title: "Setor",
-      align: "justify-content-center",
-    },
-    {
-      slug: "cellphone",
-      order: true,
-      title: "Whatsapp",
+      title: "Telefone",
       align: "justify-content-center",
     },
     {

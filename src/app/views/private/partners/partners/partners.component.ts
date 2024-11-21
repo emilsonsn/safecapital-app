@@ -6,13 +6,13 @@ import { ISmallInformationCard } from '@models/cardInformation';
 import { HeaderService } from '@services/header.service';
 import { RequestService } from '@services/request.service';
 import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
-import { DialogRequestComponent } from '@shared/dialogs/dialog-request/dialog-request.component';
 import { DialogFilterRequestComponent } from '@shared/dialogs/filters/dialog-filter-request/dialog-filter-request.component';
 import dayjs from 'dayjs';
 import { requestCards } from '@models/requestOrder';
 import { ToastrService } from 'ngx-toastr';
 import { OrderService } from '@services/order.service';
 import { DialogCollaboratorComponent } from '@shared/dialogs/dialog-collaborator/dialog-collaborator.component';
+import { DialogRequestComponent } from '@shared/dialogs/dialog-request/dialog-request.component';
 
 @Component({
   selector: 'app-partners',

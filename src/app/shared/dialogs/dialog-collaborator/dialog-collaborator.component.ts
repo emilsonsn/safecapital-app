@@ -8,7 +8,6 @@ import {
 } from '@angular/material/dialog';
 import { UserService } from '@services/user.service';
 import { User } from '@models/user';
-import { DialogTypeUserSectorComponent } from '../dialog-type-user-sector/dialog-type-user-sector.component';
 import dayjs from 'dayjs';
 import { Utils } from '@shared/utils';
 import { ToastrService } from 'ngx-toastr';
@@ -46,10 +45,10 @@ export class DialogCollaboratorComponent {
       name: [null, [Validators.required]],
       surname: [null, [Validators.required]],
       email: [null, [Validators.required]],
-      cnpj: [null, [Validators.required]],
+      cnpj: [null],
       phone: [null, [Validators.required]],
-      company_name: [null, [Validators.required]],
-      creci: [null, [Validators.required]],
+      company_name: [null],
+      creci: [null],
       password: ['']
     });
 

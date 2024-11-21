@@ -60,7 +60,7 @@ export class LayoutPrivateComponent {
     //   route: '/painel/requests'
     // },
     {
-      label: 'Colaboradores',
+      label: 'Usuários',
       icon: 'fa-solid fa-users',
       route: '/painel/collaborator'
     },
