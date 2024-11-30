@@ -237,6 +237,7 @@ export class DialogPartnerComponent {
     id: number;
     preview: string;
     file: File;
+    category : string;
   }[] = [];
 
   protected filesToRemove: number[] = [];
@@ -280,6 +281,7 @@ export class DialogPartnerComponent {
           id: this.filesToSend.length + 1,
           preview: base64,
           file: file,
+          category : null
         });
       } else this._toastr.error(`${file.type} não é permitido`);
     }

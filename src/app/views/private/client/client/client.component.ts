@@ -6,11 +6,12 @@ import { DialogPartnerComponent } from '@shared/dialogs/dialog-partner/dialog-pa
 import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
+import { HeaderService } from '@services/header.service';
 
 @Component({
   selector: 'app-client',
   templateUrl: './client.component.html',
-  styleUrl: './client.component.scss'
+  styleUrl: './client.component.scss',
 })
 export class ClientComponent {
   public loading: boolean = false;
@@ -18,8 +19,12 @@ export class ClientComponent {
   constructor(
     private readonly _dialog: MatDialog,
     private readonly _toastr: ToastrService,
-    private readonly _clientService: ClientService
-  ) {}
+    private readonly _clientService: ClientService,
+    private readonly _headerService : HeaderService,
+  ) {
+    this._headerService.setTitle('Clientes');
+    this._headerService.setSubTitle('');
+  }
 
   private _initOrStopLoading(): void {
     this.loading = !this.loading;
@@ -71,4 +76,3 @@ export class ClientComponent {
       });
   }
 }
-

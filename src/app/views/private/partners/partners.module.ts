@@ -4,14 +4,23 @@ import { PartnersRoutingModule } from './partners-routing.module';
 import { PartnersComponent } from './partners/partners.component';
 import {SharedModule} from "@shared/shared.module";
 import {MatRippleModule} from "@angular/material/core";
+import { PartnersAnalysisComponent } from './partners-analysis/partners-analysis.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
-    PartnersComponent
+    PartnersComponent,
+    PartnersAnalysisComponent
   ],
   imports: [
     CommonModule,
     PartnersRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
     SharedModule,
     MatRippleModule,
   ]

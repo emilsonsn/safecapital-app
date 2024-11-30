@@ -82,25 +82,41 @@
       <span class="fw-bolder">Anexos</span>
       <div id="files">
         @for(img of filesFromBack; track img) {
-        <div class="file" matTooltip="{{img.name}}" (click)="openFileInAnotherTab(img.path)">
-          <div class="delete">
-            <i class="fa-solid fa-close" (click)="prepareFileToRemoveFromBack(img.id, $index);"></i>
+        <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
+
+          <div class="file" matTooltip="{{img.name}}" (click)="openFileInAnotherTab(img.path)">
+            <div class="delete">
+              <i class="fa-solid fa-close" (click)="prepareFileToRemoveFromBack(img.id, $index);"></i>
+            </div>
+            <img [src]="img.path" alt="{{img.name}}" style="max-width: 100%; max-height: 100%;" />
           </div>
-          <img [src]="img.path" alt="{{img.name}}" style="max-width: 100%; max-height: 100%;" />
+          <mat-form-field appearance="outline" style="width: 18rem;">
+            <mat-label>Descrição</mat-label>
+            <input matInput type="text" [(ngModel)]="filesToSend[$index].category" [ngModelOptions]="{standalone: true}"
+              required>
+          </mat-form-field>
         </div>
+
         }
 
         @for(img of filesToSend; track img) {
-        <div class="file" matTooltip="{{img.file.name}}">
-          <div class="delete">
-            <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
+        <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
+          <div class="file" matTooltip="{{img.file.name}}">
+            <div class="delete">
+              <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
+            </div>
+            @if(img.preview) {
+            <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
+            }
+            @else {
+            <i class="fa-solid fa-file"></i>
+            }
           </div>
-          @if(img.preview) {
-          <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
-          }
-          @else {
-          <i class="fa-solid fa-file"></i>
-          }
+          <mat-form-field appearance="outline" style="width: 18rem;">
+            <mat-label>Descrição</mat-label>
+            <input matInput type="text" [(ngModel)]="filesToSend[$index].category" [ngModelOptions]="{standalone: true}"
+              required>
+          </mat-form-field>
         </div>
         }
       </div>

@@ -63,7 +63,7 @@ export class DialogCollaboratorComponent {
   }
 
   public onSubmit(form: FormGroup): void {
-    if (!form.valid || this.loading) {
+    if (!form.valid || this.loading || this.filesToSend.some(file => !file.category)) {
       form.markAllAsTouched();
       return;
     }
@@ -77,7 +77,8 @@ export class DialogCollaboratorComponent {
     formData.append('role', this._data.isClient ? 'Client' : 'Manager');
 
     this.filesToSend.map((file, index) => {
-      formData.append(`attachments[${index}]`, file.file);
+      formData.append(`attachments[${index}][category]`, file.category);
+      formData.append(`attachments[${index}][file]`, file.file);
     });
 
     if(this.isNewCollaborator) {
@@ -133,6 +134,7 @@ export class DialogCollaboratorComponent {
     id: number;
     preview: string;
     file: File;
+    category: string;
   }[] = [];
 
   protected filesToRemove : number[] = [];
@@ -141,6 +143,7 @@ export class DialogCollaboratorComponent {
     id: number,
     name : string,
     path: string, // Wasabi
+    category : string,
   }[] = [];
 
   public allowedTypes = [
@@ -176,6 +179,7 @@ export class DialogCollaboratorComponent {
           id: this.filesToSend.length + 1,
           preview: base64,
           file: file,
+          category: null,
         });
       } else this._toastr.error(`${file.type} não é permitido`);
     }

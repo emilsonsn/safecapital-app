@@ -13,16 +13,19 @@ import { TableUserComponent } from './table-users/table-users.component';
 import {SharedModule} from "@shared/shared.module";
 import {AvatarModule} from "@shared/components/avatar/avatar.module";
 import { TablePartnersComponent } from './table-partners/table-partners.component';
+import { TableSolicitationComponent } from './table-solicitation/table-solicitation.component';
 
 const tables = [
   TableClientComponent,
   TableUserComponent,
   TablePartnersComponent,
+  TableSolicitationComponent,
 ]
 
 @NgModule({
   declarations: [
     tables,
+    TableSolicitationComponent,
   ],
   imports: [
     CommonModule,

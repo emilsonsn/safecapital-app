@@ -7,3 +7,9 @@ export interface ISmallInformationCard {
   color?: string;
   background?: string;
 }
+
+export interface requestCards {
+  solicitationFinished: number
+  solicitationPending: number
+  solicitationReject: number
+}

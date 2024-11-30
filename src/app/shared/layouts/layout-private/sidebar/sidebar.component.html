@@ -1,24 +1,40 @@
 <nav [ngClass]="{ 'mobile': _sidebarService.mobile(), 'show-sidebar': _sidebarService.showSidebar() }">
   <div class="logo">
     <img src="./assets/images/logo.png" alt="logo">
-
-    @if(_sidebarService.mobile()) {
-      <div matRipple (click)="toggleShowSidebar()">
-        <i class="fa-solid fa-bars"></i>
-      </div>
-    }
+    <div *ngIf="_sidebarService.mobile()" matRipple (click)="toggleShowSidebar()">
+      <i class="fa-solid fa-bars"></i>
+    </div>
   </div>
 
   <mat-divider></mat-divider>
 
   <ul class="components">
-    @for (item of menuItem; track item) {
-      <li routerLinkActive="active" [routerLink]="item.route">
-        <a [routerLink]="item.route">
-          <i [class]="item.icon"></i>
-          <span>{{ item.label }}</span>
-        </a>
-      </li>
-    }
+    <li [ngClass]="item.children ? 'dropdown' : 'menu'" *ngFor="let item of menuItem" [routerLinkActive]="'active'"
+        (click)="item.children ? toggleDropdown(item) : navigateToRoute(item, $event)">
+      <a [routerLink]="item.children ? null : item.route">
+        <i [class]="item.icon" style="width: 25px"></i>
+        <span class="d-flex align-items-center w-100" style="justify-content: space-between">
+        <span>{{ item.label }}</span>
+        <i *ngIf="item.children" class="fa-solid"
+           [ngClass]="{'fa-chevron-up': item.isOpen, 'fa-chevron-down': !item.isOpen}"></i>
+      </span>
+      </a>
+
+      <!-- Submenu -->
+
+      <ul *ngIf="item.children && item.isOpen" class="components submenu-components" style="margin-top: 0.7rem;">
+        @for (child of item.children; track child) {
+          <li class="menu" [ngClass]="routerActive(child) ? 'activated' : ''"
+              (click)="navigateToRoute(child, $event)">
+            <a class="submenu" [routerLink]="child.route">
+              <i [class]="child.icon" style="width: 25px"></i>
+              <span style="white-space: nowrap;">{{ child.label }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+
+    </li>
   </ul>
+
 </nav>

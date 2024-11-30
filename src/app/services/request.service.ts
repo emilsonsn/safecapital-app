@@ -5,7 +5,7 @@ import {environment} from '@env/environment';
 import {ApiResponse, ApiResponsePageable, DeleteApiResponse, PageControl} from '@models/application';
 import {Utils} from '@shared/utils';
 import {Observable} from 'rxjs';
-import {requestCards} from "@models/requestOrder";
+import { requestCards } from '@models/cardInformation';
 
 @Injectable({
   providedIn: 'root'

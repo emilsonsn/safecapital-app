@@ -1,23 +1,23 @@
 import { Component, computed, Signal, signal } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ISmallInformationCard, requestCards } from '@models/cardInformation';
 import { HeaderService } from '@services/header.service';
 import { RequestService } from '@services/request.service';
 import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
+import dayjs from 'dayjs';
 import { ToastrService } from 'ngx-toastr';
 import { DialogCollaboratorComponent } from '@shared/dialogs/dialog-collaborator/dialog-collaborator.component';
 import { DialogRequestComponent } from '@shared/dialogs/dialog-request/dialog-request.component';
 
 @Component({
-  selector: 'app-partners',
-  templateUrl: './partners.component.html',
-  styleUrl: './partners.component.scss',
+  selector: 'app-solicitation',
+  templateUrl: './solicitation.component.html',
+  styleUrl: './solicitation.component.scss'
 })
-export class PartnersComponent {
-  public formFilters: FormGroup;
-  protected cards = signal<requestCards>({
+export class SolicitationComponent {
+  cards = signal<requestCards>({
     solicitationFinished: 0,
     solicitationPending: 0,
     solicitationReject: 0,
@@ -62,7 +62,7 @@ export class PartnersComponent {
     private readonly _requestService: RequestService,
     private readonly _toastrService: ToastrService
   ) {
-    this._headerService.setTitle('Parceiros');
+    this._headerService.setTitle('Solicitações');
     this._headerService.setSubTitle('');
 
     // _requestService.getCards().subscribe({
@@ -72,13 +72,9 @@ export class PartnersComponent {
     // })
   }
 
-  ngOnInit() {
-    this.formFilters = this._fb.group({
-      search_term : ''
-    });
-  }
+  ngOnInit() {}
 
-  public openPartnerDialog(user?) {
+  public openPartnerDialog(user) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '1000px',
@@ -168,21 +164,5 @@ export class PartnersComponent {
           }
         },
       });
-  }
-
-  handleSearchTerm(res) {
-
-  }
-
-  // Filters
-  public updateFilters() {
-    this.filters = this.formFilters.getRawValue();
-  }
-
-  public clearFormFilters() {
-    this.formFilters.patchValue({
-      search_term: '',
-    });
-    this.updateFilters();
   }
 }

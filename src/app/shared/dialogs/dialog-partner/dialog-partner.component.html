@@ -115,18 +115,25 @@
         }
 
         @for(img of filesToSend; track img) {
-        <div class="file" matTooltip="{{img.file.name}}">
-          <div class="delete">
-            <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
+          <div>
+            <div class="file" matTooltip="{{img.file.name}}">
+              <div class="delete">
+                <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
+              </div>
+              @if(img.preview) {
+              <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
+              }
+              @else {
+              <i class="fa-solid fa-file"></i>
+              }
+            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>Descrição</mat-label>
+              <input matInput type="text" >
+            </mat-form-field>
           </div>
-          @if(img.preview) {
-          <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
-          }
-          @else {
-          <i class="fa-solid fa-file"></i>
-          }
-        </div>
         }
+        test
       </div>
       <div matRipple id="inputFileAdd" class="mt-2">
         <div id="text">

@@ -1,0 +1,32 @@
+@import "../../../../../src/assets/scss/variables";
+
+#search-div{
+  display: flex;
+  align-items: center;
+  border: 1px solid $grey1;
+  border-radius: 5px;
+  min-width: 50px;
+  height: 2.8rem;
+  color: $grey1;
+  cursor: pointer;
+  min-width: 7.5rem;
+
+  #search{
+      border: none;
+      outline: none !important;
+      box-shadow: none;
+      text-indent: 0.4rem;
+  }
+
+  .search-icon {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 0.5rem;
+      background-color: $grey2;
+      border-left: 1px solid $grey1;
+      border-radius: 0.25rem;
+  }
+
+}

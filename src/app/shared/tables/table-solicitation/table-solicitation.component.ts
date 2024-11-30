@@ -6,21 +6,17 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Order, PageControl } from '@models/application';
-import { User } from '@models/user';
-import { UserService } from '@services/user.service';
+import { Client } from '@models/client';
+import { ClientService } from '@services/client.service';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 
 @Component({
-  selector: 'app-table-partners',
-  templateUrl: './table-partners.component.html',
-  styleUrl: './table-partners.component.scss',
+  selector: 'app-table-solicitation',
+  templateUrl: './table-solicitation.component.html',
+  styleUrl: './table-solicitation.component.scss',
 })
-export class TablePartnersComponent {
-
-  @Input()
-  validation? : string = '';
-
+export class TableSolicitationComponent {
   @Input()
   searchTerm?: string = '';
 
@@ -31,15 +27,12 @@ export class TablePartnersComponent {
   filters: any;
 
   @Output()
-  onUserClick: EventEmitter<User> = new EventEmitter<User>();
+  onClientClick: EventEmitter<Client> = new EventEmitter<Client>();
 
   @Output()
-  onRequestClick: EventEmitter<User> = new EventEmitter<User>();
+  onDeleteClientClick: EventEmitter<number> = new EventEmitter<number>();
 
-  @Output()
-  onDeleteUserClick: EventEmitter<number> = new EventEmitter<number>();
-
-  public users: User[] = [];
+  public clients = [];
 
   public columns = [
     {
@@ -49,51 +42,21 @@ export class TablePartnersComponent {
       align: 'start',
     },
     {
-      slug: 'email',
+      slug: 'phone',
+      order: true,
+      title: 'Whatsapp',
+      align: 'justify-content-center',
+    },
+    {
+      slug: 'Telefone',
       order: true,
       title: 'E-mail',
       align: 'justify-content-center',
     },
     {
-      slug: 'company_name',
+      slug: 'cpf',
       order: true,
-      title: 'Empresa',
-      align: 'justify-content-center',
-    },
-    // {
-    //   slug: 'cnpj',
-    //   order: true,
-    //   title: 'CNPJ',
-    //   align: 'justify-content-center',
-    // },
-    // {
-    //   slug: 'creci',
-    //   order: true,
-    //   title: 'CRECI',
-    //   align: 'justify-content-center',
-    // },
-    {
-      slug: 'phone',
-      order: true,
-      title: 'Telefone',
-      align: 'justify-content-center',
-    },
-    {
-      slug: 'created_at',
-      order: true,
-      title: 'Data da Solicitação',
-      align: 'justify-content-center',
-    },
-    {
-      slug: 'status',
-      order: true,
-      title: 'Status',
-      align: 'justify-content-center',
-    },
-    {
-      slug: 'active',
-      order: true,
-      title: 'Ativo',
+      title: 'CPF',
       align: 'justify-content-center',
     },
     {
@@ -115,7 +78,7 @@ export class TablePartnersComponent {
 
   constructor(
     private readonly _toastr: ToastrService,
-    private readonly _userService: UserService
+    private readonly _clientService: ClientService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -150,15 +113,22 @@ export class TablePartnersComponent {
   search(): void {
     this._initOrStopLoading();
 
-    this._userService
-      .getUsers(this.pageControl, { ...this.filters, role: 'Client', validation : this.validation })
+    this._clientService
+      .getClients(this.pageControl, this.filters)
       .pipe(finalize(() => this._initOrStopLoading()))
-      .subscribe((res) => {
-        this.users = res.data;
+      .subscribe({
+        next: (res) => {
+          this.clients = res.data;
 
-        this.pageControl.page = res.current_page - 1;
-        this.pageControl.itemCount = res.total;
-        this.pageControl.pageCount = res.last_page;
+          this.pageControl.page = res.current_page - 1;
+          this.pageControl.itemCount = res.total;
+          this.pageControl.pageCount = res.last_page;
+        },
+        error: (err) => {
+          this._toastr.error(
+            err?.error?.message || 'Ocorreu um erro ao buscar os dados'
+          );
+        },
       });
   }
 

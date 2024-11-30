@@ -1,43 +1,51 @@
 <div class="row mt-4">
   @for (item of itemsRequests(); track item) {
-    <div class="col-md-4 col-12">
-      <app-small-information-card [data]="item"></app-small-information-card>
-    </div>
+  <div class="col-md-4 col-12">
+    <app-small-information-card [data]="item"></app-small-information-card>
+  </div>
   }
 </div>
 
-<div id="componentHeaderTemplate">
-  <div id="componentHeader">
+<app-header-page-component>
 
-    <div>
-      <!-- <app-search-input
-        (onSearchInputChanged)="handleSearchTerm($event)">
-      </app-search-input> -->
-    </div>
+  <div id="searchInput">
+    <app-search-input (onSearchInputChanged)="handleSearchTerm($event)">
+    </app-search-input>
+  </div>
 
-    <div id="options">
-      @if(false) {
-      <div id="filter" matRipple (click)="openOrderFilterDialog()">
-        <i class="fa-solid fa-filter"></i>
+  <div id="buttons">
+    <button matRipple class="button primary" (click)="openPartnerDialog()">
+      <i class="fa-solid fa-plus"></i> Profissão
+    </button>
+  </div>
+
+  <div id="filters">
+    <form [formGroup]="formFilters">
+      <div class="row">
+        <div class="col-md-4 mb-md-0 mb-2">
+          <mat-form-field>
+            <mat-label>Pesquisar</mat-label>
+            <input matInput formControlName="search_term" placeholder="Buscar">
+          </mat-form-field>
+        </div>
+
       </div>
-      }
-      <div id="buttons">
-        <button matRipple class="button primary" (click)="openPartnerDialog(null)">
-          <i class="fa-solid fa-plus"></i> Novo Parceiro
-        </button>
-      </div>
+    </form>
 
+    <div class="d-flex justify-content-end flex-wrap gap-2 mt-2">
+      <button matRipple class="button bgRed" (click)="clearFormFilters()">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+      <button matRipple class="button primary" (click)="updateFilters()">
+        <i class="fa-solid fa-magnifying-glass"></i> Pesquisar
+      </button>
     </div>
   </div>
-</div>
+
+</app-header-page-component>
 
 <div id="componentTable" class="col-12 mt-4">
-  <app-table-partners
-    (onUserClick)="openPartnerDialog($event)"
-    (onRequestClick)="openRequestDialog($event)"
-    (onDeleteUserClick)="deleteDialog($event)"
-    [loading]="loading"
-    [filters]="filters"
-    >
+  <app-table-partners (onUserClick)="openPartnerDialog($event)" (onRequestClick)="openRequestDialog($event)"
+    (onDeleteUserClick)="deleteDialog($event)" [loading]="loading" [filters]="filters" [validation]="'Accepted'">
   </app-table-partners>
 </div>

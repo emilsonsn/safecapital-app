@@ -1,5 +1,5 @@
 import { Component, computed, Signal, signal } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ISmallInformationCard, requestCards } from '@models/cardInformation';
@@ -11,13 +11,12 @@ import { DialogCollaboratorComponent } from '@shared/dialogs/dialog-collaborator
 import { DialogRequestComponent } from '@shared/dialogs/dialog-request/dialog-request.component';
 
 @Component({
-  selector: 'app-partners',
-  templateUrl: './partners.component.html',
-  styleUrl: './partners.component.scss',
+  selector: 'app-partners-analysis',
+  templateUrl: './partners-analysis.component.html',
+  styleUrl: './partners-analysis.component.scss',
 })
-export class PartnersComponent {
-  public formFilters: FormGroup;
-  protected cards = signal<requestCards>({
+export class PartnersAnalysisComponent {
+  cards = signal<requestCards>({
     solicitationFinished: 0,
     solicitationPending: 0,
     solicitationReject: 0,
@@ -62,7 +61,7 @@ export class PartnersComponent {
     private readonly _requestService: RequestService,
     private readonly _toastrService: ToastrService
   ) {
-    this._headerService.setTitle('Parceiros');
+    this._headerService.setTitle('Análise de Parceiros');
     this._headerService.setSubTitle('');
 
     // _requestService.getCards().subscribe({
@@ -72,13 +71,9 @@ export class PartnersComponent {
     // })
   }
 
-  ngOnInit() {
-    this.formFilters = this._fb.group({
-      search_term : ''
-    });
-  }
+  ngOnInit() {}
 
-  public openPartnerDialog(user?) {
+  public openPartnerDialog(user) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '1000px',
@@ -168,21 +163,5 @@ export class PartnersComponent {
           }
         },
       });
-  }
-
-  handleSearchTerm(res) {
-
-  }
-
-  // Filters
-  public updateFilters() {
-    this.filters = this.formFilters.getRawValue();
-  }
-
-  public clearFormFilters() {
-    this.formFilters.patchValue({
-      search_term: '',
-    });
-    this.updateFilters();
   }
 }

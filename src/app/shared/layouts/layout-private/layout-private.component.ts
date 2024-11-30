@@ -1,20 +1,19 @@
-import {Component, ElementRef, Renderer2} from '@angular/core';
-import {IMenuItem} from "@models/ItemsMenu";
-import {SidebarService} from '@services/sidebar.service';
-import {Subscription} from "rxjs";
-import {User} from "@models/user";
-import {UserService} from "@services/user.service";
-import {ApiResponse} from "@models/application";
+import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { IMenuItem } from '@models/ItemsMenu';
+import { SidebarService } from '@services/sidebar.service';
+import { Subscription } from 'rxjs';
+import { User } from '@models/user';
+import { UserService } from '@services/user.service';
+import { ApiResponse } from '@models/application';
 import { SessionService } from '@store/session.service';
 import { SessionQuery } from '@store/session.query';
 
 @Component({
   selector: 'app-layout-private',
   templateUrl: './layout-private.component.html',
-  styleUrl: './layout-private.component.scss'
+  styleUrl: './layout-private.component.scss',
 })
 export class LayoutPrivateComponent {
-
   public permitedMenuItem: IMenuItem[] = [];
 
   public menuItem: IMenuItem[] = [
@@ -22,7 +21,7 @@ export class LayoutPrivateComponent {
       label: 'Home',
       icon: 'fa-solid fa-house',
       route: '/painel/home',
-      active: true
+      active: true,
     },
     // {
     //   label: 'Pedidos',
@@ -42,7 +41,7 @@ export class LayoutPrivateComponent {
     {
       label: 'Clientes',
       icon: 'fa-solid fa-user-tie',
-      route: '/painel/client'
+      route: '/painel/client',
     },
     // {
     //   label: 'Serviços',
@@ -52,24 +51,37 @@ export class LayoutPrivateComponent {
     {
       label: 'Parceiros',
       icon: 'fa-solid fa-user-tie',
-      route: '/painel/tasks'
+      route: '/painel/partners',
+      active: false,
+      children: [
+        {
+          label: 'Parceiros',
+          icon: 'fa-solid fa-user-tie',
+          route: '/painel/partners',
+        },
+        {
+          label: 'Análise de Parceiros',
+          icon: 'fa-solid fa-chart-simple',
+          route: '/painel/partners/analysis',
+        },
+      ],
     },
-    // {
-    //   label: 'Análise de Parceiro',
-    //   icon: 'fa-solid fa-bookmark',
-    //   route: '/painel/requests'
-    // },
+    {
+      label: 'Solicitações',
+      icon: 'fa-solid fa-bookmark',
+      route: '/painel/solicitation',
+    },
     {
       label: 'Usuários',
       icon: 'fa-solid fa-users',
-      route: '/painel/collaborator'
+      route: '/painel/collaborator',
     },
     // {
     //   label: 'Configurações',
     //   icon: 'fa-solid fa-gear',
     //   route: '/painel/services'
     // },
-  ]
+  ];
 
   protected isMobile: boolean = window.innerWidth >= 1000;
   private resizeSubscription: Subscription;
@@ -81,40 +93,35 @@ export class LayoutPrivateComponent {
     private readonly _sidebarService: SidebarService,
     private readonly _userService: UserService,
     private readonly _sessionService: SessionService,
-    private readonly _sessionQuery : SessionQuery
-  ) { }
-
+    private readonly _sessionQuery: SessionQuery
+  ) {}
 
   ngOnInit(): void {
-
     document.getElementById('template').addEventListener('click', () => {
       this._sidebarService.retractSidebar();
     });
 
-    this._sessionQuery.user$.subscribe(user => {
-      if(user) {
+    this._sessionQuery.user$.subscribe((user) => {
+      if (user) {
         this.user = user;
 
-        if(user?.role == 'Admin' || user?.role == 'Manager') {
+        if (user?.role == 'Admin' || user?.role == 'Manager') {
           this.permitedMenuItem = this.menuItem;
-        }
-        else if(user?.role == 'Client') {
-          this.permitedMenuItem = this.menuItem.filter(item =>
-            item.label == 'Pedidos' ||
-            item.label == 'Solicitações' ||
-            item.label == 'Fornecedores'
+        } else if (user?.role == 'Client') {
+          this.permitedMenuItem = this.menuItem.filter(
+            (item) =>
+              item.label == 'Pedidos' ||
+              item.label == 'Solicitações' ||
+              item.label == 'Fornecedores'
           );
         }
       }
-    })
-
+    });
   }
-
 
   ngOnDestroy(): void {
     if (this.resizeSubscription) {
       this.resizeSubscription.unsubscribe();
     }
   }
-
 }

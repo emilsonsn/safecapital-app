@@ -27,11 +27,11 @@ const routes: Routes = [
         }
       },
       {
-        path: 'tasks',
+        path: 'partners',
         loadChildren: () => import('./partners/partners.module').then(m => m.PartnersModule),
         canActivate: [permissionGuard],
         data: {
-          page: 'tasks'
+          page: 'partners'
         }
       },
       {
@@ -40,6 +40,14 @@ const routes: Routes = [
         canActivate: [permissionGuard],
         data: {
           page: 'client'
+        }
+      },
+      {
+        path: 'solicitation',
+        loadChildren: () => import('./solicitation/solicitation.module').then(m => m.SolicitationModule),
+        canActivate: [permissionGuard],
+        data: {
+          page: 'solicitation'
         }
       },
       {

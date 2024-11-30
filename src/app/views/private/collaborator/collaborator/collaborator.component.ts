@@ -1,13 +1,14 @@
-import {Component} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {Router} from '@angular/router';
-import {DialogCollaboratorComponent} from '@shared/dialogs/dialog-collaborator/dialog-collaborator.component';
-import {DialogConfirmComponent} from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
-import {ToastrService} from 'ngx-toastr';
-import {finalize} from 'rxjs';
-import {ISmallInformationCard} from '@models/cardInformation';
-import {User} from '@models/user';
-import {UserService} from '@services/user.service';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { DialogCollaboratorComponent } from '@shared/dialogs/dialog-collaborator/dialog-collaborator.component';
+import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
+import { ToastrService } from 'ngx-toastr';
+import { finalize } from 'rxjs';
+import { ISmallInformationCard } from '@models/cardInformation';
+import { User } from '@models/user';
+import { UserService } from '@services/user.service';
+import { HeaderService } from '@services/header.service';
 
 @Component({
   selector: 'app-collaborator',
@@ -39,14 +40,17 @@ export class CollaboratorComponent {
       category: 'Usuários',
       description: 'Usuários totais',
     },
-  ]
+  ];
 
   constructor(
     private readonly _dialog: MatDialog,
     private readonly _toastr: ToastrService,
     private readonly _router: Router,
-    private readonly _userService: UserService
+    private readonly _userService: UserService,
+    private readonly _headerService: HeaderService
   ) {
+    this._headerService.setTitle('Usuários');
+    this._headerService.setSubTitle('');
   }
 
   ngOnInit(): void {
@@ -62,8 +66,8 @@ export class CollaboratorComponent {
     this._dialog
       .open(DialogCollaboratorComponent, {
         data: {
-          isClient : false,
-          user
+          isClient: false,
+          user,
         },
         width: '80%',
         maxWidth: '850px',
@@ -72,7 +76,7 @@ export class CollaboratorComponent {
       .afterClosed()
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe((res) => {
-        if(res) {
+        if (res) {
         }
       });
   }
@@ -107,7 +111,7 @@ export class CollaboratorComponent {
               category: 'Usuários',
               description: 'Usuários totais',
             },
-          ]
+          ];
         },
         error: (err) => {
           this._toastr.error(err.error.error);
@@ -118,7 +122,7 @@ export class CollaboratorComponent {
   onDeleteCollaborator(id: number) {
     const text = 'Tem certeza? Essa ação não pode ser revertida!';
     this._dialog
-      .open(DialogConfirmComponent, {data: {text}})
+      .open(DialogConfirmComponent, { data: { text } })
       .afterClosed()
       .subscribe((res: boolean) => {
         if (res) {
