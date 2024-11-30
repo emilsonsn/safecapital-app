@@ -1,0 +1,58 @@
+@if(loading) {
+<div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+  <mat-spinner></mat-spinner>
+</div>
+}
+
+<form [formGroup]="form">
+  <div class="row">
+    <div class="col-12">
+      <span class="fw-bold fs-6 mb-3">Limites de Score para Aprovação</span>
+    </div>
+    <div class="col-md-6 mb-3">
+      <mat-form-field appearance="outline" class="bgWhite">
+        <mat-label>Início - Aprovado </mat-label>
+        <input matInput type="text" formControlName="start_approved_score" mask="0*">
+      </mat-form-field>
+    </div>
+    <div class="col-md-6 mb-3">
+      <mat-form-field appearance="outline" class="bgWhite">
+        <mat-label>Fim - Aprovado </mat-label>
+        <input matInput type="text" formControlName="end_approved_score" mask="0*">
+      </mat-form-field>
+    </div>
+    <div class="col-12">
+      <span class="fw-bold fs-6 mb-3">Limites de Score para Pendente</span>
+    </div>
+    <div class="col-md-6 mb-3">
+      <mat-form-field appearance="outline" class="bgWhite">
+        <mat-label>Início - Pendente </mat-label>
+        <input matInput type="text" formControlName="start_pending_score" mask="0*">
+      </mat-form-field>
+    </div>
+    <div class="col-md-6 mb-3">
+      <mat-form-field appearance="outline" class="bgWhite">
+        <mat-label>Fim - Pendente </mat-label>
+        <input matInput type="text" formControlName="end_pending_score" mask="0*">
+      </mat-form-field>
+    </div>
+    <div class="col-12">
+      <span class="fw-bold fs-6 mb-3">Limites de Score para Reprovado</span>
+    </div>
+    <div class="col-md-6 mb-3">
+      <mat-form-field appearance="outline" class="bgWhite">
+        <mat-label>Início - Reprovado </mat-label>
+        <input matInput type="text" formControlName="start_disapproved_score" mask="0*">
+      </mat-form-field>
+    </div>
+    <div class="col-md-6 mb-3">
+      <mat-form-field appearance="outline" class="bgWhite">
+        <mat-label>Fim - Reprovado </mat-label>
+        <input matInput type="text" formControlName="end_disapproved_score" mask="0*">
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <button matRipple id="submit" class="button primary" style="width: 7rem;" (click)="onSubmit()">Salvar</button>
+  </div>
+</form>

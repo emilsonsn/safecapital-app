@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, signal } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 
 @Component({
   selector: 'app-header-page-component',
@@ -19,7 +19,11 @@ import { Component, signal } from '@angular/core';
 })
 export class HeaderPageComponent {
 
+  @Input()
+  hasFilter : boolean = true;
+
   public showFilter = signal(false);
+
 
   public toggleShowFilter() {
     this.showFilter.set(!this.showFilter());

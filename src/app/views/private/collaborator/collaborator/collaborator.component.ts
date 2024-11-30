@@ -9,6 +9,7 @@ import { ISmallInformationCard } from '@models/cardInformation';
 import { User } from '@models/user';
 import { UserService } from '@services/user.service';
 import { HeaderService } from '@services/header.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-collaborator',
@@ -17,6 +18,9 @@ import { HeaderService } from '@services/header.service';
 })
 export class CollaboratorComponent {
   public loading: boolean = false;
+  public filters;
+  public formFilters : FormGroup;
+  public searchTerm : string = '';
 
   protected itemsRequests: ISmallInformationCard[] = [
     {
@@ -61,7 +65,7 @@ export class CollaboratorComponent {
     this.loading = !this.loading;
   }
 
-  openDialogCollaborator(user: User) {
+  openDialogCollaborator(user?: User) {
     this._initOrStopLoading();
     this._dialog
       .open(DialogCollaboratorComponent, {
@@ -145,4 +149,21 @@ export class CollaboratorComponent {
         },
       });
   }
+
+  // Filters
+  public updateFilters() {
+    this.filters = this.formFilters.getRawValue();
+  }
+
+  public clearFormFilters() {
+    this.formFilters.patchValue({
+      search_term: '',
+    });
+    this.updateFilters();
+  }
+
+  protected handleSearchTerm(res) {
+    this.searchTerm = res;
+  }
+
 }

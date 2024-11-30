@@ -5,7 +5,7 @@ import {
   Signal,
   signal,
 } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ISmallInformationCard, requestCards } from '@models/cardInformation';
@@ -37,7 +37,9 @@ export class SolicitationComponent {
   });
   public filters;
   public loading: boolean = false;
+  public formFilters: FormGroup;
   protected role: UserRole;
+  protected searchTerm: string = '';
 
   protected itemsRequests: Signal<ISmallInformationCard[]> = computed<
     ISmallInformationCard[]
@@ -233,4 +235,21 @@ export class SolicitationComponent {
   protected deleteTask(e : Solicitation) {
     this.deleteDialog(e);
   }
+
+  // Filters
+  public updateFilters() {
+    this.filters = this.formFilters.getRawValue();
+  }
+
+  public clearFormFilters() {
+    this.formFilters.patchValue({
+      search_term: '',
+    });
+    this.updateFilters();
+  }
+
+  protected handleSearchTerm(res) {
+    this.searchTerm = res;
+  }
+
 }

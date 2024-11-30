@@ -24,6 +24,7 @@ export class PartnersComponent {
   });
   public filters;
   public loading: boolean = false;
+  protected searchTerm : string = '';
 
   itemsRequests: Signal<ISmallInformationCard[]> = computed<
     ISmallInformationCard[]
@@ -170,10 +171,6 @@ export class PartnersComponent {
       });
   }
 
-  handleSearchTerm(res) {
-
-  }
-
   // Filters
   public updateFilters() {
     this.filters = this.formFilters.getRawValue();
@@ -185,4 +182,9 @@ export class PartnersComponent {
     });
     this.updateFilters();
   }
+
+  protected handleSearchTerm(res) {
+    this.searchTerm = res;
+  }
+
 }

@@ -51,6 +51,14 @@ const routes: Routes = [
         }
       },
       {
+        path: 'settings',
+        loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
+        canActivate: [permissionGuard],
+        data: {
+          page: 'settings'
+        }
+      },
+      {
         path: '**',
         redirectTo: 'home',
         canMatch: []

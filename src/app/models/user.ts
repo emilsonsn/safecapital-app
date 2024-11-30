@@ -16,7 +16,7 @@ export interface User {
   updated_at?: string;
 }
 
-enum StatusUser {
+export enum StatusUser {
   Accepted = 'Accepted',
   Pending = 'Pending',
   Refused = 'Refused',

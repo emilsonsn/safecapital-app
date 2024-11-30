@@ -6,36 +6,53 @@
   }
 </div>
 
-<div id="componentHeaderTemplate">
-  <div id="componentHeader">
+<app-header-page-component [hasFilter]="true">
 
-    <div>
-      <!-- <app-search-input
-        (onSearchInputChanged)="handleSearchTerm($event)">
-      </app-search-input> -->
-    </div>
+  <div id="searchInput">
+    <app-search-input (onSearchInputChanged)="handleSearchTerm($event)">
+    </app-search-input>
+  </div>
 
-    <div id="options">
-      @if(false) {
-      <div id="filter" matRipple>
-        <i class="fa-solid fa-filter"></i>
+  <div id="buttons">
+    <button matRipple class="button primary" (click)="openPartnerDialog()">
+      <i class="fa-solid fa-plus"></i> Parceiro
+    </button>
+  </div>
+
+  <div id="filters">
+    <form [formGroup]="formFilters">
+      <div class="row">
+        <div class="col-md-4 mb-md-0 mb-2">
+          <mat-form-field>
+            <mat-select formControlName="validation" placeholder="Status">
+              @for (status of statuses; track status) {
+              <mat-option [value]="status">{{ status | status }}</mat-option>
+              }
+            </mat-select>
+
+          </mat-form-field>
+        </div>
       </div>
-      }
-      <div id="buttons">
-        <button matRipple class="button primary" (click)="openPartnerDialog(null)">
-          <i class="fa-solid fa-plus"></i> Novo Parceiro
-        </button>
-      </div>
+    </form>
 
+    <div class="d-flex justify-content-end flex-wrap gap-2 mt-2">
+      <button matRipple class="button bgRed" (click)="clearFormFilters()">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+      <button matRipple class="button primary" (click)="updateFilters()">
+        <i class="fa-solid fa-magnifying-glass"></i> Pesquisar
+      </button>
     </div>
   </div>
-</div>
+
+</app-header-page-component>
 
 <div id="componentTable" class="col-12 mt-4">
   <app-table-partners
     (onUserClick)="openPartnerDialog($event)"
     (onRequestClick)="openRequestDialog($event)"
     (onDeleteUserClick)="deleteDialog($event)"
+    [searchTerm]="searchTerm"
     [loading]="loading"
     [filters]="filters"
     >

@@ -1,6 +1,6 @@
 @import "_variables";
 
-#header {}
+// #header {}
 
 #close {
   display: flex;
@@ -22,7 +22,11 @@
   #content {
 
 
-    .message {}
+    #messages {
+      max-height: 25rem;
+      overflow: auto;
+    }
+    // .message {}
 
     #sendMessage {
       display: flex;

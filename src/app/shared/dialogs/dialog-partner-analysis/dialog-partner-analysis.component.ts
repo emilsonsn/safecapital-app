@@ -10,15 +10,10 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Request } from '@models/request';
-import { User } from '@models/user';
+import { StatusUser, User } from '@models/user';
 import { UserService } from '@services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
-
-enum PartnerStatus {
-  Accepted = 'Accepted',
-  Refused = 'Refused',
-}
 
 @Component({
   selector: 'app-dialog-partner-analysis',
@@ -66,7 +61,7 @@ export class DialogPartnerAnalysisComponent {
   ];
 
   // Select
-  protected statuses = Object.values(PartnerStatus);
+  protected statuses = Object.values(StatusUser).filter(status => status != StatusUser.Pending);
 
   constructor(
     @Inject(MAT_DIALOG_DATA)

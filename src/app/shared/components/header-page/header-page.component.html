@@ -7,9 +7,11 @@
       </div>
 
       <div class="d-flex align-items-center gap-2">
-        <button id="filter" matRipple (click)="toggleShowFilter()">
-          <i class="fa-solid fa-filter"></i>
-        </button>
+        @if(hasFilter) {
+          <button id="filter" matRipple (click)="toggleShowFilter()">
+            <i class="fa-solid fa-filter"></i>
+          </button>
+        }
 
         <div id="buttons">
           <ng-content select="#buttons"></ng-content>

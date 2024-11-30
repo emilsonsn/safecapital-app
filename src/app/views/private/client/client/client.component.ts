@@ -7,6 +7,7 @@ import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-co
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { HeaderService } from '@services/header.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-client',
@@ -14,13 +15,16 @@ import { HeaderService } from '@services/header.service';
   styleUrl: './client.component.scss',
 })
 export class ClientComponent {
+  public formFilters: FormGroup;
+  public filters;
   public loading: boolean = false;
+  protected searchTerm : string = '';
 
   constructor(
     private readonly _dialog: MatDialog,
     private readonly _toastr: ToastrService,
     private readonly _clientService: ClientService,
-    private readonly _headerService : HeaderService,
+    private readonly _headerService: HeaderService
   ) {
     this._headerService.setTitle('Clientes');
     this._headerService.setSubTitle('');
@@ -74,5 +78,21 @@ export class ClientComponent {
           this._toastr.error(err.error.error);
         },
       });
+  }
+
+  // Filters
+  public updateFilters() {
+    this.filters = this.formFilters.getRawValue();
+  }
+
+  public clearFormFilters() {
+    this.formFilters.patchValue({
+      search_term: '',
+    });
+    this.updateFilters();
+  }
+
+  protected handleSearchTerm(res) {
+    this.searchTerm = res;
   }
 }

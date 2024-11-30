@@ -6,7 +6,7 @@
   }
 </div>
 
-<app-header-page-component>
+<app-header-page-component [hasFilter]="false">
 
   <div id="searchInput">
     <app-search-input (onSearchInputChanged)="handleSearchTerm($event)">
@@ -15,11 +15,11 @@
 
   <div id="buttons">
     <button matRipple class="button primary" (click)="openPartnerDialog()">
-      <i class="fa-solid fa-plus"></i> Profissão
+      <i class="fa-solid fa-plus"></i> Parceiro
     </button>
   </div>
 
-  <div id="filters">
+  <!-- <div id="filters">
     <form [formGroup]="formFilters">
       <div class="row">
         <div class="col-md-4 mb-md-0 mb-2">
@@ -40,12 +40,13 @@
         <i class="fa-solid fa-magnifying-glass"></i> Pesquisar
       </button>
     </div>
-  </div>
+  </div> -->
 
 </app-header-page-component>
 
 <div id="componentTable" class="col-12 mt-4">
   <app-table-partners (onUserClick)="openPartnerDialog($event)" (onRequestClick)="openRequestDialog($event)"
-    (onDeleteUserClick)="deleteDialog($event)" [loading]="loading" [filters]="filters" [validation]="'Accepted'">
+    (onDeleteUserClick)="deleteDialog($event)" [searchTerm]="searchTerm" [loading]="loading" [searchTerm]=""
+    [filters]="filters" [validation]="'Accepted'">
   </app-table-partners>
 </div>

@@ -76,11 +76,11 @@ export class LayoutPrivateComponent {
       icon: 'fa-solid fa-users',
       route: '/painel/collaborator',
     },
-    // {
-    //   label: 'Configurações',
-    //   icon: 'fa-solid fa-gear',
-    //   route: '/painel/services'
-    // },
+    {
+      label: 'Configurações',
+      icon: 'fa-solid fa-gear',
+      route: '/painel/settings'
+    },
   ];
 
   protected isMobile: boolean = window.innerWidth >= 1000;

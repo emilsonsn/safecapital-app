@@ -1,5 +1,5 @@
 import { Component, computed, Signal, signal } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ISmallInformationCard, requestCards } from '@models/cardInformation';
@@ -9,6 +9,12 @@ import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-co
 import { ToastrService } from 'ngx-toastr';
 import { DialogCollaboratorComponent } from '@shared/dialogs/dialog-collaborator/dialog-collaborator.component';
 import { DialogPartnerAnalysisComponent } from '@shared/dialogs/dialog-partner-analysis/dialog-partner-analysis.component';
+import { StatusUser } from '@models/user';
+
+enum PartnerStatusSelect {
+  Pending = 'Pending',
+  Refused = 'Refused',
+}
 
 @Component({
   selector: 'app-partners-analysis',
@@ -16,15 +22,18 @@ import { DialogPartnerAnalysisComponent } from '@shared/dialogs/dialog-partner-a
   styleUrl: './partners-analysis.component.scss',
 })
 export class PartnersAnalysisComponent {
-  cards = signal<requestCards>({
+  public formFilters : FormGroup;
+  public filters;
+  public loading: boolean = false;
+  public searchTerm: string = '';
+
+  // Cards
+  protected cards = signal<requestCards>({
     solicitationFinished: 0,
     solicitationPending: 0,
     solicitationReject: 0,
   });
-  public filters;
-  public loading: boolean = false;
-
-  itemsRequests: Signal<ISmallInformationCard[]> = computed<
+  protected itemsRequests: Signal<ISmallInformationCard[]> = computed<
     ISmallInformationCard[]
   >(() => [
     {
@@ -53,6 +62,9 @@ export class PartnersAnalysisComponent {
     },
   ]);
 
+  // Selects
+  protected statuses = Object.values(StatusUser).filter(status => status != StatusUser.Accepted);
+
   constructor(
     private readonly _headerService: HeaderService,
     private readonly _router: Router,
@@ -71,9 +83,13 @@ export class PartnersAnalysisComponent {
     // })
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.formFilters = this._fb.group({
+      status : ['Pending,Refused']
+    });
+  }
 
-  public openPartnerDialog(user) {
+  public openPartnerDialog(user?) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '1000px',
@@ -163,5 +179,21 @@ export class PartnersAnalysisComponent {
           }
         },
       });
+  }
+
+  // Filters
+  public updateFilters() {
+    this.filters = this.formFilters.getRawValue();
+  }
+
+  public clearFormFilters() {
+    this.formFilters.patchValue({
+      status: 'Pending,Refused',
+    });
+    this.updateFilters();
+  }
+
+  protected handleSearchTerm(res) {
+    this.searchTerm = res;
   }
 }
