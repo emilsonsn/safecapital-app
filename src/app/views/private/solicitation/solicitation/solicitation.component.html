@@ -25,7 +25,7 @@
         @if(role == 'Client') {
           <!-- Botão de Novo Chamado -->
         }
-        <button matRipple class="button primary" (click)="openRequestDialog()">
+        <button matRipple class="button primary" (click)="openRequestDialog()" >  <!-- (click)="openRequestDialog()" -->
           <i class="fa-solid fa-plus"></i> Chamado
         </button>
       </div>
@@ -39,7 +39,7 @@
     [status]="status"
     [data]="kanbanData"
     (itemMoved)="taskMoved($event)"
-    (itemClicked)="openSolicitationDialog($event)"
+    (itemClicked)="openBottomSheet($event)"
     (itemDeleted)="deleteTask($event)"
   ></app-kanban>
 </div>

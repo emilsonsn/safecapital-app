@@ -21,6 +21,8 @@ import { Kanban } from '@models/Kanban';
 import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
 import { KanbanSolicitationStatus } from '@shared/components/kanban/kanban.component';
 import { DialogRequestComponent } from '@shared/dialogs/dialog-request/dialog-request.component';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { SolicitationChatComponent } from '../solicitation-chat/solicitation-chat.component';
 
 @Component({
   selector: 'app-solicitation',
@@ -74,7 +76,8 @@ export class SolicitationComponent {
     private readonly _requestService: RequestService,
     private readonly _toastrService: ToastrService,
     private readonly _sessionQuery: SessionQuery,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private readonly _matBottomSheet : MatBottomSheet,
   ) {
     this._headerService.setTitle('Chamados');
     this._headerService.setSubTitle('');
@@ -86,6 +89,14 @@ export class SolicitationComponent {
     // })
     this._sessionQuery.user$.subscribe((user) => {
       this.role = user?.role;
+    });
+  }
+
+  openBottomSheet(solicitation : Solicitation): void {
+    this._matBottomSheet.open(SolicitationChatComponent, {
+      data: {solicitation},
+      disableClose: true,
+      hasBackdrop: false
     });
   }
 

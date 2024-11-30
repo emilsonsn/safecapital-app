@@ -1,0 +1,24 @@
+<div>
+  <div id="header" class="d-flex align-items-center justify-content-between gap-2">
+    <div>{{ _data?.solicitation?.contract_number }}</div>
+    <div id="close" matRipple (click)="close()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+  <div id="chatTemplate">
+    <div id="content">
+      <div class="message">
+        <div style="height: 8rem; width: 100%;">
+          Mensagens
+        </div>
+      </div>
+
+      <div id="sendMessage">
+        <input matInput type="text" [(ngModel)]="messageText" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" />
+        <div id="icon" matRipple (click)="sendMessage()">
+          <i class="fa-solid fa-paper-plane"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
