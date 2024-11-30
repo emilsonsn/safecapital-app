@@ -67,7 +67,7 @@ export class LayoutPrivateComponent {
       ],
     },
     {
-      label: 'Solicitações',
+      label: 'Chamados',
       icon: 'fa-solid fa-bookmark',
       route: '/painel/solicitation',
     },

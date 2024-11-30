@@ -22,8 +22,11 @@
       </div>
       }
       <div id="buttons">
-        <button matRipple class="button primary" (click)="openPartnerDialog(null)">
-          <i class="fa-solid fa-plus"></i> Novo Parceiro
+        @if(role == 'Client') {
+          <!-- Botão de Novo Chamado -->
+        }
+        <button matRipple class="button primary" (click)="openRequestDialog()">
+          <i class="fa-solid fa-plus"></i> Chamado
         </button>
       </div>
 
@@ -32,12 +35,11 @@
 </div>
 
 <div id="componentTable" class="col-12 mt-4">
-  <app-table-solicitation
-    (onUserClick)="openPartnerDialog($event)"
-    (onRequestClick)="openRequestDialog($event)"
-    (onDeleteUserClick)="deleteDialog($event)"
-    [loading]="loading"
-    [filters]="filters"
-    >
-  </app-table-solicitation>
+  <app-kanban
+    [status]="status"
+    [data]="kanbanData"
+    (itemMoved)="taskMoved($event)"
+    (itemClicked)="openSolicitationDialog($event)"
+    (itemDeleted)="deleteTask($event)"
+  ></app-kanban>
 </div>

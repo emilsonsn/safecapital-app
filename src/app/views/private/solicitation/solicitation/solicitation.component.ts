@@ -1,4 +1,10 @@
-import { Component, computed, Signal, signal } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  computed,
+  Signal,
+  signal,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -6,26 +12,32 @@ import { ISmallInformationCard, requestCards } from '@models/cardInformation';
 import { HeaderService } from '@services/header.service';
 import { RequestService } from '@services/request.service';
 import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
-import dayjs from 'dayjs';
 import { ToastrService } from 'ngx-toastr';
 import { DialogCollaboratorComponent } from '@shared/dialogs/dialog-collaborator/dialog-collaborator.component';
+import { DialogPartnerAnalysisComponent } from '@shared/dialogs/dialog-partner-analysis/dialog-partner-analysis.component';
+import { SessionQuery } from '@store/session.query';
+import { UserRole } from '@models/user';
+import { Kanban } from '@models/Kanban';
+import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
+import { KanbanSolicitationStatus } from '@shared/components/kanban/kanban.component';
 import { DialogRequestComponent } from '@shared/dialogs/dialog-request/dialog-request.component';
 
 @Component({
   selector: 'app-solicitation',
   templateUrl: './solicitation.component.html',
-  styleUrl: './solicitation.component.scss'
+  styleUrl: './solicitation.component.scss',
 })
 export class SolicitationComponent {
-  cards = signal<requestCards>({
+  protected cards = signal<requestCards>({
     solicitationFinished: 0,
     solicitationPending: 0,
     solicitationReject: 0,
   });
   public filters;
   public loading: boolean = false;
+  protected role: UserRole;
 
-  itemsRequests: Signal<ISmallInformationCard[]> = computed<
+  protected itemsRequests: Signal<ISmallInformationCard[]> = computed<
     ISmallInformationCard[]
   >(() => [
     {
@@ -60,9 +72,11 @@ export class SolicitationComponent {
     private readonly _dialog: MatDialog,
     private readonly _fb: FormBuilder,
     private readonly _requestService: RequestService,
-    private readonly _toastrService: ToastrService
+    private readonly _toastrService: ToastrService,
+    private readonly _sessionQuery: SessionQuery,
+    private cdr: ChangeDetectorRef
   ) {
-    this._headerService.setTitle('Solicitações');
+    this._headerService.setTitle('Chamados');
     this._headerService.setSubTitle('');
 
     // _requestService.getCards().subscribe({
@@ -70,41 +84,33 @@ export class SolicitationComponent {
     //     this.cards.set(res.data);
     //   }
     // })
+    this._sessionQuery.user$.subscribe((user) => {
+      this.role = user?.role;
+    });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
 
-  public openPartnerDialog(user) {
-    const dialogConfig: MatDialogConfig = {
-      width: '80%',
-      maxWidth: '1000px',
-      maxHeight: '90%',
-      hasBackdrop: true,
-      closeOnNavigation: true,
-    };
 
-    this._dialog
-      .open(DialogCollaboratorComponent, {
-        data: {
-          isClient: true,
-          user,
-        },
-        ...dialogConfig,
-      })
-      .afterClosed()
-      .subscribe({
-        next: (res) => {
-          if (res) {
-            this.loading = true;
-            setTimeout(() => {
-              this.loading = false;
-            }, 200);
-          }
-        },
-      });
+    // Inicia as colunas do kanban
+    this.status.forEach((status) => {
+      this.kanbanData[status.name] = [];
+    });
+
+    // Mover para a requisição de GetSolicitacion
+    this.solicitationData.forEach((task) => {
+      const name = this.status.find(
+        (status) => status.slug  == task.status
+      )?.name;
+
+      if (name) this.kanbanData[name].push(task);
+    });
+
+    this.cdr.detectChanges();
+    // ----
   }
 
-  public openRequestDialog(request) {
+  public openRequestDialog(request? : Solicitation) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '1000px',
@@ -131,7 +137,11 @@ export class SolicitationComponent {
       });
   }
 
-  public deleteDialog(request) {
+  public openRequestChat(request? : Solicitation) {
+    console.log("Abrir chat", request);
+  }
+
+  public deleteDialog(request : Solicitation) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '550px',
@@ -148,21 +158,68 @@ export class SolicitationComponent {
       .afterClosed()
       .subscribe({
         next: (res) => {
-          if (res) {
-            this._requestService.deleteRequest(request.id).subscribe({
-              next: (resData) => {
-                this.loading = true;
-                this._toastrService.success(resData.message);
-                setTimeout(() => {
-                  this.loading = false;
-                  this.itemsRequests().filter(
-                    (item) => item.title !== request.title
-                  );
-                }, 200);
-              },
-            });
+          if(res) {
+            console.log("Deleta o chamado")
           }
         },
       });
+  }
+
+  // Kanban
+  protected solicitationData : Solicitation[] = [
+    {
+      id: 1,
+      contract_number: '3223',
+      subject: 'Teste Aberto',
+      status: SolicitationStatusEnum.Open
+    },
+    {
+      id: 2,
+      contract_number: '34',
+      subject: 'Teste Fechado',
+      status: SolicitationStatusEnum.Closed
+    },
+    {
+      id: 3,
+      contract_number: '555',
+      subject: 'Teste Fechado 2',
+      status: SolicitationStatusEnum.Closed
+    },
+    {
+      id: 4,
+      contract_number: '535',
+      subject: 'Teste Aberto 2',
+      status: SolicitationStatusEnum.Open
+    },
+  ];
+
+  protected kanbanData: Kanban<Solicitation> = {};
+
+  protected status: KanbanSolicitationStatus[] = [
+    {
+      id: 1,
+      slug : SolicitationStatusEnum.Open,
+      name: 'Aberto',
+      color: '#FFFFFF',
+    },
+    {
+      id: 2,
+      slug : SolicitationStatusEnum.Closed,
+      name: 'Fechado',
+      color: '#FF00FF',
+    },
+  ];
+
+  protected taskMoved(e : Solicitation) {
+    // Realizar o patch da solicitacion
+    console.log(e);
+  }
+
+  protected openSolicitationDialog(e : Solicitation) {
+    this.openRequestChat(e);
+  }
+
+  protected deleteTask(e : Solicitation) {
+    this.deleteDialog(e);
   }
 }

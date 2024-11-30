@@ -1,0 +1,96 @@
+<mat-dialog-content>
+
+  @if(loading) {
+  <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
+
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">{{ title }}</span>
+    <div matRipple class="close" (click)="onCancel()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form" class="row">
+
+    @for(field of fields; track field) {
+    <div class="col-md-6 mb-2">
+      <div class="d-flex flex-column">
+        <span class="fw-bolder" style="font-size: 1.05rem;">{{ field.title }}</span>
+        <span style="font-weight: 500; font-size: 1.05rem;">
+          @if(field.slug == 'cnpj') {
+          {{ _data[field.slug] | cpfCnpjMask }}
+          }
+          @else if(field.slug == 'phone') {
+          {{ +_data[field.slug] | phoneMask }}
+          }
+          @else if(field.slug == 'created_at') {
+          {{ _data[field.slug] | date:"dd/MM/YYYY HH:mm:ss" }}
+          }
+          @else {
+          {{ _data[field.slug] }}
+          }
+        </span>
+      </div>
+    </div>
+    }
+
+    <div class="mt-2">
+      <span class="fw-bolder">Anexos</span>
+      <div id="files">
+        @for(img of _data.attachments; track img) {
+        <div class="file" matTooltip="{{img.category}}" (click)="openFileInAnotherTab(img.file)">
+          <img [src]="img.file" alt="{{img.category}}" style="max-width: 100%; max-height: 100%;" />
+        </div>
+        }
+      </div>
+    </div>
+
+    <mat-divider class="my-3"></mat-divider>
+
+    <div class="col-md-6 mb-2">
+      <span class="fw-bolder" style="font-size: 1.05rem;">Status *</span>
+      <mat-form-field>
+        <mat-select formControlName="validation" placeholder="Status">
+          @for (status of statuses; track status) {
+          <mat-option [value]="status">{{ status | status }}</mat-option>
+          }
+        </mat-select>
+
+      </mat-form-field>
+    </div>
+
+    @if(form.get('validation').value == 'Refused') {
+    <div class="mb-2">
+      <span class="fw-bolder">Descrição *</span>
+      <mat-form-field>
+        <textarea matInput formControlName="justification" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [placeholder]="'Descrição'">
+        </textarea>
+      </mat-form-field>
+    </div>
+    }
+
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="w-100 me-2">
+    <div id="actionsDialog" class="flex-sm-row flex-column gap-1">
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button primary" (click)="onConfirm()">{{
+            'Salvar'
+            }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>

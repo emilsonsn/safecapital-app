@@ -8,7 +8,7 @@ import { RequestService } from '@services/request.service';
 import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
 import { ToastrService } from 'ngx-toastr';
 import { DialogCollaboratorComponent } from '@shared/dialogs/dialog-collaborator/dialog-collaborator.component';
-import { DialogRequestComponent } from '@shared/dialogs/dialog-request/dialog-request.component';
+import { DialogPartnerAnalysisComponent } from '@shared/dialogs/dialog-partner-analysis/dialog-partner-analysis.component';
 
 @Component({
   selector: 'app-partners',
@@ -118,7 +118,7 @@ export class PartnersComponent {
     };
 
     this._dialog
-      .open(DialogRequestComponent, {
+      .open(DialogPartnerAnalysisComponent, {
         data: request ? { ...request } : null,
         ...dialogConfig,
       })
