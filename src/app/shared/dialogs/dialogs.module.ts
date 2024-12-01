@@ -27,7 +27,7 @@ import {TablesModule} from '@shared/tables/tables.module';
 import {MatIcon} from "@angular/material/icon";
 import {NgxMatSelectSearchModule} from 'ngx-mat-select-search';
 import { DialogPartnerAnalysisComponent } from './dialog-partner-analysis/dialog-partner-analysis.component';
-import { DialogRequestComponent } from './dialog-request/dialog-request.component';
+import { DialogSolicitationComponent } from './dialog-solicitation/dialog-solicitation.component';
 
 
 @NgModule({
@@ -36,7 +36,7 @@ import { DialogRequestComponent } from './dialog-request/dialog-request.componen
     DialogCollaboratorComponent,
     DialogPartnerComponent,
     DialogPartnerAnalysisComponent,
-    DialogRequestComponent
+    DialogSolicitationComponent
   ],
   imports: [
     CommonModule,

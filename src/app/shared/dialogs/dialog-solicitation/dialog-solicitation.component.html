@@ -1,0 +1,53 @@
+<mat-dialog-content>
+
+  @if(loading) {
+  <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
+
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">{{_data ? "Dados do Chamado" : "Novo Chamado"}}</span>
+    <div matRipple class="close" (click)="onCancel()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Número do Contrato</mat-label>
+          <input matInput type="text" formControlName="contract_number">
+        </mat-form-field>
+      </div>
+      <div class="col-12"></div>
+      <div class="col-12 mb-3">
+        <mat-form-field>
+          <mat-label>Assunto</mat-label>
+          <textarea matInput formControlName="subject" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [placeholder]="'Descrição'">
+          </textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="container">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        @if(isNewSolicitation) {
+          <div class="col-auto">
+            <button matRipple id="submit" class="button primary" (click)="onSubmit()">Criar</button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>

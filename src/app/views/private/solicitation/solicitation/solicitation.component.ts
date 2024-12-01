@@ -18,7 +18,7 @@ import { UserRole } from '@models/user';
 import { Kanban } from '@models/Kanban';
 import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
 import { KanbanSolicitationStatus } from '@shared/components/kanban/kanban.component';
-import { DialogRequestComponent } from '@shared/dialogs/dialog-request/dialog-request.component';
+import { DialogSolicitationComponent } from '@shared/dialogs/dialog-solicitation/dialog-solicitation.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SolicitationChatComponent } from '../solicitation-chat/solicitation-chat.component';
 
@@ -131,7 +131,7 @@ export class SolicitationComponent {
     };
 
     this._dialog
-      .open(DialogRequestComponent, {
+      .open(DialogSolicitationComponent, {
         data: request ? { ...request } : null,
         ...dialogConfig,
       })

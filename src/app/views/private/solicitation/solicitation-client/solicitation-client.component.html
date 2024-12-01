@@ -39,8 +39,11 @@
 </app-header-page-component>
 
 <div id="componentTable" class="col-12 mt-4">
+  <!--
+  [loading]="loading"
+    [filters]="filters"
+    [searchTerm]="searchTerm"-->
   <app-cards-solicitation
-
     (onOpenSolicitationChat)="openRequestChat($event)"
     (onOpenSolicitationDetails)="openRequestDialog($event)"></app-cards-solicitation>
 </div>
