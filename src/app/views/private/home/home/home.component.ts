@@ -6,6 +6,8 @@ import { ApiResponse } from '@models/application';
 import { OrderData } from '@models/dashboard';
 import { formatCurrency } from '@angular/common';
 import { HeaderService } from '@services/header.service';
+import { SessionQuery } from '@store/session.query';
+import { User } from '@models/user';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +15,8 @@ import { HeaderService } from '@services/header.service';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  protected user: User;
+
   dashboardCards = signal<OrderData>({
     ordersByDay: 0,
     ordersByWeek: 0,
@@ -26,7 +30,8 @@ export class HomeComponent {
 
   constructor(
     private readonly _dashboardService: DashboardService,
-    private readonly _headerService: HeaderService
+    private readonly _headerService: HeaderService,
+    private readonly _sessionQuery: SessionQuery
   ) {
     this._headerService.setTitle('Home');
     this._headerService.setSubTitle('');
@@ -244,5 +249,9 @@ export class HomeComponent {
         this.lineChart.update(); // Update chart
       }
     });*/
+
+    this._sessionQuery.user$.subscribe((user) => {
+      this.user = user;
+    });
   }
 }

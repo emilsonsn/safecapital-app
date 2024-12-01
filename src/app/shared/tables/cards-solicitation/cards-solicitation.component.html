@@ -24,10 +24,12 @@
           Atualizado em: <br>{{ (solicitation?.updated_at | date:"dd/MM/YYYY HH:mm:ss") ?? '-'}}
         </div>
         <div id="buttons">
-          <div matRipple class="buttonTemplate" (click)="onOpenSolicitationChat.emit(solicitation); $event.stopPropagation()">
+          <div matRipple class="buttonTemplate"
+            (click)="onOpenSolicitationChat.emit(solicitation); $event.stopPropagation()">
             <i class="fa-solid fa-comment"></i>
           </div>
-          <div matRipple class="buttonTemplate" (click)="onOpenSolicitationDetails.emit(solicitation); $event.stopPropagation()">
+          <div matRipple class="buttonTemplate"
+            (click)="onOpenSolicitationDetails.emit(solicitation); $event.stopPropagation()">
             <i class="fa-solid fa-circle-info"></i>
           </div>
         </div>
@@ -36,9 +38,9 @@
     }
     }
     @else {
-      <div class="d-flex justify-content-center w-100">
-        <mat-spinner></mat-spinner>
-      </div>
+    <div class="d-flex justify-content-center w-100">
+      <mat-spinner></mat-spinner>
+    </div>
     }
   </div>
   <mat-paginator [length]="pageControl.itemCount" [pageSize]="pageControl.take" [showFirstLastButtons]="true"
@@ -49,29 +51,17 @@
 
 <!--
 
-<div matRipple class="buttonTemplate" (click)="onClientClick.emit(client)">
-                <i class="fa-solid fa-pen-to-square"></i>
-              </div>
-
-              <div matRipple class="buttonTemplate" (click)="onDeleteClientClick.emit(client?.id)">
-                <i class="fa-solid fa-trash"></i>
-              </div>
-
-              <div id="mat-loading">
-              <mat-spinner></mat-spinner>
-            </div>
-
-            <th [class.hasorder]="col.order" [ngStyle]="{ cursor: 'pointer' }"
-          [class.active-order]="pageControl.orderField === col.slug">
-          (click)="onClickOrderBy(col.slug, col.order)"
-          <div class="{{col.align}}" style="color: #a2a1a8">
-            {{ col.title }}
-            <i class="material-icons" *ngIf="pageControl.orderField === col.slug">
-              {{
-              pageControl.order === "DESC" ? "arrow_downward" : "arrow_upward"
-              }}
-            </i>
-          </div>
-        </th>
+    <th [class.hasorder]="col.order" [ngStyle]="{ cursor: 'pointer' }"
+  [class.active-order]="pageControl.orderField === col.slug">
+  (click)="onClickOrderBy(col.slug, col.order)"
+  <div class="{{col.align}}" style="color: #a2a1a8">
+    {{ col.title }}
+    <i class="material-icons" *ngIf="pageControl.orderField === col.slug">
+      {{
+      pageControl.order === "DESC" ? "arrow_downward" : "arrow_upward"
+      }}
+    </i>
+  </div>
+  </th>
 
 -->

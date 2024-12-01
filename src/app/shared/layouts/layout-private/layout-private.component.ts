@@ -50,13 +50,13 @@ export class LayoutPrivateComponent {
     // },
     {
       label: 'Parceiros',
-      icon: 'fa-solid fa-user-tie',
+      icon: 'fa-solid fa-handshake',
       route: '/painel/partners',
       active: false,
       children: [
         {
           label: 'Parceiros',
-          icon: 'fa-solid fa-user-tie',
+          icon: 'fa-solid fa-user',
           route: '/painel/partners',
         },
         {

@@ -85,8 +85,10 @@ export class PartnersAnalysisComponent {
 
   ngOnInit() {
     this.formFilters = this._fb.group({
-      status : ['Pending,Refused']
+      validation : ['Pending']
     });
+
+    this.updateFilters();
   }
 
   public openPartnerDialog(user?) {
@@ -188,7 +190,7 @@ export class PartnersAnalysisComponent {
 
   public clearFormFilters() {
     this.formFilters.patchValue({
-      status: 'Pending,Refused',
+      status: 'Pending',
     });
     this.updateFilters();
   }

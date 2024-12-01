@@ -75,8 +75,10 @@ export class PartnersComponent {
 
   ngOnInit() {
     this.formFilters = this._fb.group({
-      search_term : ''
+      validation: ['Accepted']
     });
+
+    this.updateFilters();
   }
 
   public openPartnerDialog(user?) {
@@ -178,7 +180,7 @@ export class PartnersComponent {
 
   public clearFormFilters() {
     this.formFilters.patchValue({
-      search_term: '',
+      validation: 'Accepted',
     });
     this.updateFilters();
   }

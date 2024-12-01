@@ -46,23 +46,12 @@ export class KanbanComponent {
     new EventEmitter<Solicitation>();
 
   @Output()
-  protected itemClicked: EventEmitter<Solicitation> =
+  protected onOpenChat: EventEmitter<Solicitation> =
     new EventEmitter<Solicitation>();
 
   @Output()
-  protected itemDeleted: EventEmitter<Solicitation> =
+  protected onOpenSolicitationDetails: EventEmitter<Solicitation> =
     new EventEmitter<Solicitation>();
-
-  protected onItemClick(item: Solicitation) {
-    this.itemClicked.emit(item);
-  }
-
-  @HostListener('click', ['$event'])
-  public onDeleteItemClick(event: Event, solicitation: Solicitation): void {
-    // event.stopPropagation();
-    if (!solicitation) return;
-    this.itemDeleted.emit(solicitation);
-  }
 
   // Kanban
   protected drop(event: CdkDragDrop<Solicitation[]>) {
@@ -96,9 +85,8 @@ export class KanbanComponent {
     const keys: (string | number)[] = Object.keys(
       this.data
     ) as (keyof Kanban<Solicitation>)[];
-    const solicitation: Solicitation = this.data[
-      keys[currentContainerIndex]
-    ][event.currentIndex];
+    const solicitation: Solicitation =
+      this.data[keys[currentContainerIndex]][event.currentIndex];
 
     solicitation.status = this.status[currentContainerIndex].slug;
 

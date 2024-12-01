@@ -89,7 +89,7 @@ export class SolicitationComponent {
     private readonly _toastrService: ToastrService,
     private readonly _sessionQuery: SessionQuery,
     private cdr: ChangeDetectorRef,
-    private readonly _matBottomSheet: MatBottomSheet
+    private readonly _matBottomSheet: MatBottomSheet,
   ) {
     this._headerService.setTitle('Chamados');
     this._headerService.setSubTitle('');
@@ -104,79 +104,13 @@ export class SolicitationComponent {
     });
   }
 
-  openBottomSheet(solicitation: Solicitation): void {
-    this._matBottomSheet.open(SolicitationChatComponent, {
-      data: { solicitation },
-      disableClose: true,
-      hasBackdrop: false,
-    });
-  }
-
   ngOnInit() {
     // Inicia as colunas do kanban
     this.status.forEach((status) => {
       this.kanbanData[status.name] = [];
     });
 
-    // Mover para a requisição de GetSolicitacion
     this.getSolicitationData();
-
-    // ----
-  }
-
-  public openRequestDialog(request?: Solicitation) {
-    const dialogConfig: MatDialogConfig = {
-      width: '80%',
-      maxWidth: '1000px',
-      maxHeight: '90%',
-      hasBackdrop: true,
-      closeOnNavigation: true,
-    };
-
-    this._dialog
-      .open(DialogSolicitationComponent, {
-        data: request ? { ...request } : null,
-        ...dialogConfig,
-      })
-      .afterClosed()
-      .subscribe({
-        next: (res) => {
-          if (res) {
-            this.loading = true;
-            setTimeout(() => {
-              this.loading = false;
-            }, 200);
-          }
-        },
-      });
-  }
-
-  public openRequestChat(request?: Solicitation) {
-    console.log('Abrir chat', request);
-  }
-
-  public deleteDialog(request: Solicitation) {
-    const dialogConfig: MatDialogConfig = {
-      width: '80%',
-      maxWidth: '550px',
-      maxHeight: '90%',
-      hasBackdrop: true,
-      closeOnNavigation: true,
-    };
-
-    this._dialog
-      .open(DialogConfirmComponent, {
-        data: { text: `Tem certeza? Essa ação não pode ser revertida!` },
-        ...dialogConfig,
-      })
-      .afterClosed()
-      .subscribe({
-        next: (res) => {
-          if (res) {
-            console.log('Deleta o chamado');
-          }
-        },
-      });
   }
 
   // Kanban
@@ -229,17 +163,56 @@ export class SolicitationComponent {
       });
   }
 
-  protected taskMoved(e: Solicitation) {
-    // Realizar o patch da solicitacion
-    console.log(e);
+  public openSolicitationDialog(solicitation?: Solicitation) {
+    const dialogConfig: MatDialogConfig = {
+      width: '80%',
+      maxWidth: '1000px',
+      maxHeight: '90%',
+      hasBackdrop: true,
+      closeOnNavigation: true,
+    };
+
+    this._dialog
+      .open(DialogSolicitationComponent, {
+        data: solicitation ? { solicitation } : null,
+        ...dialogConfig,
+      })
+      .afterClosed()
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.loading = true;
+            setTimeout(() => {
+              this.loading = false;
+            }, 200);
+          }
+        },
+      });
   }
 
-  protected openSolicitationDialog(e: Solicitation) {
-    this.openRequestChat(e);
+  protected openSolicitationChat(solicitation: Solicitation): void {
+    this._matBottomSheet.open(SolicitationChatComponent, {
+      data: { solicitation },
+      disableClose: true,
+      hasBackdrop: false,
+    });
   }
 
-  protected deleteTask(e: Solicitation) {
-    this.deleteDialog(e);
+  protected taskMoved(solicitation: Solicitation) {
+    this._initOrStopLoading();
+
+    this._solicitationService.patch(solicitation.id, solicitation)
+      .pipe(finalize(() => {
+        this._initOrStopLoading();
+      }))
+      .subscribe({
+        next: (res) => {
+          // O kanban atualiza visualmente, sem necessidade de fazer search
+        },
+        error: (err) => {
+          this._toastrService.error(err.error.error);
+        },
+      })
   }
 
   // Filters

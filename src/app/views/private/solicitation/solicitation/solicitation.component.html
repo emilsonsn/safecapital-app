@@ -1,10 +1,10 @@
-<div class="row mt-4">
+<!-- <div class="row mt-4">
   @for (item of itemsRequests(); track item) {
     <div class="col-md-4 col-12">
       <app-small-information-card [data]="item"></app-small-information-card>
     </div>
   }
-</div>
+</div> -->
 
 <app-header-page-component [hasFilter]="false">
 
@@ -15,7 +15,7 @@
 
   <div id="buttons">
     @if(role == 'Client') {
-      <button matRipple class="button primary" (click)="openRequestDialog()">
+      <button matRipple class="button primary" (click)="openSolicitationDialog()">
         <i class="fa-solid fa-plus"></i> Chamado
       </button>
     }
@@ -51,8 +51,8 @@
     [status]="status"
     [data]="kanbanData"
     (itemMoved)="taskMoved($event)"
-    (itemClicked)="openBottomSheet($event)"
-    (itemDeleted)="deleteTask($event)"
+    (onOpenChat)="openSolicitationChat($event)"
+    (onOpenSolicitationDetails)="openSolicitationDialog($event)"
   ></app-kanban>
   <mat-paginator
     [length]="pageControl.itemCount"

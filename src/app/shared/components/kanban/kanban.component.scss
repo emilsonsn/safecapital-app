@@ -45,8 +45,7 @@
 
 
 .kanban-box {
-  padding: 20px 10px;
-  padding-top: 0;
+  padding: 15px 10px;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
   flex-direction: column;
@@ -89,8 +88,8 @@
   box-sizing: border-box;
   border-radius: 4px;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-  0 8px 10px 1px rgba(0, 0, 0, 0.14),
-  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
   /* Ajuste para garantir que a sombra seja exibida corretamente */
   transform: translateX(0) translateY(0);
 }
@@ -101,4 +100,17 @@
 
 .kanban-list.cdk-drop-list-dragging .kanban-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.buttonKanban {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  border-radius: 50px;
+
+  i {
+    font-size: 1.02rem;
+    color: #475f93;
+  }
 }

@@ -13,6 +13,7 @@ import { SearchInputComponent } from './search-input/search-input.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatRippleModule } from '@angular/material/core';
 
 const components: any[] = [
   AccountManagerComponent,
@@ -32,6 +33,7 @@ const components: any[] = [
     MatFormFieldModule,
     MatInputModule,
     MatDivider,
+    MatRippleModule,
     CdkDropListGroup,
     CdkDropList,
     CdkDrag,
