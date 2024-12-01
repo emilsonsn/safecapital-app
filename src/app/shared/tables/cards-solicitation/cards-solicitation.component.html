@@ -35,6 +35,11 @@
     </div>
     }
     }
+    @else {
+      <div class="d-flex justify-content-center w-100">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
   </div>
   <mat-paginator [length]="pageControl.itemCount" [pageSize]="pageControl.take" [showFirstLastButtons]="true"
     [pageSizeOptions]="[10, 25, 50, 100]" [hidePageSize]="false" [pageIndex]="pageControl.page - 1"

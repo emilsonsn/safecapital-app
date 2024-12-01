@@ -39,52 +39,7 @@ export class CardsSolicitationComponent {
     [SolicitationStatusEnum.Closed]: '#06B76C',
   };
 
-  public solicitations: Solicitation[] = [
-    {
-      id: 1,
-      contract_number: '22',
-      subject: '34',
-      status: SolicitationStatusEnum.Open,
-    },
-    {
-      id: 1,
-      contract_number: '34535535535353',
-      subject:
-        'TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE',
-      status: SolicitationStatusEnum.Open,
-      updated_at: '2024-11-30 14:15:17',
-    },
-    {
-      id: 1,
-      contract_number: '22',
-      subject: '34',
-      status: SolicitationStatusEnum.Open,
-    },
-    {
-      id: 1,
-      contract_number: '22',
-      subject: '34',
-      status: SolicitationStatusEnum.Closed,
-    },
-    {
-      id: 1,
-      contract_number: '22',
-      subject: '34',
-      status: SolicitationStatusEnum.Open,
-    },
-    {
-      id: 1,
-      contract_number: '22',
-      subject: '34',
-      status: SolicitationStatusEnum.Open,
-    },
-    {
-      id: 1,
-      contract_number: '22',
-      subject: '34',
-      status: SolicitationStatusEnum.Open,
-    },
-  ];
+  public solicitations: Solicitation[] = [];
 
   public pageControl: PageControl = {
     take: 10,

@@ -39,11 +39,10 @@
 </app-header-page-component>
 
 <div id="componentTable" class="col-12 mt-4">
-  <!--
+  <app-cards-solicitation
   [loading]="loading"
     [filters]="filters"
-    [searchTerm]="searchTerm"-->
-  <app-cards-solicitation
+    [searchTerm]="searchTerm"
     (onOpenSolicitationChat)="openRequestChat($event)"
     (onOpenSolicitationDetails)="openRequestDialog($event)"></app-cards-solicitation>
 </div>

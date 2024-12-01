@@ -21,6 +21,9 @@ import { KanbanSolicitationStatus } from '@shared/components/kanban/kanban.compo
 import { DialogSolicitationComponent } from '@shared/dialogs/dialog-solicitation/dialog-solicitation.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SolicitationChatComponent } from '../solicitation-chat/solicitation-chat.component';
+import { SolicitationService } from '@services/solicitation.service';
+import { Order, PageControl } from '@models/application';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-solicitation',
@@ -68,16 +71,25 @@ export class SolicitationComponent {
     },
   ]);
 
+  public pageControl: PageControl = {
+    take: 10,
+    page: 1,
+    itemCount: 0,
+    pageCount: 0,
+    orderField: 'id',
+    order: Order.ASC,
+  };
+
   constructor(
     private readonly _headerService: HeaderService,
     private readonly _router: Router,
     private readonly _dialog: MatDialog,
     private readonly _fb: FormBuilder,
-    private readonly _requestService: RequestService,
+    private readonly _solicitationService: SolicitationService,
     private readonly _toastrService: ToastrService,
     private readonly _sessionQuery: SessionQuery,
     private cdr: ChangeDetectorRef,
-    private readonly _matBottomSheet : MatBottomSheet,
+    private readonly _matBottomSheet: MatBottomSheet
   ) {
     this._headerService.setTitle('Chamados');
     this._headerService.setSubTitle('');
@@ -92,36 +104,27 @@ export class SolicitationComponent {
     });
   }
 
-  openBottomSheet(solicitation : Solicitation): void {
+  openBottomSheet(solicitation: Solicitation): void {
     this._matBottomSheet.open(SolicitationChatComponent, {
-      data: {solicitation},
+      data: { solicitation },
       disableClose: true,
-      hasBackdrop: false
+      hasBackdrop: false,
     });
   }
 
   ngOnInit() {
-
-
     // Inicia as colunas do kanban
     this.status.forEach((status) => {
       this.kanbanData[status.name] = [];
     });
 
     // Mover para a requisição de GetSolicitacion
-    this.solicitationData.forEach((task) => {
-      const name = this.status.find(
-        (status) => status.slug  == task.status
-      )?.name;
+    this.getSolicitationData();
 
-      if (name) this.kanbanData[name].push(task);
-    });
-
-    this.cdr.detectChanges();
     // ----
   }
 
-  public openRequestDialog(request? : Solicitation) {
+  public openRequestDialog(request?: Solicitation) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '1000px',
@@ -148,11 +151,11 @@ export class SolicitationComponent {
       });
   }
 
-  public openRequestChat(request? : Solicitation) {
-    console.log("Abrir chat", request);
+  public openRequestChat(request?: Solicitation) {
+    console.log('Abrir chat', request);
   }
 
-  public deleteDialog(request : Solicitation) {
+  public deleteDialog(request: Solicitation) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '550px',
@@ -169,68 +172,73 @@ export class SolicitationComponent {
       .afterClosed()
       .subscribe({
         next: (res) => {
-          if(res) {
-            console.log("Deleta o chamado")
+          if (res) {
+            console.log('Deleta o chamado');
           }
         },
       });
   }
 
   // Kanban
-  protected solicitationData : Solicitation[] = [
-    {
-      id: 1,
-      contract_number: '3223',
-      subject: 'Teste Aberto',
-      status: SolicitationStatusEnum.Open
-    },
-    {
-      id: 2,
-      contract_number: '34',
-      subject: 'Teste Fechado',
-      status: SolicitationStatusEnum.Closed
-    },
-    {
-      id: 3,
-      contract_number: '555',
-      subject: 'Teste Fechado 2',
-      status: SolicitationStatusEnum.Closed
-    },
-    {
-      id: 4,
-      contract_number: '535',
-      subject: 'Teste Aberto 2',
-      status: SolicitationStatusEnum.Open
-    },
-  ];
+  protected solicitationData: Solicitation[] = [];
 
   protected kanbanData: Kanban<Solicitation> = {};
 
   protected status: KanbanSolicitationStatus[] = [
     {
       id: 1,
-      slug : SolicitationStatusEnum.Open,
+      slug: SolicitationStatusEnum.Open,
       name: 'Aberto',
       color: '#FFFFFF',
     },
     {
       id: 2,
-      slug : SolicitationStatusEnum.Closed,
+      slug: SolicitationStatusEnum.Closed,
       name: 'Fechado',
       color: '#FF00FF',
     },
   ];
 
-  protected taskMoved(e : Solicitation) {
+  protected getSolicitationData() {
+    this._initOrStopLoading();
+
+    this._solicitationService
+      .getList(this.pageControl, this.filters)
+      .pipe(
+        finalize(() => {
+          this._initOrStopLoading();
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this.solicitationData = res.data;
+
+          this.solicitationData.forEach((task) => {
+            const name = this.status.find(
+              (status) => status.slug == task.status
+            )?.name;
+
+            if (name) this.kanbanData[name].push(task);
+
+            this.cdr.detectChanges();
+          });
+        },
+        error: (err) => {
+          this._toastrService.error(err.error.error);
+        },
+      });
+  }
+
+  protected taskMoved(e: Solicitation) {
     // Realizar o patch da solicitacion
     console.log(e);
   }
 
-  protected openSolicitationDialog(e : Solicitation) {
+  protected openSolicitationDialog(e: Solicitation) {
     this.openRequestChat(e);
   }
 
-  protected deleteTask(e : Solicitation) {
+  protected deleteTask(e: Solicitation) {
     this.deleteDialog(e);
   }
 
@@ -250,4 +258,8 @@ export class SolicitationComponent {
     this.searchTerm = res;
   }
 
+  // Utils
+  protected _initOrStopLoading() {
+    this.loading = !this.loading;
+  }
 }

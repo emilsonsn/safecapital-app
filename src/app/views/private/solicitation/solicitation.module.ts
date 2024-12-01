@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { SolicitationManagerComponent } from './solicitation-manager/solicitation-manager.component';
 import { SolicitationClientComponent } from './solicitation-client/solicitation-client.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { SolicitationClientComponent } from './solicitation-client/solicitation-
     MatInputModule,
     MatButtonModule,
     MatRippleModule,
+    MatPaginatorModule,
     MatBottomSheetModule,
   ],
 })
