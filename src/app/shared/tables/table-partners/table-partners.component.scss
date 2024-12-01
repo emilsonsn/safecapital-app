@@ -1,0 +1,38 @@
+@import "_variables";
+
+.status {
+  text-align: center;
+  font-weight: 600 !important;
+  border-radius: 5px;
+  color: $white-300;
+  padding: 0.2rem 0.5rem;
+
+  &.pending {
+    background-color: $yellow;
+  }
+
+  &.accepted {
+    background-color: $green;
+  }
+
+  &.refused {
+    background-color: $red;
+  }
+}
+
+.active {
+
+  font-size: 1rem;
+  font-weight: 600!important;
+  text-align: center;
+
+  &.accepted {
+    color: $green;
+
+  }
+
+  &.refused {
+    color: $red;
+
+  }
+}

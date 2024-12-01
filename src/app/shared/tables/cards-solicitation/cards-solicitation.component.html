@@ -13,7 +13,7 @@
           {{solicitation?.contract_number}}
         </div>
         <div class="status" [ngStyle]="{ 'background-color': statusMapping[solicitation?.status] }">
-          {{ solicitation?.status == 'Open' ? 'Aberto' : 'Fechado' }}
+          {{ solicitation?.status | status }}
         </div>
       </div>
       <div class="cardDescription">

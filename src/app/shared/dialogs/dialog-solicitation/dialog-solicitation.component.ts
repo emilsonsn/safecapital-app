@@ -44,7 +44,7 @@ export class DialogSolicitationComponent {
     this.form = this._fb.group({
       contract_number : [null, [Validators.required]],
       subject : [null, [Validators.required]],
-      status : [this._data?.solicitation?.status ?? "Open"],
+      status : [this._data?.solicitation?.status ?? 'Received'],
     });
 
     if (this._data?.solicitation) {

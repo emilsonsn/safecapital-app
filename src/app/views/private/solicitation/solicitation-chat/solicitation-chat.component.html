@@ -7,7 +7,7 @@
   </div>
   <div id="chatTemplate">
     <div id="content">
-      <div id="messages">
+      <div id="messages" #messagesContainer>
         @if(_data?.solicitation?.messages?.length > 0) {
         @for(message of _data?.solicitation?.messages; track message) {
         <!-- Se for o meu usuário OU for do suporte(Admin ou Manager), a exibição da mensagens é na direita(Como se fossem minhas mensagens) -->

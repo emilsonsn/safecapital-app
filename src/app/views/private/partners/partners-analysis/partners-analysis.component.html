@@ -1,8 +1,8 @@
 <div class="row mt-4">
   @for (item of itemsRequests(); track item) {
-    <div class="col-md-4 col-12">
-      <app-small-information-card [data]="item"></app-small-information-card>
-    </div>
+  <div class="col-md-4 col-12">
+    <app-small-information-card [data]="item"></app-small-information-card>
+  </div>
   }
 </div>
 
@@ -25,6 +25,10 @@
         <div class="col-md-4 mb-md-0 mb-2">
           <mat-form-field>
             <mat-select formControlName="validation" placeholder="Status">
+              @if(formFilters?.get('validation')?.value) {
+              <mat-option [value]="''" (click)="formFilters?.get('validation').setValue('Pending,Refused'); updateFilters()">Limpar
+                Filtro</mat-option>
+              }
               @for (status of statuses; track status) {
               <mat-option [value]="status">{{ status | status }}</mat-option>
               }
@@ -48,13 +52,7 @@
 </app-header-page-component>
 
 <div id="componentTable" class="col-12 mt-4">
-  <app-table-partners
-    (onUserClick)="openPartnerDialog($event)"
-    (onRequestClick)="openRequestDialog($event)"
-    (onDeleteUserClick)="deleteDialog($event)"
-    [searchTerm]="searchTerm"
-    [loading]="loading"
-    [filters]="filters"
-    >
+  <app-table-partners (onUserClick)="openPartnerDialog($event)" (onRequestClick)="openRequestDialog($event)"
+    (onDeleteUserClick)="deleteDialog($event)" [searchTerm]="searchTerm" [loading]="loading" [filters]="filters">
   </app-table-partners>
 </div>

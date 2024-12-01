@@ -35,8 +35,11 @@ export class CardsSolicitationComponent {
     new EventEmitter<Solicitation>();
 
   protected statusMapping = {
-    [SolicitationStatusEnum.Open]: '#ffc107',
-    [SolicitationStatusEnum.Closed]: '#06B76C',
+    [SolicitationStatusEnum.Awaiting]: '#007bff',
+    [SolicitationStatusEnum.Completed]: '#ffc107',
+    [SolicitationStatusEnum.UnderAnalysis]: '#f76e00',
+    [SolicitationStatusEnum.PaymentProvisioned]: '#abff00',
+    [SolicitationStatusEnum.Received]: '#28a745',
   };
 
   public solicitations: Solicitation[] = [];

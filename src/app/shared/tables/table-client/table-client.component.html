@@ -55,15 +55,17 @@
             </div>
           </td>
           <td>
-            <div class="d-flex justify-content-end">
+            <div class="status" [ngClass]="client?.status?.toLowerCase()">
+              {{ client?.status | status }}
+            </div>
+          </td>
+          <td>
+            <div class="d-flex justify-content-center">
 
               <div matRipple class="buttonTemplate" (click)="onClientClick.emit(client)">
                 <i class="fa-solid fa-pen-to-square"></i>
               </div>
 
-              <div matRipple class="buttonTemplate" (click)="onDeleteClientClick.emit(client?.id)">
-                <i class="fa-solid fa-trash"></i>
-              </div>
             </div>
           </td>
         </tr>

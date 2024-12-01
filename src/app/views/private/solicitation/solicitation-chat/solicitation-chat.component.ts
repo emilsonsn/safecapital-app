@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
   MAT_BOTTOM_SHEET_DATA,
@@ -22,7 +22,10 @@ export class SolicitationChatComponent {
   protected messageText: string = '';
   protected loading: boolean = false;
   protected user : User;
+
+  // Utils
   private routerSubscription!: Subscription;
+  @ViewChild('messagesContainer') protected messagesContainer!: ElementRef;
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA)
@@ -44,6 +47,7 @@ export class SolicitationChatComponent {
         this.closeChat();
       }
     });
+
   }
 
   protected onSubmit() {
@@ -172,6 +176,17 @@ export class SolicitationChatComponent {
   }
 
   // Utils
+
+  ngOnDestroy(): void {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
+
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
+
   protected closeChat() {
     this._bottomSheetRef.dismiss();
   }
@@ -180,10 +195,18 @@ export class SolicitationChatComponent {
     this.loading = !this.loading;
   }
 
-  ngOnDestroy(): void {
-    if (this.routerSubscription) {
-      this.routerSubscription.unsubscribe();
+  scrollToBottom(): void {
+    if (this.messagesContainer) {
+      try {
+        this.messagesContainer.nativeElement.scrollTop =
+          this.messagesContainer.nativeElement.scrollHeight;
+      } catch (err) {
+        console.error('Erro ao rolar para o final:', err);
+      }
+    } else {
+      console.warn('messagesContainer não está definido.');
     }
   }
+
 
 }

@@ -17,16 +17,16 @@ import { DialogPartnerAnalysisComponent } from '@shared/dialogs/dialog-partner-a
 })
 export class PartnersComponent {
   public formFilters: FormGroup;
+  public filters;
+  public loading: boolean = false;
+  protected searchTerm : string = '';
+
   protected cards = signal<requestCards>({
     solicitationFinished: 0,
     solicitationPending: 0,
     solicitationReject: 0,
   });
-  public filters;
-  public loading: boolean = false;
-  protected searchTerm : string = '';
-
-  itemsRequests: Signal<ISmallInformationCard[]> = computed<
+  protected itemsRequests: Signal<ISmallInformationCard[]> = computed<
     ISmallInformationCard[]
   >(() => [
     {
@@ -55,13 +55,25 @@ export class PartnersComponent {
     },
   ]);
 
+  // Filters
+  protected statusSelect = [
+    {
+      label: "Sim",
+      value: "1",
+    },
+    {
+      label: "Não",
+      value: "0",
+    },
+  ]
+
   constructor(
     private readonly _headerService: HeaderService,
     private readonly _router: Router,
     private readonly _dialog: MatDialog,
     private readonly _fb: FormBuilder,
     private readonly _requestService: RequestService,
-    private readonly _toastrService: ToastrService
+    private readonly _toastrService: ToastrService,
   ) {
     this._headerService.setTitle('Parceiros');
     this._headerService.setSubTitle('');
@@ -75,7 +87,8 @@ export class PartnersComponent {
 
   ngOnInit() {
     this.formFilters = this._fb.group({
-      validation: ['Accepted']
+      validation: ['Accepted'],
+      is_active : ['']
     });
 
     this.updateFilters();

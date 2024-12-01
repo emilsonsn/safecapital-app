@@ -26,8 +26,12 @@
       <div class="row">
         <div class="col-md-4 mb-md-0 mb-2">
           <mat-form-field>
-            <mat-label>Pesquisar</mat-label>
-            <input matInput formControlName="search_term" placeholder="Buscar">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status" placeholder="Status">
+              @for (status of statusSelect; track status) {
+              <mat-option [value]="status.value">{{ status.label }}</mat-option>
+              }
+            </mat-select>
           </mat-form-field>
         </div>
 

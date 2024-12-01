@@ -15,6 +15,7 @@ import { SolicitationManagerComponent } from './solicitation-manager/solicitatio
 import { SolicitationClientComponent } from './solicitation-client/solicitation-client.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ReactiveFormsModule,
     FormsModule,
     MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     MatRippleModule,
     MatPaginatorModule,

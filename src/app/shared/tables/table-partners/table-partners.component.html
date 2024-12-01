@@ -88,13 +88,13 @@
                 </div>
               </td>
               <td>
-                <div class="text-center" style="text-wrap: nowrap;">
+                <div class="status" [ngClass]="partner?.validation?.toLowerCase()">
                   {{ partner?.validation | status  }}
                 </div>
               </td>
               <td>
-                <div class="text-center" style="text-wrap: nowrap;">
-                  {{ partner?.is_active  }}
+                <div class="active" [ngClass]="partner?.is_active ? 'accepted' : 'refused'" style="text-wrap: nowrap;">
+                  {{ partner?.is_active ? 'Sim' : 'Não'  }}
                 </div>
               </td>
               <td>

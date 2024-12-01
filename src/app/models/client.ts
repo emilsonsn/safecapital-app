@@ -8,6 +8,13 @@ export interface Client {
   address: string;
   city: string;
   state: string;
+  status : ClientStatus;
   created_at?: Date;
   updated_at?: Date;
+}
+
+export enum ClientStatus {
+  Approved = 'Approved',
+  Pending = 'Pending',
+  Disapproved = 'Disapproved',
 }

@@ -36,11 +36,11 @@ export class HomeComponent {
     this._headerService.setTitle('Home');
     this._headerService.setSubTitle('');
 
-    _dashboardService
-      .getDashboardCards()
-      .subscribe((c: ApiResponse<OrderData>) => {
-        this.dashboardCards.set(c.data);
-      });
+    // _dashboardService
+    //   .getDashboardCards()
+    //   .subscribe((c: ApiResponse<OrderData>) => {
+    //     this.dashboardCards.set(c.data);
+    //   });
   }
 
   itemsShopping: Signal<ISmallInformationCard[]> = computed<
@@ -225,18 +225,18 @@ export class HomeComponent {
     // this.lineChart = new Chart('lineChart', this.lineChart);
     this.barChart = new Chart('barChart', this.barChart);
 
-    this._dashboardService
-      .getPurchaseGraphicBar()
-      .subscribe((c: ApiResponse<{ month: string; total: number }[]>) => {
-        const months = c.data.map((d) => d.month); // Extract months
-        const totals = c.data.map((d) => d.total); // Extract totals
+    // this._dashboardService
+    //   .getPurchaseGraphicBar()
+    //   .subscribe((c: ApiResponse<{ month: string; total: number }[]>) => {
+    //     const months = c.data.map((d) => d.month); // Extract months
+    //     const totals = c.data.map((d) => d.total); // Extract totals
 
-        if (this.barChart && this.barChart instanceof Chart) {
-          this.barChart.data.labels = months;
-          this.barChart.data.datasets[0].data = totals;
-          this.barChart.update(); // Update chart
-        }
-      });
+    //     if (this.barChart && this.barChart instanceof Chart) {
+    //       this.barChart.data.labels = months;
+    //       this.barChart.data.datasets[0].data = totals;
+    //       this.barChart.update(); // Update chart
+    //     }
+    //   });
 
     /*this._dashboardService.getPurchaseGraphicLine().subscribe((c: ApiResponse<{ month: string, total: number }[]>) => {
       const months = c.data.map(d => d.month); // Extract months

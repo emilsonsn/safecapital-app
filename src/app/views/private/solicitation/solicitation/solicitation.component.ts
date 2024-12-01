@@ -31,17 +31,18 @@ import { finalize } from 'rxjs';
   styleUrl: './solicitation.component.scss',
 })
 export class SolicitationComponent {
-  protected cards = signal<requestCards>({
-    solicitationFinished: 0,
-    solicitationPending: 0,
-    solicitationReject: 0,
-  });
+
   public filters;
   public loading: boolean = false;
   public formFilters: FormGroup;
   protected role: UserRole;
   protected searchTerm: string = '';
 
+  protected cards = signal<requestCards>({
+    solicitationFinished: 0,
+    solicitationPending: 0,
+    solicitationReject: 0,
+  });
   protected itemsRequests: Signal<ISmallInformationCard[]> = computed<
     ISmallInformationCard[]
   >(() => [
@@ -121,14 +122,32 @@ export class SolicitationComponent {
   protected status: KanbanSolicitationStatus[] = [
     {
       id: 1,
-      slug: SolicitationStatusEnum.Open,
-      name: 'Aberto',
+      slug: SolicitationStatusEnum.Received,
+      name: 'Recebido',
       color: '#FFFFFF',
     },
     {
       id: 2,
-      slug: SolicitationStatusEnum.Closed,
-      name: 'Fechado',
+      slug: SolicitationStatusEnum.UnderAnalysis,
+      name: 'Em Análise',
+      color: '#FF00FF',
+    },
+    {
+      id: 3,
+      slug: SolicitationStatusEnum.Awaiting,
+      name: 'Esperando imobiliária',
+      color: '#FFFFFF',
+    },
+    {
+      id: 4,
+      slug: SolicitationStatusEnum.PaymentProvisioned,
+      name: 'Pagamento provisionado',
+      color: '#FF00FF',
+    },
+    {
+      id: 5,
+      slug: SolicitationStatusEnum.Completed,
+      name: 'Finalizado',
       color: '#FF00FF',
     },
   ];

@@ -3,9 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { PrivateRoutingModule } from './private-routing.module';
 import {HomeModule} from "@app/views/private/home/home.module";
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient } from '@angular/common/http';
-import { MatNativeDateModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -13,7 +10,7 @@ import { MatNativeDateModule } from '@angular/material/core';
   imports: [
     CommonModule,
     PrivateRoutingModule,
-    HomeModule
+    HomeModule,
   ]
 })
 export class PrivateModule { }

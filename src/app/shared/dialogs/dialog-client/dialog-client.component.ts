@@ -7,10 +7,12 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Client } from '@models/client';
+import { User } from '@models/user';
 import { Estados } from '@models/utils';
 import { ClientService } from '@services/client.service';
 import { UtilsService } from '@services/utils.service';
 import { Utils } from '@shared/utils';
+import { SessionQuery } from '@store/session.query';
 import dayjs from 'dayjs';
 import { ToastrService } from 'ngx-toastr';
 import { finalize, map, ReplaySubject } from 'rxjs';
@@ -23,12 +25,28 @@ import { finalize, map, ReplaySubject } from 'rxjs';
 export class DialogClientComponent {
   public isNewClient: boolean = true;
   public title: string = 'Novo cliente';
+  protected user: User;
 
   public form: FormGroup;
 
   public loading: boolean = false;
 
   public states: string[] = Object.values(Estados);
+
+  public statusSelect: { label: string; value: string }[] = [
+    {
+      label: 'Aprovado',
+      value: 'Approved',
+    },
+    {
+      label: 'Pendente',
+      value: 'Pending',
+    },
+    {
+      label: 'Reprovado',
+      value: 'Disapproved',
+    },
+  ];
 
   public citys: string[] = [];
   public cityCtrl: FormControl<any> = new FormControl<any>(null);
@@ -44,7 +62,8 @@ export class DialogClientComponent {
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
     private readonly _utilsService: UtilsService,
-    private readonly _clientService: ClientService
+    private readonly _clientService: ClientService,
+    protected readonly _sessionQuery: SessionQuery
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +75,7 @@ export class DialogClientComponent {
       cpf: [null, [Validators.required]],
       phone: [null, [Validators.required]],
       email: [null, [Validators.required]],
+      status: ['Pending', [Validators.required]],
       cep: [null, [Validators.required]],
       street: [null, [Validators.required]],
       neighborhood: [null, [Validators.required]],
@@ -64,10 +84,19 @@ export class DialogClientComponent {
       number: [null, [Validators.required]],
     });
 
+    this._sessionQuery.user$.subscribe((user) => {
+      this.user = user;
+    });
+
     if (this._data?.client) {
       this.isNewClient = false;
       this.title = 'Editar cliente';
       this.form.patchValue(this._data?.client);
+      this.atualizarCidades(this._data?.client?.state);
+
+      if (this.user?.role == 'Client') {
+        this.form.disable();
+      }
     }
 
     this.form.get('state').valueChanges.subscribe((res) => {
@@ -86,12 +115,12 @@ export class DialogClientComponent {
   public onSubmit(form: FormGroup): void {
     if (!form.valid || this.loading) {
       form.markAllAsTouched();
-      this._toastr.error("Preencha todos os campos!");
+      this._toastr.error('Preencha todos os campos!');
       return;
     }
 
-    if(this.isNewClient && !this.filesToSend) {
-      this._toastr.error("Anexe pelo menos um arquivo!");
+    if (this.isNewClient && !this.filesToSend) {
+      this._toastr.error('Anexe pelo menos um arquivo!');
       return;
     }
 
@@ -140,14 +169,13 @@ export class DialogClientComponent {
       });
   }
 
-  protected prepareFormData(form : FormGroup) {
+  protected prepareFormData(form: FormGroup) {
     const formData = new FormData();
 
     Object.entries(form.controls).forEach(([key, control]) => {
       if (key == 'birthday') {
-        formData.append(key, dayjs(control.value).format("YYYY-MM-DD"));
-      }
-      else {
+        formData.append(key, dayjs(control.value).format('YYYY-MM-DD'));
+      } else {
         formData.append(key, control.value);
       }
     });
@@ -208,7 +236,7 @@ export class DialogClientComponent {
     return true;
   }
 
-  public autocompleteCep(cep : string) {
+  public autocompleteCep(cep: string) {
     if (cep.length == 8) {
       this._utilsService.getAddressByCep(cep).subscribe((res) => {
         if (res.erro) {
@@ -237,7 +265,7 @@ export class DialogClientComponent {
     id: number;
     preview: string;
     file: File;
-    category : string;
+    category: string;
   }[] = [];
 
   protected filesToRemove: number[] = [];
@@ -281,7 +309,7 @@ export class DialogClientComponent {
           id: this.filesToSend.length + 1,
           preview: base64,
           file: file,
-          category : null
+          category: null,
         });
       } else this._toastr.error(`${file.type} não é permitido`);
     }

@@ -29,6 +29,20 @@ export class StatusPipe implements PipeTransform {
         return 'Aceito';
       case 'Refused':
         return 'Rejeitado';
+      case 'Received':
+        return 'Recebido';
+      case 'UnderAnalysis':
+        return 'Em análise';
+      case 'Awaiting':
+        return 'Aguardando';
+      case 'PaymentProvisioned':
+        return 'Pagamento provisionado';
+      case 'Completed':
+        return 'Finalizado';
+      case 'Approved':
+        return 'Aprovado';
+      case 'Disapproved':
+        return 'Reprovado';
 
       default:
         return 'Não encontrado';

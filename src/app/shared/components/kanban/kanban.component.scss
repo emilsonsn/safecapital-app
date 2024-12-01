@@ -24,6 +24,9 @@
     padding: 1rem;
     color: $gray-600;
     border-bottom: 1px solid $secondary;
+    display: flex;
+    align-items: center;
+    height: 5rem;
   }
 }
 

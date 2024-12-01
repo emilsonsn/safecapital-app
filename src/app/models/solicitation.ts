@@ -18,7 +18,7 @@ export interface SolicitationMessage {
   message: string;
   attachment: File | string;
   solicitation_id: number;
-  user? : User;
+  user?: User;
   user_id?: number;
   created_at?: string;
   updated_at?: string;
@@ -26,6 +26,9 @@ export interface SolicitationMessage {
 }
 
 export enum SolicitationStatusEnum {
-  Open = 'Open',
-  Closed = 'Closed',
+  Received = 'Received',
+  UnderAnalysis = 'UnderAnalysis',
+  Awaiting = 'Awaiting',
+  PaymentProvisioned = 'PaymentProvisioned',
+  Completed = 'Completed',
 }

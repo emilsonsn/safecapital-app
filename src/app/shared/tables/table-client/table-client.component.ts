@@ -56,6 +56,12 @@ export class TableClientComponent {
       align: "justify-content-center",
     },
     {
+      slug: "status",
+      order: true,
+      title: "Status",
+      align: "justify-content-center",
+    },
+    {
       slug: "",
       order: true,
       title: "Ações",

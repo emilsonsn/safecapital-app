@@ -100,9 +100,15 @@ export class KanbanComponent {
   // Utils
   protected getEmojiForStatus(status: string): string {
     switch (status) {
-      case 'Aberto':
+      case 'Recebido':
+        return '📥';
+      case 'Em Análise':
+        return '🔍';
+      case 'Esperando imobiliária':
         return '⏳';
-      case 'Fechado':
+      case 'Pagamento provisionado':
+        return '💳';
+      case 'Finalizado':
         return '✅';
       default:
         return '❓';
@@ -110,8 +116,11 @@ export class KanbanComponent {
   }
 
   protected borderColors = {
-    Open: '#ffc107',
-    Closed: '#06B76C',
+    Received: '#007bff',
+    UnderAnalysis: '#ffc107',
+    Awaiting: '#f76e00',
+    PaymentProvisioned: '#abff00',
+    Completed: '#28a745',
   };
 
   protected getBorderColor(status: SolicitationStatusEnum) {

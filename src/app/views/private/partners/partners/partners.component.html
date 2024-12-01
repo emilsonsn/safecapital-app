@@ -6,7 +6,7 @@
   }
 </div>
 
-<app-header-page-component [hasFilter]="false">
+<app-header-page-component [hasFilter]="true">
 
   <div id="searchInput">
     <app-search-input (onSearchInputChanged)="handleSearchTerm($event)">
@@ -19,13 +19,21 @@
     </button>
   </div>
 
-  <!-- <div id="filters">
+  <div id="filters">
     <form [formGroup]="formFilters">
       <div class="row">
         <div class="col-md-4 mb-md-0 mb-2">
           <mat-form-field>
-            <mat-label>Pesquisar</mat-label>
-            <input matInput formControlName="search_term" placeholder="Buscar">
+            <mat-label>Ativo</mat-label>
+            <mat-select formControlName="is_active" placeholder="Ativo">
+              @if(formFilters?.get('is_active')?.value) {
+              <mat-option [value]="''" (click)="formFilters?.get('is_active').setValue(''); updateFilters()">Limpar
+                Filtro</mat-option>
+              }
+              @for (status of statusSelect; track status) {
+              <mat-option [value]="status.value">{{ status.label }}</mat-option>
+              }
+            </mat-select>
           </mat-form-field>
         </div>
 
@@ -40,7 +48,7 @@
         <i class="fa-solid fa-magnifying-glass"></i> Pesquisar
       </button>
     </div>
-  </div> -->
+  </div>
 
 </app-header-page-component>
 
