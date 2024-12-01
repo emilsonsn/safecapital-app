@@ -1,0 +1,6 @@
+@if(role == 'Admin' || role == 'Manager') {
+  <app-solicitation></app-solicitation>
+}
+@else if(role == 'Client') {
+  <app-solicitation-client></app-solicitation-client>
+}

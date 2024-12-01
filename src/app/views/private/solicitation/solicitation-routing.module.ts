@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SolicitationComponent } from './solicitation/solicitation.component';
+import { SolicitationManagerComponent } from './solicitation-manager/solicitation-manager.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: SolicitationComponent
+    component: SolicitationManagerComponent
   }
 ];
 

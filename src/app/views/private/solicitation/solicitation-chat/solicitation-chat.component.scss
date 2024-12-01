@@ -23,6 +23,9 @@
 
 
     #messages {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
       max-height: 25rem;
       overflow: auto;
     }
@@ -34,7 +37,7 @@
       width: 100%;
       gap: 0.5rem;
       padding: 6px 0.2rem 6px 1rem;
-      background-color: #5d7386;
+      background-color: #162b3e;
       border-radius: 5px;
 
       input {

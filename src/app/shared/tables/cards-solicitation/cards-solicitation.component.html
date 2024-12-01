@@ -1,0 +1,72 @@
+<div id="templateCardsSolicitation" class="p-md-0 p-2">
+  <div id="contentCards">
+    @if (!loading) {
+    <div *ngIf="!solicitations?.length">
+      <div class="text-center w-100">
+        <div>Nenhum resultado encontrado</div>
+      </div>
+    </div>
+    @for (solicitation of solicitations; track solicitation) {
+    <div class="cardSolicitation">
+      <div class="cardHeader">
+        <div class="title">
+          {{solicitation?.contract_number}}
+        </div>
+        <div class="status" [ngStyle]="{ 'background-color': statusMapping[solicitation?.status] }">
+          {{ solicitation?.status == 'Open' ? 'Aberto' : 'Fechado' }}
+        </div>
+      </div>
+      <div class="cardDescription">
+        {{solicitation?.subject}}
+      </div>
+      <div class="cardFooter">
+        <div class="title">
+          Atualizado em: <br>{{ (solicitation?.updated_at | date:"dd/MM/YYYY HH:mm:ss") ?? '-'}}
+        </div>
+        <div id="buttons">
+          <div matRipple class="buttonTemplate" (click)="onOpenSolicitationChat.emit(solicitation); $event.stopPropagation()">
+            <i class="fa-solid fa-comment"></i>
+          </div>
+          <div matRipple class="buttonTemplate" (click)="onOpenSolicitationDetails.emit(solicitation); $event.stopPropagation()">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+    }
+  </div>
+  <mat-paginator [length]="pageControl.itemCount" [pageSize]="pageControl.take" [showFirstLastButtons]="true"
+    [pageSizeOptions]="[10, 25, 50, 100]" [hidePageSize]="false" [pageIndex]="pageControl.page - 1"
+    (page)="pageEvent($event)" aria-label="Select page">
+  </mat-paginator>
+</div>
+
+<!--
+
+<div matRipple class="buttonTemplate" (click)="onClientClick.emit(client)">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </div>
+
+              <div matRipple class="buttonTemplate" (click)="onDeleteClientClick.emit(client?.id)">
+                <i class="fa-solid fa-trash"></i>
+              </div>
+
+              <div id="mat-loading">
+              <mat-spinner></mat-spinner>
+            </div>
+
+            <th [class.hasorder]="col.order" [ngStyle]="{ cursor: 'pointer' }"
+          [class.active-order]="pageControl.orderField === col.slug">
+          (click)="onClickOrderBy(col.slug, col.order)"
+          <div class="{{col.align}}" style="color: #a2a1a8">
+            {{ col.title }}
+            <i class="material-icons" *ngIf="pageControl.orderField === col.slug">
+              {{
+              pageControl.order === "DESC" ? "arrow_downward" : "arrow_upward"
+              }}
+            </i>
+          </div>
+        </th>
+
+-->

@@ -23,21 +23,23 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SolicitationChatComponent } from '../solicitation-chat/solicitation-chat.component';
 
 @Component({
-  selector: 'app-solicitation',
-  templateUrl: './solicitation.component.html',
-  styleUrl: './solicitation.component.scss',
+  selector: 'app-solicitation-client',
+  templateUrl: './solicitation-client.component.html',
+  styleUrl: './solicitation-client.component.scss',
 })
-export class SolicitationComponent {
-  protected cards = signal<requestCards>({
-    solicitationFinished: 0,
-    solicitationPending: 0,
-    solicitationReject: 0,
-  });
+export class SolicitationClientComponent {
   public filters;
   public loading: boolean = false;
   public formFilters: FormGroup;
   protected role: UserRole;
   protected searchTerm: string = '';
+
+  // Cards
+  protected cards = signal<requestCards>({
+    solicitationFinished: 0,
+    solicitationPending: 0,
+    solicitationReject: 0,
+  });
 
   protected itemsRequests: Signal<ISmallInformationCard[]> = computed<
     ISmallInformationCard[]
@@ -92,34 +94,7 @@ export class SolicitationComponent {
     });
   }
 
-  openBottomSheet(solicitation : Solicitation): void {
-    this._matBottomSheet.open(SolicitationChatComponent, {
-      data: {solicitation},
-      disableClose: true,
-      hasBackdrop: false
-    });
-  }
-
-  ngOnInit() {
-
-
-    // Inicia as colunas do kanban
-    this.status.forEach((status) => {
-      this.kanbanData[status.name] = [];
-    });
-
-    // Mover para a requisição de GetSolicitacion
-    this.solicitationData.forEach((task) => {
-      const name = this.status.find(
-        (status) => status.slug  == task.status
-      )?.name;
-
-      if (name) this.kanbanData[name].push(task);
-    });
-
-    this.cdr.detectChanges();
-    // ----
-  }
+  ngOnInit() {}
 
   public openRequestDialog(request? : Solicitation) {
     const dialogConfig: MatDialogConfig = {
@@ -148,8 +123,12 @@ export class SolicitationComponent {
       });
   }
 
-  public openRequestChat(request? : Solicitation) {
-    console.log("Abrir chat", request);
+  public openRequestChat(solicitation : Solicitation): void {
+    this._matBottomSheet.open(SolicitationChatComponent, {
+      data: {solicitation},
+      disableClose: true,
+      hasBackdrop: false
+    });
   }
 
   public deleteDialog(request : Solicitation) {
@@ -176,64 +155,6 @@ export class SolicitationComponent {
       });
   }
 
-  // Kanban
-  protected solicitationData : Solicitation[] = [
-    {
-      id: 1,
-      contract_number: '3223',
-      subject: 'Teste Aberto',
-      status: SolicitationStatusEnum.Open
-    },
-    {
-      id: 2,
-      contract_number: '34',
-      subject: 'Teste Fechado',
-      status: SolicitationStatusEnum.Closed
-    },
-    {
-      id: 3,
-      contract_number: '555',
-      subject: 'Teste Fechado 2',
-      status: SolicitationStatusEnum.Closed
-    },
-    {
-      id: 4,
-      contract_number: '535',
-      subject: 'Teste Aberto 2',
-      status: SolicitationStatusEnum.Open
-    },
-  ];
-
-  protected kanbanData: Kanban<Solicitation> = {};
-
-  protected status: KanbanSolicitationStatus[] = [
-    {
-      id: 1,
-      slug : SolicitationStatusEnum.Open,
-      name: 'Aberto',
-      color: '#FFFFFF',
-    },
-    {
-      id: 2,
-      slug : SolicitationStatusEnum.Closed,
-      name: 'Fechado',
-      color: '#FF00FF',
-    },
-  ];
-
-  protected taskMoved(e : Solicitation) {
-    // Realizar o patch da solicitacion
-    console.log(e);
-  }
-
-  protected openSolicitationDialog(e : Solicitation) {
-    this.openRequestChat(e);
-  }
-
-  protected deleteTask(e : Solicitation) {
-    this.deleteDialog(e);
-  }
-
   // Filters
   public updateFilters() {
     this.filters = this.formFilters.getRawValue();
@@ -249,5 +170,4 @@ export class SolicitationComponent {
   protected handleSearchTerm(res) {
     this.searchTerm = res;
   }
-
 }

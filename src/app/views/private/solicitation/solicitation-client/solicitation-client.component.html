@@ -1,0 +1,46 @@
+<app-header-page-component [hasFilter]="false">
+
+  <div id="searchInput">
+    <app-search-input (onSearchInputChanged)="handleSearchTerm($event)">
+    </app-search-input>
+  </div>
+
+  <div id="buttons">
+    @if(role == 'Client') {
+    <button matRipple class="button primary" (click)="openRequestDialog()">
+      <i class="fa-solid fa-plus"></i> Chamado
+    </button>
+    }
+  </div>
+
+  <!-- <div id="filters">
+    <form [formGroup]="formFilters">
+      <div class="row">
+        <div class="col-md-4 mb-md-0 mb-2">
+          <mat-form-field>
+            <mat-label>Pesquisar</mat-label>
+            <input matInput formControlName="search_term" placeholder="Buscar">
+          </mat-form-field>
+        </div>
+
+      </div>
+    </form>
+
+    <div class="d-flex justify-content-end flex-wrap gap-2 mt-2">
+      <button matRipple class="button bgRed" (click)="clearFormFilters()">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+      <button matRipple class="button primary" (click)="updateFilters()">
+        <i class="fa-solid fa-magnifying-glass"></i> Pesquisar
+      </button>
+    </div>
+  </div> -->
+
+</app-header-page-component>
+
+<div id="componentTable" class="col-12 mt-4">
+  <app-cards-solicitation
+
+    (onOpenSolicitationChat)="openRequestChat($event)"
+    (onOpenSolicitationDetails)="openRequestDialog($event)"></app-cards-solicitation>
+</div>

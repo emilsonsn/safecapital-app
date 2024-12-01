@@ -6,17 +6,17 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Order, PageControl } from '@models/application';
-import { Client } from '@models/client';
-import { ClientService } from '@services/client.service';
+import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
+import { SolicitationService } from '@services/solicitation.service';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 
 @Component({
-  selector: 'app-table-solicitation',
-  templateUrl: './table-solicitation.component.html',
-  styleUrl: './table-solicitation.component.scss',
+  selector: 'app-cards-solicitation',
+  templateUrl: './cards-solicitation.component.html',
+  styleUrl: './cards-solicitation.component.scss',
 })
-export class TableSolicitationComponent {
+export class CardsSolicitationComponent {
   @Input()
   searchTerm?: string = '';
 
@@ -27,43 +27,62 @@ export class TableSolicitationComponent {
   filters: any;
 
   @Output()
-  onClientClick: EventEmitter<Client> = new EventEmitter<Client>();
+  onOpenSolicitationDetails: EventEmitter<Solicitation> =
+    new EventEmitter<Solicitation>();
 
   @Output()
-  onDeleteClientClick: EventEmitter<number> = new EventEmitter<number>();
+  onOpenSolicitationChat: EventEmitter<Solicitation> =
+    new EventEmitter<Solicitation>();
 
-  public clients = [];
+  protected statusMapping = {
+    [SolicitationStatusEnum.Open]: '#ffc107',
+    [SolicitationStatusEnum.Closed]: '#06B76C',
+  };
 
-  public columns = [
+  public solicitations: Solicitation[] = [
     {
-      slug: 'name',
-      order: true,
-      title: 'Nome',
-      align: 'start',
+      id: 1,
+      contract_number: '22',
+      subject: '34',
+      status: SolicitationStatusEnum.Open,
     },
     {
-      slug: 'phone',
-      order: true,
-      title: 'Whatsapp',
-      align: 'justify-content-center',
+      id: 1,
+      contract_number: '34535535535353',
+      subject:
+        'TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE TESTE',
+      status: SolicitationStatusEnum.Open,
+      updated_at: '2024-11-30 14:15:17',
     },
     {
-      slug: 'Telefone',
-      order: true,
-      title: 'E-mail',
-      align: 'justify-content-center',
+      id: 1,
+      contract_number: '22',
+      subject: '34',
+      status: SolicitationStatusEnum.Open,
     },
     {
-      slug: 'cpf',
-      order: true,
-      title: 'CPF',
-      align: 'justify-content-center',
+      id: 1,
+      contract_number: '22',
+      subject: '34',
+      status: SolicitationStatusEnum.Closed,
     },
     {
-      slug: '',
-      order: true,
-      title: 'Ações',
-      align: 'justify-content-center',
+      id: 1,
+      contract_number: '22',
+      subject: '34',
+      status: SolicitationStatusEnum.Open,
+    },
+    {
+      id: 1,
+      contract_number: '22',
+      subject: '34',
+      status: SolicitationStatusEnum.Open,
+    },
+    {
+      id: 1,
+      contract_number: '22',
+      subject: '34',
+      status: SolicitationStatusEnum.Open,
     },
   ];
 
@@ -78,7 +97,7 @@ export class TableSolicitationComponent {
 
   constructor(
     private readonly _toastr: ToastrService,
-    private readonly _clientService: ClientService
+    private readonly _solicitationService: SolicitationService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -113,12 +132,12 @@ export class TableSolicitationComponent {
   search(): void {
     this._initOrStopLoading();
 
-    this._clientService
-      .getClients(this.pageControl, this.filters)
+    this._solicitationService
+      .getList(this.pageControl, this.filters)
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {
-          this.clients = res.data;
+          this.solicitations = res.data;
 
           this.pageControl.page = res.current_page - 1;
           this.pageControl.itemCount = res.total;

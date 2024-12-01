@@ -105,14 +105,24 @@ export class LayoutPrivateComponent {
       if (user) {
         this.user = user;
 
-        if (user?.role == 'Admin' || user?.role == 'Manager') {
+        if (user?.role == 'Admin' ) {
           this.permitedMenuItem = this.menuItem;
-        } else if (user?.role == 'Client') {
+        }
+        else if (user?.role == 'Manager') {
           this.permitedMenuItem = this.menuItem.filter(
             (item) =>
-              item.label == 'Pedidos' ||
-              item.label == 'Solicitações' ||
-              item.label == 'Fornecedores'
+              item.label == 'Home' ||
+              item.label == 'Clientes' ||
+              item.label == 'Chamados' ||
+              item.label == 'Parceiros'
+          );
+        }
+        else if (user?.role == 'Client') {
+          this.permitedMenuItem = this.menuItem.filter(
+            (item) =>
+              item.label == 'Home' ||
+              item.label == 'Clientes' ||
+              item.label == 'Chamados'
           );
         }
       }

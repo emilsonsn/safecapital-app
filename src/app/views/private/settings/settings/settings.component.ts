@@ -55,6 +55,7 @@ export class SettingsComponent {
       .subscribe({
         next: (res) => {
           this._toastr.success(res.message);
+          this.getSettings();
         },
         error: (err) => {
           this._toastr.error(err.error.error);
@@ -74,7 +75,7 @@ export class SettingsComponent {
       )
       .subscribe({
         next: (res) => {
-          this.form.patchValue(res.data);
+          this.form.patchValue(res);
         },
         error: (err) => {
           this._toastr.error(err.error.error);

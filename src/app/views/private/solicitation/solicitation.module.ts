@@ -11,9 +11,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
+import { SolicitationManagerComponent } from './solicitation-manager/solicitation-manager.component';
+import { SolicitationClientComponent } from './solicitation-client/solicitation-client.component';
 
 @NgModule({
-  declarations: [SolicitationComponent, SolicitationChatComponent],
+  declarations: [
+    SolicitationComponent,
+    SolicitationChatComponent,
+    SolicitationManagerComponent,
+    SolicitationClientComponent,
+  ],
   imports: [
     CommonModule,
     RequestsRoutingModule,

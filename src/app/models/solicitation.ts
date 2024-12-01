@@ -5,6 +5,9 @@ export interface Solicitation {
   status : SolicitationStatusEnum;
   messages?;
   user_id?;
+  created_at? : string;
+  updated_at? : string;
+  deleted_at? : string;
 }
 
 export enum SolicitationStatusEnum {
