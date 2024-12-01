@@ -16,6 +16,7 @@ import { SolicitationClientComponent } from './solicitation-client/solicitation-
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatPaginatorModule,
     MatBottomSheetModule,
     MatTooltipModule,
+    NgxMatSelectSearchModule,
   ],
 })
 export class SolicitationModule {}

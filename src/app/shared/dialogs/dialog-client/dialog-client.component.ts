@@ -181,7 +181,8 @@ export class DialogClientComponent {
     });
 
     this.filesToSend.map((file, index) => {
-      formData.append(`attachments[${index}]`, file.file);
+      formData.append(`attachments[${index}][category]`, file.category);
+      formData.append(`attachments[${index}][file]`, file.file);
     });
 
     return formData;

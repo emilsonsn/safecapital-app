@@ -117,3 +117,12 @@
     color: #475f93;
   }
 }
+
+.title {
+  font-size: 0.95em;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-wrap: nowrap;
+  width: 100%;
+}

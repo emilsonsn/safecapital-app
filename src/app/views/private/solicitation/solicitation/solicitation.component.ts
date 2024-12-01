@@ -5,7 +5,7 @@ import {
   Signal,
   signal,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ISmallInformationCard, requestCards } from '@models/cardInformation';
@@ -14,7 +14,7 @@ import { RequestService } from '@services/request.service';
 import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
 import { ToastrService } from 'ngx-toastr';
 import { SessionQuery } from '@store/session.query';
-import { UserRole } from '@models/user';
+import { User, UserRole } from '@models/user';
 import { Kanban } from '@models/Kanban';
 import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
 import { KanbanSolicitationStatus } from '@shared/components/kanban/kanban.component';
@@ -23,7 +23,8 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SolicitationChatComponent } from '../solicitation-chat/solicitation-chat.component';
 import { SolicitationService } from '@services/solicitation.service';
 import { Order, PageControl } from '@models/application';
-import { finalize } from 'rxjs';
+import { debounceTime, finalize, map, ReplaySubject, Subject, takeUntil } from 'rxjs';
+import { UserService } from '@services/user.service';
 
 @Component({
   selector: 'app-solicitation',
@@ -31,7 +32,7 @@ import { finalize } from 'rxjs';
   styleUrl: './solicitation.component.scss',
 })
 export class SolicitationComponent {
-
+  protected _onDestroy = new Subject<void>();
   public filters;
   public loading: boolean = false;
   public formFilters: FormGroup;
@@ -81,6 +82,15 @@ export class SolicitationComponent {
     order: Order.ASC,
   };
 
+  // Filters
+  protected userSelect: User[] = [];
+
+  protected partnerCtrl: FormControl<any> = new FormControl<any>(null);
+  protected partnerFilterCtrl: FormControl<any> = new FormControl<string>('');
+  protected filteredPartners: ReplaySubject<any[]> = new ReplaySubject<any[]>(
+    1
+  );
+
   constructor(
     private readonly _headerService: HeaderService,
     private readonly _router: Router,
@@ -91,6 +101,7 @@ export class SolicitationComponent {
     private readonly _sessionQuery: SessionQuery,
     private cdr: ChangeDetectorRef,
     private readonly _matBottomSheet: MatBottomSheet,
+    private readonly _userService : UserService,
   ) {
     this._headerService.setTitle('Chamados');
     this._headerService.setSubTitle('');
@@ -103,12 +114,18 @@ export class SolicitationComponent {
     this._sessionQuery.user$.subscribe((user) => {
       this.role = user?.role;
     });
+
+    this.getUsersFromBack();
   }
 
   ngOnInit() {
     // Inicia as colunas do kanban
     this.status.forEach((status) => {
       this.kanbanData[status.name] = [];
+    });
+
+    this.formFilters = this._fb.group({
+      user_id : ['']
     });
 
     this.getSolicitationData();
@@ -155,8 +172,15 @@ export class SolicitationComponent {
   protected getSolicitationData() {
     this._initOrStopLoading();
 
+    for (const status of this.status) {
+      this.kanbanData[status.name] = [];
+    }
+
     this._solicitationService
-      .getList(this.pageControl, this.filters)
+      .getList(this.pageControl, {
+        ...this.filters,
+        searchTerm : this.searchTerm
+      })
       .pipe(
         finalize(() => {
           this._initOrStopLoading();
@@ -237,6 +261,8 @@ export class SolicitationComponent {
   // Filters
   public updateFilters() {
     this.filters = this.formFilters.getRawValue();
+
+    this.getSolicitationData();
   }
 
   public clearFormFilters() {
@@ -248,10 +274,53 @@ export class SolicitationComponent {
 
   protected handleSearchTerm(res) {
     this.searchTerm = res;
+
+    this.updateFilters();
+  }
+
+  protected prepareFilterClientCtrl() {
+    this.partnerFilterCtrl.valueChanges
+      .pipe(
+        takeUntil(this._onDestroy),
+        debounceTime(100),
+        map((search: string | null) => {
+          if (!search) {
+            return this.userSelect
+              .filter((user) => user.role.toLowerCase() == 'client')
+              .slice();
+          } else {
+            search = search.toLowerCase();
+            return this.userSelect.filter(
+              (user) =>
+                user.role.toLowerCase() == 'client' &&
+                user.name.toLowerCase().includes(search)
+            );
+          }
+        })
+      )
+      .subscribe((filtered) => {
+        this.filteredPartners.next(filtered);
+      });
   }
 
   // Utils
   protected _initOrStopLoading() {
     this.loading = !this.loading;
+  }
+
+  // Getters
+
+  public getUsersFromBack() {
+    this._userService.getUsers().subscribe((res) => {
+      this.userSelect = res.data;
+
+      this.filteredPartners.next(
+        this.userSelect
+          .filter((user) => user.role.toLowerCase() == 'client')
+          .slice()
+      );
+
+      this.prepareFilterClientCtrl();
+    });
   }
 }

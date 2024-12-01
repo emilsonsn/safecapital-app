@@ -5,12 +5,23 @@
     <div cdkDropList [cdkDropListData]="data[key]" class="kanban-list" (cdkDropListDropped)="drop($event)">
       @for (item of data[key]; track item) {
       <div class="kanban-box" [ngStyle]="{ 'border-color': borderColors[item?.status] }" cdkDrag>
-        <h4>
+        <h4 matTooltip="Número do Contrato" [matTooltipPosition]="'right'" style="width: fit-content;">
           <strong>
             {{ item?.contract_number }}
           </strong>
         </h4>
-        <h4>{{ item?.subject }}</h4>
+        <div class="w-100"></div>
+        <h4 matTooltip="Assunto" [matTooltipPosition]="'right'" style="width: fit-content;">{{ item?.subject }}</h4>
+        <div class="w-100"></div>
+        <div class="title">
+          Usuário: {{  item?.user?.name}}
+        </div>
+        <div class="title">
+          Criado em: <br>{{ (item?.created_at | date:"dd/MM/YYYY HH:mm:ss") ?? '-'}}
+        </div>
+        <div class="title">
+          Atualizado em: <br>{{ (item?.updated_at | date:"dd/MM/YYYY HH:mm:ss") ?? '-'}}
+        </div>
         <div class="d-flex align-items-center justify-content-end w-100 gap-2 pt-2">
           <div class="buttonKanban" matRipple (click)="onOpenSolicitationDetails.emit(item); $event.stopPropagation()">
             <i style="cursor: pointer" class="fa-solid fa-circle-info"></i>

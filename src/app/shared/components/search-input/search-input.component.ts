@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-search-input',
@@ -25,12 +26,18 @@ export class SearchInputComponent {
 
     this.form
       .get('search')
-      .valueChanges.subscribe((res) => this.emitSearchInput());
+      .valueChanges.pipe(
+        debounceTime(500),
+        distinctUntilChanged()
+      )
+      .subscribe((value: string) => {
+        this.onSearchInputChanged.emit(value);
+      });
   }
 
-  protected emitSearchInput() {
-    setTimeout(() => {
-      this.onSearchInputChanged.emit(this.form.get('search').value);
-    }, 500);
-  }
+  // protected emitSearchInput() {
+  //   setTimeout(() => {
+  //     this.onSearchInputChanged.emit(this.form.get('search').value);
+  //   }, 500);
+  // }
 }

@@ -6,7 +6,7 @@
   }
 </div> -->
 
-<app-header-page-component [hasFilter]="false">
+<app-header-page-component [hasFilter]="true">
 
   <div id="searchInput">
     <app-search-input (onSearchInputChanged)="handleSearchTerm($event)">
@@ -21,20 +21,28 @@
     }
   </div>
 
-  <!-- <div id="filters">
+  <div id="filters">
     <form [formGroup]="formFilters">
       <div class="row">
         <div class="col-md-4 mb-md-0 mb-2">
           <mat-form-field>
-            <mat-label>Status</mat-label>
-            <mat-select formControlName="status" placeholder="Status">
-              @for (status of statusSelect; track status) {
-              <mat-option [value]="status.value">{{ status.label }}</mat-option>
+            <mat-select formControlName="user_id" placeholder="Parceiro">
+              <mat-option>
+                <ngx-mat-select-search [formControl]="partnerFilterCtrl" placeholderLabel="Procure pelo usuário"
+                  i18n-placeholderLabel noEntriesFoundLabel="Usuário não encontrado" i18n-noEntriesFoundLabel>
+                </ngx-mat-select-search>
+              </mat-option>
+              @if(formFilters?.get('user_id').value) {
+                <mat-option [value]="''" (click)="formFilters?.get('user_id').setValue(''); updateFilters()">
+                  Limpar Filtro
+                </mat-option>
               }
+              <mat-option *ngFor="let user of filteredPartners | async" [value]="user.id">
+                {{ user.name }}
+              </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-
       </div>
     </form>
 
@@ -46,7 +54,7 @@
         <i class="fa-solid fa-magnifying-glass"></i> Pesquisar
       </button>
     </div>
-  </div> -->
+  </div>
 
 </app-header-page-component>
 

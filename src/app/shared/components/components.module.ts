@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const components: any[] = [
   AccountManagerComponent,
@@ -33,6 +34,7 @@ const components: any[] = [
     MatFormFieldModule,
     MatInputModule,
     MatDivider,
+    MatTooltipModule,
     MatRippleModule,
     CdkDropListGroup,
     CdkDropList,

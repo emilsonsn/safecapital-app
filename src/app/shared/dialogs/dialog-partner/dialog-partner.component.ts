@@ -29,6 +29,18 @@ export class DialogPartnerComponent {
 
   public utils = Utils;
 
+  // Filters
+  public statusSelect: { label: string; value: string }[] = [
+    {
+      label: 'Ativo',
+      value: '1',
+    },
+    {
+      label: 'Inativo',
+      value: '0',
+    },
+  ];
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     protected readonly _data: { isClient: boolean; user: User },
@@ -49,7 +61,9 @@ export class DialogPartnerComponent {
       phone: [null, [Validators.required]],
       company_name: [null],
       creci: [null],
-      password: ['']
+      password: [''],
+      is_active: [this._data?.user?.is_active ?? 'Pending'],
+      justification: [this._data?.user?.justification ?? ''],
     });
 
     if (this._data?.user) {

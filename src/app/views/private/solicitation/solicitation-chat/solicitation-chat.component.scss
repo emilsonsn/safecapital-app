@@ -28,6 +28,7 @@
       gap: 0.3rem;
       max-height: 22rem;
       overflow: auto;
+      height: 100vh;
     }
 
     .sideManager {
@@ -112,22 +113,42 @@
 
   @media (min-width: 960px) {
     margin-left: 25rem;
+
+    #geralTemplate {
+      max-width: 42vw;
+    }
   }
 
   @media (min-width: 1100px) {
     margin-left: 35rem;
+
+    #geralTemplate {
+      max-width: 42vw;
+    }
   }
 
   @media (min-width: 1400px) {
     margin-left: 45rem;
+
+    #geralTemplate {
+      max-width: 35vw;
+    }
   }
 
   @media (min-width: 1700px) {
     margin-left: 65rem;
+
+    #geralTemplate {
+      max-width: 30vw;
+    }
   }
 
   @media (min-width: 2000px) {
     margin-left: 85rem;
+
+    #geralTemplate {
+      max-width: 28vw;
+    }
   }
 }
 

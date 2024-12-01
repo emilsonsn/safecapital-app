@@ -12,6 +12,7 @@ export interface User {
   role: UserRole;
   attachments: Attachment[];
   validation : StatusUser;
+  justification? : string;
   created_at?: string;
   updated_at?: string;
 }
