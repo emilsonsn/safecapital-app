@@ -1,19 +1,17 @@
 import { Component, Inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Client } from '@models/client';
-import { Estados } from '@models/utils';
-import { ClientService } from '@services/client.service';
-import { UtilsService } from '@services/utils.service';
-import { Utils } from '@shared/utils';
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogConfig,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { UserService } from '@services/user.service';
+import { User } from '@models/user';
 import dayjs from 'dayjs';
+import { Utils } from '@shared/utils';
 import { ToastrService } from 'ngx-toastr';
-import { finalize, map, ReplaySubject } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-partner',
@@ -21,30 +19,24 @@ import { finalize, map, ReplaySubject } from 'rxjs';
   styleUrl: './dialog-partner.component.scss',
 })
 export class DialogPartnerComponent {
-  public isNewClient: boolean = true;
-  public title: string = 'Novo cliente';
-
+  public isNewCollaborator: boolean = true;
+  public title: string = 'Novo ';
   public form: FormGroup;
-
   public loading: boolean = false;
-
-  public states: string[] = Object.values(Estados);
-
-  public citys: string[] = [];
-  public cityCtrl: FormControl<any> = new FormControl<any>(null);
-  public cityFilterCtrl: FormControl<any> = new FormControl<string>('');
-  public filteredCitys: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public profileImageFile: File | null = null;
+  profileImage: string | ArrayBuffer = null;
+  isDragOver: boolean = false;
 
   public utils = Utils;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    private readonly _data: { client: Client },
+    protected readonly _data: { isClient: boolean; user: User },
     private readonly _dialogRef: MatDialogRef<DialogPartnerComponent>,
     private readonly _fb: FormBuilder,
-    private readonly _toastr: ToastrService,
-    private readonly _utilsService: UtilsService,
-    private readonly _clientService: ClientService
+    private readonly _dialog: MatDialog,
+    private readonly _userService: UserService,
+    private readonly _toastr : ToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -52,183 +44,88 @@ export class DialogPartnerComponent {
       id: [null],
       name: [null, [Validators.required]],
       surname: [null, [Validators.required]],
-      birthday: [null, [Validators.required]],
-      cpf: [null, [Validators.required]],
-      phone: [null, [Validators.required]],
       email: [null, [Validators.required]],
-      cep: [null, [Validators.required]],
-      street: [null, [Validators.required]],
-      neighborhood: [null, [Validators.required]],
-      city: [null, [Validators.required]],
-      state: [null, [Validators.required]],
-      number: [null, [Validators.required]],
+      cnpj: [null],
+      phone: [null, [Validators.required]],
+      company_name: [null],
+      creci: [null],
+      password: ['']
     });
 
-    if (this._data?.client) {
-      this.isNewClient = false;
-      this.title = 'Editar cliente';
-      this.form.patchValue(this._data?.client);
+    if (this._data?.user) {
+      this.isNewCollaborator = false;
+      this.title = 'Editar ';
+      this.form.patchValue(this._data.user);
+      // if (this._data.user.photo) {
+      //   this.profileImage = this._data.user.photo
+      // }
     }
-
-    this.form.get('state').valueChanges.subscribe((res) => {
-      this.atualizarCidades(res);
-    });
-
-    this.form.get('cep').valueChanges.subscribe((res) => {
-      this.autocompleteCep(res);
-    });
-
-    this.cityFilterCtrl.valueChanges.pipe().subscribe(() => {
-      this.filterCitys();
-    });
   }
 
   public onSubmit(form: FormGroup): void {
-    if (!form.valid || this.loading) {
+    if (!form.valid || this.loading || this.filesToSend.some(file => !file.category)) {
       form.markAllAsTouched();
-      this._toastr.error("Preencha todos os campos!");
       return;
     }
 
-    if(this.isNewClient && !this.filesToSend) {
-      this._toastr.error("Anexe pelo menos um arquivo!");
-      return;
-    }
-
-    if (this.isNewClient) {
-      this._postClient();
-    } else {
-      this._patchClient(this._data.client.id);
-    }
-  }
-
-  _postClient() {
-    this._initOrStopLoading();
-
-    this._clientService
-      .postClient(this.prepareFormData(this.form))
-      .pipe(finalize(() => this._initOrStopLoading()))
-      .subscribe({
-        next: (res) => {
-          if (res.status) {
-            this._toastr.success(res.message);
-            this._dialogRef.close(true);
-          }
-        },
-        error: (err) => {
-          this._toastr.error(err.error.error);
-        },
-      });
-  }
-
-  _patchClient(id) {
-    this._initOrStopLoading();
-
-    this._clientService
-      .patchClient(id, this.prepareFormData(this.form))
-      .pipe(finalize(() => this._initOrStopLoading()))
-      .subscribe({
-        next: (res) => {
-          if (res.status) {
-            this._toastr.success(res.message);
-            this._dialogRef.close(true);
-          }
-        },
-        error: (err) => {
-          this._toastr.error(err.error.error);
-        },
-      });
-  }
-
-  protected prepareFormData(form : FormGroup) {
     const formData = new FormData();
 
     Object.entries(form.controls).forEach(([key, control]) => {
-      if (key == 'birthday') {
-        formData.append(key, dayjs(control.value).format("YYYY-MM-DD"));
-      }
-      else {
-        formData.append(key, control.value);
-      }
+      formData.append(key, control.value);
     });
+
+    formData.append('role', this._data.isClient ? 'Client' : 'Manager');
 
     this.filesToSend.map((file, index) => {
-      formData.append(`attachments[${index}]`, file.file);
+      formData.append(`attachments[${index}][category]`, file.category);
+      formData.append(`attachments[${index}][file]`, file.file);
     });
 
-    return formData;
+    if(this.isNewCollaborator) {
+      this._postCollaborator(formData);
+    }
+    else {
+      this._patchCollaborator(formData);
+    }
+
   }
 
-  // Utils
-  public atualizarCidades(uf: string): void {
-    this._utilsService
-      .obterCidadesPorEstado(uf)
-      .pipe(map((res) => res.map((city) => city.nome)))
+  _patchCollaborator(collaborator) {
+    this._initOrStopLoading();
+    const id = +collaborator.get('id');
+    this._userService
+      .patchUser(id, collaborator)
+      .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
-        next: (names) => {
-          this.citys = names;
-          this.filteredCitys.next(this.citys.slice());
+        next: (res) => {
+          if (res.status) {
+            this._toastr.success(res.message);
+            this._dialogRef.close(true);
+          }
         },
-        error: (error) => {
-          console.error('Erro ao obter cidades:', error);
+        error: (err) => {
+          this._toastr.error(err.error.error);
         },
       });
   }
 
-  protected filterCitys() {
-    if (!this.citys) {
-      return;
-    }
-    let search = this.cityFilterCtrl.value;
-    if (!search) {
-      this.filteredCitys.next(this.citys.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
+  _postCollaborator(collaborator) {
+    this._initOrStopLoading();
 
-    this.filteredCitys.next(
-      this.citys.filter((city) => city.toLowerCase().indexOf(search) > -1)
-    );
-  }
-
-  validateCellphoneNumber(control: any) {
-    const phoneNumber = control.value;
-    if (phoneNumber && phoneNumber.replace(/\D/g, '').length !== 11) {
-      return false;
-    }
-    return true;
-  }
-
-  validatePhoneNumber(control: any) {
-    const phoneNumber = control.value;
-    if (phoneNumber && phoneNumber.replace(/\D/g, '').length !== 10) {
-      return false;
-    }
-    return true;
-  }
-
-  public autocompleteCep(cep : string) {
-    if (cep.length == 8) {
-      this._utilsService.getAddressByCep(cep).subscribe((res) => {
-        if (res.erro) {
-          this._toastr.error('CEP Inválido para busca!');
-        } else {
-          this.form.get('street').patchValue(res.logradouro);
-          this.form.get('neighborhood').patchValue(res.bairro);
-          this.form.get('city').patchValue(res.localidade);
-          this.form.get('state').patchValue(res.uf);
-        }
+    this._userService
+      .postUser(collaborator)
+      .pipe(finalize(() => this._initOrStopLoading()))
+      .subscribe({
+        next: (res) => {
+          if (res.status) {
+            this._toastr.success(res.message);
+            this._dialogRef.close(true);
+          }
+        },
+        error: (err) => {
+          this._toastr.error(err.error.error);
+        },
       });
-    }
-  }
-
-  public onCancel(): void {
-    this._dialogRef.close();
-  }
-
-  private _initOrStopLoading(): void {
-    this.loading = !this.loading;
   }
 
   // Files
@@ -237,15 +134,16 @@ export class DialogPartnerComponent {
     id: number;
     preview: string;
     file: File;
-    category : string;
+    category: string;
   }[] = [];
 
-  protected filesToRemove: number[] = [];
-  protected filesFromBack: {
-    index: number;
-    id: number;
-    name: string;
-    path: string; // Wasabi
+  protected filesToRemove : number[] = [];
+  protected filesFromBack : {
+    index : number,
+    id: number,
+    name : string,
+    path: string, // Wasabi
+    category : string,
   }[] = [];
 
   public allowedTypes = [
@@ -281,7 +179,7 @@ export class DialogPartnerComponent {
           id: this.filesToSend.length + 1,
           preview: base64,
           file: file,
-          category : null
+          category: null,
         });
       } else this._toastr.error(`${file.type} não é permitido`);
     }
@@ -302,5 +200,30 @@ export class DialogPartnerComponent {
   public prepareFileToRemoveFromBack(fileId, index) {
     this.filesFromBack.splice(index, 1);
     this.filesToRemove.push(fileId);
+  }
+
+  // Utils
+  public onCancel(): void {
+    this._dialogRef.close();
+  }
+
+  protected _initOrStopLoading() {
+    this.loading = !this.loading;
+  }
+
+  validateCellphoneNumber(control: any) {
+    const phoneNumber = control.value;
+    if (phoneNumber && phoneNumber.replace(/\D/g, '').length !== 11) {
+      return false;
+    }
+    return true;
+  }
+
+  validatePhoneNumber(control: any) {
+    const phoneNumber = control.value;
+    if (phoneNumber && phoneNumber.replace(/\D/g, '').length !== 10) {
+      return false;
+    }
+    return true;
   }
 }

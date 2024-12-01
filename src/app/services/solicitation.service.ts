@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@env/environment';
 import {ApiResponse, ApiResponsePageable, DeleteApiResponse, PageControl} from '@models/application';
-import { Solicitation } from '@models/solicitation';
+import { Solicitation, SolicitationMessage } from '@models/solicitation';
 import {Utils} from '@shared/utils';
 import {Observable} from 'rxjs';
 
@@ -38,6 +38,10 @@ export class SolicitationService {
 
   public patch(id: number, solicitation: Solicitation): Observable<ApiResponse<Solicitation>> {
     return this._http.post<ApiResponse<Solicitation>>(`${environment.api}/${this.sessionEndpoint}/${id}?_method=PATCH`, solicitation);
+  }
+
+  public createMessage(message: SolicitationMessage | FormData): Observable<ApiResponse<SolicitationMessage>> {
+    return this._http.post<ApiResponse<SolicitationMessage>>(`${environment.api}/${this.sessionEndpoint}/create-message`, message);
   }
 
 }

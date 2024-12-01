@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { DialogCollaboratorComponent } from '@shared/dialogs/dialog-collaborator/dialog-collaborator.component';
+import { DialogPartnerComponent } from '@shared/dialogs/dialog-partner/dialog-partner.component';
 import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
@@ -68,7 +68,7 @@ export class CollaboratorComponent {
   openDialogCollaborator(user?: User) {
     this._initOrStopLoading();
     this._dialog
-      .open(DialogCollaboratorComponent, {
+      .open(DialogPartnerComponent, {
         data: {
           isClient: false,
           user,

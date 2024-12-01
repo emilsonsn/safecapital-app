@@ -7,7 +7,7 @@ import { HeaderService } from '@services/header.service';
 import { RequestService } from '@services/request.service';
 import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
 import { ToastrService } from 'ngx-toastr';
-import { DialogCollaboratorComponent } from '@shared/dialogs/dialog-collaborator/dialog-collaborator.component';
+import { DialogPartnerComponent } from '@shared/dialogs/dialog-partner/dialog-partner.component';
 import { DialogPartnerAnalysisComponent } from '@shared/dialogs/dialog-partner-analysis/dialog-partner-analysis.component';
 import { StatusUser } from '@models/user';
 
@@ -99,7 +99,7 @@ export class PartnersAnalysisComponent {
     };
 
     this._dialog
-      .open(DialogCollaboratorComponent, {
+      .open(DialogPartnerComponent, {
         data: {
           isClient: true,
           user,

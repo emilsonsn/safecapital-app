@@ -17,12 +17,12 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {PipesModule} from '@shared/pipes/pipes.module';
 import {DialogConfirmComponent} from './dialog-confirm/dialog-confirm.component';
-import {DialogCollaboratorComponent} from './dialog-collaborator/dialog-collaborator.component';
+import {DialogPartnerComponent} from './dialog-partner/dialog-partner.component';
 import {CdkTextareaAutosize, TextFieldModule} from '@angular/cdk/text-field';
 import {MatRippleModule} from '@angular/material/core';
 import {NgxMaskDirective, NgxMaskPipe} from 'ngx-mask';
 import {CurrencyMaskModule} from 'ng2-currency-mask';
-import {DialogPartnerComponent} from './dialog-partner/dialog-partner.component';
+import {DialogClientComponent} from './dialog-client/dialog-client.component';
 import {TablesModule} from '@shared/tables/tables.module';
 import {MatIcon} from "@angular/material/icon";
 import {NgxMatSelectSearchModule} from 'ngx-mat-select-search';
@@ -33,8 +33,8 @@ import { DialogSolicitationComponent } from './dialog-solicitation/dialog-solici
 @NgModule({
   declarations: [
     DialogConfirmComponent,
-    DialogCollaboratorComponent,
     DialogPartnerComponent,
+    DialogClientComponent,
     DialogPartnerAnalysisComponent,
     DialogSolicitationComponent
   ],

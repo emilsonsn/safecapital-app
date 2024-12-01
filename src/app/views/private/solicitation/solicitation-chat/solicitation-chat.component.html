@@ -1,24 +1,70 @@
 <div>
   <div id="header" class="d-flex align-items-center justify-content-between gap-2 mb-2">
     <h5>{{ _data?.solicitation?.contract_number }}</h5>
-    <div id="close" matRipple (click)="close()">
+    <div id="close" matRipple (click)="closeChat()">
       <i class="fa-solid fa-close"></i>
     </div>
   </div>
   <div id="chatTemplate">
     <div id="content">
       <div id="messages">
-        <div class="message">
-          <div style="height: 60rem; width: 100%;">
-            Uma mensagem
+        @if(_data?.solicitation?.messages?.length > 0) {
+        @for(message of _data?.solicitation?.messages; track message) {
+        <!-- Se for o meu usuário OU for do suporte(Admin ou Manager), a exibição da mensagens é na direita(Como se fossem minhas mensagens) -->
+        <div class="sideManager"
+          [ngStyle]="{'flex-direction' : ((message?.user_id == user?.id) || ((message?.user?.role == 'Admin' || message?.user?.role == 'Manager') && user?.role != 'Client')) ? 'row-reverse' : 'row'  }">
+          <div class="messageTemplate">
+            @if(message?.attachment) {
+              <div class="img" (click)="openImgInAnotherTab(message?.attachment)" [ngStyle]="{'margin-left' : ((message?.user_id == user?.id) || (message?.user?.role == 'Admin' || message?.user?.role == 'Manager')) ? 'auto' : '0'  }">
+                <img [src]="message?.attachment" style="max-width: 100%; max-height: 100%;" />
+              </div>
+            }
+            <div class="message">
+              {{ message?.message }}
+            </div>
+            <div class="hour" [ngStyle]="{'text-align' : ((message?.user_id == user?.id) || (message?.user?.role == 'Admin' || message?.user?.role == 'Manager'))? 'end' : 'start'  }">
+              {{ (message?.user?.role == 'Admin' || message?.user?.role == 'Manager') ? 'Suporte - Safe capital' : message?.user?.name }} - {{ message?.created_at | date:"dd/MM/YYYY hh:MM:SS" }}
+            </div>
           </div>
         </div>
+        }
+        }
+        @else {
+        <div class="d-flex justify-content-center">Sem mensagens no chamado!</div>
+        }
       </div>
 
-      <div id="sendMessage" class="mt-2">
-        <input matInput type="text" [(ngModel)]="messageText" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" />
-        <div id="icon" matRipple (click)="sendMessage()">
-          <i class="fa-solid fa-paper-plane"></i>
+      <div id="sendMessage">
+        <div>
+          <div id="files">
+            @if(fileToSend) {
+            <div>
+              <div class="file" matTooltip="{{fileToSend.file.name}}">
+                <div class="delete">
+                  <i class="fa-solid fa-close" (click)="removeFile();"></i>
+                </div>
+                @if(fileToSend.preview) {
+                <img [src]="fileToSend.preview" alt="{{fileToSend.file.name}}"
+                  style="max-width: 100%; max-height: 100%;" />
+                }
+                @else {
+                <i class="fa-solid fa-file"></i>
+                }
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+        <div id="sendMessageInput" class="mt-2">
+          <input matInput type="text" [(ngModel)]="messageText"
+            pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" />
+          <div id="inputFileAdd" class="icon" matRipple>
+            <input type="file" (change)="onFileSelected($event)" title=" " />
+            <i class="fa-solid fa-paperclip"></i>
+          </div>
+          <div class="icon" matRipple (click)="onSubmit()">
+            <i class="fa-solid fa-paper-plane"></i>
+          </div>
         </div>
       </div>
     </div>

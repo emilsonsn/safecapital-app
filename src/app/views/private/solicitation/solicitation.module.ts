@@ -14,6 +14,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { SolicitationManagerComponent } from './solicitation-manager/solicitation-manager.component';
 import { SolicitationClientComponent } from './solicitation-client/solicitation-client.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatRippleModule,
     MatPaginatorModule,
     MatBottomSheetModule,
+    MatTooltipModule,
   ],
 })
 export class SolicitationModule {}

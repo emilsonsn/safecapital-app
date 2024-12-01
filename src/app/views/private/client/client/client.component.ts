@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Client } from '@models/client';
 import { ClientService } from '@services/client.service';
-import { DialogPartnerComponent } from '@shared/dialogs/dialog-partner/dialog-partner.component';
+import { DialogClientComponent } from '@shared/dialogs/dialog-client/dialog-client.component';
 import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
@@ -36,7 +36,7 @@ export class ClientComponent {
 
   openDialogClient(service?: Client) {
     this._dialog
-      .open(DialogPartnerComponent, {
+      .open(DialogClientComponent, {
         data: { service },
         width: '80%',
         maxWidth: '850px',
