@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "granatum-app": {
+    "safecapital-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -24,7 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/granatum-app",
+            "outputPath": "dist/safecapital-app",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -89,10 +89,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "granatum-app:build:production"
+              "buildTarget": "safecapital-app:build:production"
             },
             "development": {
-              "buildTarget": "granatum-app:build:development"
+              "buildTarget": "safecapital-app:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -100,7 +100,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "granatum-app:build"
+            "buildTarget": "safecapital-app:build"
           }
         },
         "test": {
