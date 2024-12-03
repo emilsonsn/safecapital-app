@@ -1,0 +1,10 @@
+<app-register-layout>
+
+  @if(autenticateState) {
+    <app-register-autenticate (AutenticateEmitter)="handleIsNewUser($event)" style="width: 100%;" />
+  }
+  @else {
+    <app-register [userData]="user" style="width: 100%;" />
+  }
+
+</app-register-layout>

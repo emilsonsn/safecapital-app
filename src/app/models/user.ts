@@ -10,8 +10,8 @@ export interface User {
   password: string;
   is_active: boolean;
   role: UserRole;
-  attachments: Attachment[];
   validation : StatusUser;
+  attachments?: Attachment[];
   justification? : string;
   created_at?: string;
   updated_at?: string;

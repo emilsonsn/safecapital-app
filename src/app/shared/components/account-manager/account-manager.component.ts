@@ -9,5 +9,6 @@ import {AnimationOptions} from "ngx-lottie";
 export class AccountManagerComponent {
   @Input() primary_text: string = '';
   @Input() options: AnimationOptions = {};
+  @Input() pathVideo : string = '../../../../assets/videos/ominiman.mp4';
 
 }

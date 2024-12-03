@@ -1,0 +1,61 @@
+@import "_variables";
+
+#template {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+
+  #leftSideTemplate {
+    width: 50%;
+    height: 100%;
+    flex: 1;
+    background-color: #50606e ;
+
+    #leftSideContent {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      padding: 1rem;
+
+      #formContent {
+        max-width: 43rem;
+        padding: 1.5rem;
+        border-radius: 6px;
+        background-color: $white-100;
+        max-height: 100%;
+        overflow: auto;
+
+        .logo{
+          width: fit-content;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 6px;
+          padding: 1rem 3rem;
+
+          img{
+            width: 150px !important;
+          }
+        }
+
+      }
+    }
+  }
+
+  #rightSideTemplate {
+    width: 50%;
+    height: 100%;
+    flex: 1;
+    background-color: #85b5b5;
+    overflow: hidden;
+
+    #rightSideContent {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+}

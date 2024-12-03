@@ -1,0 +1,24 @@
+@import "_variables";
+
+#formContent {
+  max-width: 43rem;
+  padding: 1.5rem;
+  border-radius: 6px;
+  background-color: $white-100;
+  max-height: 100%;
+  overflow: auto;
+
+  .logo{
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    padding: 1rem 3rem;
+
+    img{
+      width: 150px !important;
+    }
+  }
+
+}

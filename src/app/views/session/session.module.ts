@@ -10,7 +10,7 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './register/register/register.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -25,7 +25,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     LoginComponent,
     ForgotPasswordComponent,
     PasswordRecoveryComponent,
-    RegisterComponent
   ],
   imports: [
     CommonModule,

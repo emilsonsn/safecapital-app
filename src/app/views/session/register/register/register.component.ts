@@ -1,5 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, Input } from '@angular/core';
+import { FormBuilder, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { UserService } from '@services/user.service';
 import dayjs from 'dayjs';
 import { Utils } from '@shared/utils';
@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { AnimationOptions } from 'ngx-lottie';
+import { User } from '@models/user';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,9 @@ import { AnimationOptions } from 'ngx-lottie';
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
+  @Input()
+  public userData?: User = null;
+
   // Utils
   public loading: boolean = false;
   public utils = Utils;
@@ -22,7 +26,6 @@ export class RegisterComponent {
   // Form
   public form: FormGroup;
   protected confirm_password: String;
-  protected accept_terms : boolean = false;
 
   constructor(
     private readonly _fb: FormBuilder,
@@ -42,6 +45,13 @@ export class RegisterComponent {
       creci: [null, [Validators.required]],
       password: [null, [Validators.required]],
     });
+
+    if (this.userData) {
+      this.form.patchValue(this.userData);
+
+      this.form.get('password').setValidators([]);
+      this.form.removeControl('password');
+    }
   }
 
   public onSubmit(): void {
@@ -50,13 +60,8 @@ export class RegisterComponent {
       return;
     }
 
-    if(!this.filesToSend) {
+    if (!this.filesToSend) {
       this._toastr.error('Anexe pelo menos um arquivo!');
-      return;
-    }
-
-    if(!this.accept_terms) {
-      this._toastr.error('Você precisa aceitar os termos de uso!');
       return;
     }
 
@@ -173,9 +178,4 @@ export class RegisterComponent {
   protected isValidDateFormat(value: string): boolean {
     return /^\d{2}\/\d{2}\/\d{4}$/.test(value);
   }
-
-  protected options: AnimationOptions = {
-    path: '/assets/json/register_animation.json',
-  };
-
 }

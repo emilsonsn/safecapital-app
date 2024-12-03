@@ -1,0 +1,52 @@
+<div id="formContent">
+
+  @if(loading) {
+  <div class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
+
+  <div class="d-flex flex-column align-items-center justify-content-center">
+    <div class="logo">
+      <img src="./assets/images/logo.png" alt="logo">
+    </div>
+    <h4 style="font-weight: 500;" class="text-center mt-1">Seja um parceiro</h4>
+    <div>
+
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form">
+
+    <div class="col-12 mb-3">
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail </mat-label>
+        <input matInput type="text" formControlName="email" [pattern]="utils.patternEmail">
+      </mat-form-field>
+    </div>
+    @if(_user != null) {
+      <div class="col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Senha </mat-label>
+          <input matInput type="text" formControlName="password" type="password">
+        </mat-form-field>
+      </div>
+    }
+
+  </form>
+
+  <div id="templateButtons" class="mt-2">
+
+    <div class="d-flex flex-sm-row flex-column justify-content-end gap-3">
+      <div class="d-flex flex-sm-row flex-column gap-2">
+        <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        <button matRipple id="submit" class="button primary" (click)="onSubmit()">Continuar</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

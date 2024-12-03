@@ -3,7 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from "@app/views/session/login/login.component";
 import {ForgotPasswordComponent} from "@app/views/session/forgot-password/forgot-password.component";
 import {PasswordRecoveryComponent} from "@app/views/session/password-recovery/password-recovery.component";
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './register/register/register.component';
 
 const routes: Routes = [
   {
@@ -22,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    component: RegisterComponent
+    loadChildren: () => import('./register/register.module').then(m => m.RegisterModule),
   },
   {
     path: 'password_recovery',
