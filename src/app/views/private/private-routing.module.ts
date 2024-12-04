@@ -1,4 +1,3 @@
-import { CollaboratorModule } from './collaborator/collaborator.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutPrivateComponent } from "@shared/layouts/layout-private/layout-private.component";
@@ -19,11 +18,11 @@ const routes: Routes = [
         }
       },
       {
-        path: 'collaborator',
-        loadChildren: () => import('./collaborator/collaborator.module').then(m => m.CollaboratorModule),
+        path: 'users',
+        loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
         canActivate: [permissionGuard],
         data: {
-          page: 'collaborator'
+          page: 'users'
         }
       },
       {

@@ -38,7 +38,7 @@
               <div>Nenhum resultado encontrado</div>
             </td>
           </tr>
-          @for (collaborator of users; track collaborator) {
+          @for (user of users; track user) {
             <tr
               class="table-line-hover"
               style="outline: none; cursor: pointer"
@@ -54,32 +54,32 @@
                     [color]="'#e7b403'"
                     [onCircle]="true"
                   ></app-avatar> -->
-                  {{ collaborator?.name }}
+                  {{ user?.name }}
                 </div>
               </td>
 
               <td>
                 <div class="text-center">
-                  {{ collaborator?.role }}
+                  {{ user?.role }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ collaborator?.phone  }}
+                  {{ user?.phone  }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ collaborator?.email }}
+                  {{ user?.email }}
                 </div>
               </td>
               <td>
                 <div class="d-flex justify-content-center">
-                  <div matRipple class="buttonTemplate" (click)="onUserClick.emit(collaborator)">
+                  <div matRipple class="buttonTemplate" (click)="onUserClick.emit(user)">
                     <i class="fa-solid fa-pen-to-square"></i>
                   </div>
 
-                  <div matRipple class="buttonTemplate" (click)="onDeleteUserClick.emit(collaborator?.id)">
+                  <div matRipple class="buttonTemplate" (click)="onDeleteUserClick.emit(user?.id)">
                     <i class="fa-solid fa-trash"></i>
                   </div>
                 </div>

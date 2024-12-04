@@ -49,7 +49,7 @@
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
-      @if(user?.role == 'Admin' || user?.role == 'Manager' ) {
+      @if(myUser?.role == 'Admin' || myUser?.role == 'Manager' ) {
       <div class="col-md-5 col-12 mb-3">
         <mat-form-field>
           <mat-label>Status</mat-label>

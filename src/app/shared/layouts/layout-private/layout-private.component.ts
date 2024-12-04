@@ -77,7 +77,7 @@ export class LayoutPrivateComponent {
     {
       label: 'Usuários',
       icon: 'fa-solid fa-users',
-      route: '/painel/collaborator',
+      route: '/painel/users',
     },
     {
       label: 'Configurações',

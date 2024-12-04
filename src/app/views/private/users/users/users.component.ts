@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { DialogPartnerComponent } from '@shared/dialogs/dialog-partner/dialog-partner.component';
 import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-confirm.component';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
@@ -10,18 +9,25 @@ import { User } from '@models/user';
 import { UserService } from '@services/user.service';
 import { HeaderService } from '@services/header.service';
 import { FormGroup } from '@angular/forms';
+import { DialogUserComponent } from '@shared/dialogs/dialog-user/dialog-user.component';
 
 @Component({
-  selector: 'app-collaborator',
-  templateUrl: './collaborator.component.html',
-  styleUrl: './collaborator.component.scss',
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrl: './users.component.scss',
 })
-export class CollaboratorComponent {
+export class UsersComponent {
+  // Utils
   public loading: boolean = false;
-  public filters;
-  public formFilters : FormGroup;
-  public searchTerm : string = '';
 
+  // Form
+  public formFilters: FormGroup;
+
+  // Filters
+  public searchTerm: string = '';
+  public filters;
+
+  // Cards
   protected itemsRequests: ISmallInformationCard[] = [
     {
       icon: 'fa-solid fa-circle-check',
@@ -58,19 +64,13 @@ export class CollaboratorComponent {
   }
 
   ngOnInit(): void {
-    this._getCards();
+    // this.getUsersCards();
   }
 
-  private _initOrStopLoading(): void {
-    this.loading = !this.loading;
-  }
-
-  openDialogCollaborator(user?: User) {
-    this._initOrStopLoading();
+  protected openUserDialog(user?: User) {
     this._dialog
-      .open(DialogPartnerComponent, {
+      .open(DialogUserComponent, {
         data: {
-          isClient: false,
           user,
         },
         width: '80%',
@@ -78,14 +78,68 @@ export class CollaboratorComponent {
         maxHeight: '90%',
       })
       .afterClosed()
-      .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe((res) => {
         if (res) {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+          }, 200);
         }
       });
   }
 
-  _getCards() {
+  protected openConfirmDeleteUserDialog(id: number) {
+    const text = 'Tem certeza? Essa ação não pode ser revertida!';
+    this._dialog
+      .open(DialogConfirmComponent, { data: { text } })
+      .afterClosed()
+      .subscribe((res: boolean) => {
+        if (res) {
+          this.deleteUser(id);
+        }
+      });
+  }
+
+  private deleteUser(id: number) {
+    this._userService.deleteUser(id).subscribe({
+      next: (res) => {
+        this._toastr.success(res.message);
+        if (res) {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+          }, 200);
+        }
+      },
+      error: (err) => {
+        this._toastr.error(err.error.error);
+      },
+    });
+  }
+
+  // Filters
+  public updateFilters() {
+    this.filters = this.formFilters.getRawValue();
+  }
+
+  public clearFormFilters() {
+    this.formFilters.patchValue({
+      search_term: '',
+    });
+    this.updateFilters();
+  }
+
+  protected handleSearchTerm(res) {
+    this.searchTerm = res;
+  }
+
+  // Utils
+  private _initOrStopLoading(): void {
+    this.loading = !this.loading;
+  }
+
+  // Cards
+  protected getUsersCards() {
     this._initOrStopLoading();
 
     this._userService
@@ -122,48 +176,4 @@ export class CollaboratorComponent {
         },
       });
   }
-
-  onDeleteCollaborator(id: number) {
-    const text = 'Tem certeza? Essa ação não pode ser revertida!';
-    this._dialog
-      .open(DialogConfirmComponent, { data: { text } })
-      .afterClosed()
-      .subscribe((res: boolean) => {
-        if (res) {
-          this._deleteCollaborator(id);
-        }
-      });
-  }
-
-  _deleteCollaborator(id: number) {
-    this._initOrStopLoading();
-    this._userService
-      .deleteUser(id)
-      .pipe(finalize(() => this._initOrStopLoading()))
-      .subscribe({
-        next: (res) => {
-          this._toastr.success(res.message);
-        },
-        error: (err) => {
-          this._toastr.error(err.error.error);
-        },
-      });
-  }
-
-  // Filters
-  public updateFilters() {
-    this.filters = this.formFilters.getRawValue();
-  }
-
-  public clearFormFilters() {
-    this.formFilters.patchValue({
-      search_term: '',
-    });
-    this.updateFilters();
-  }
-
-  protected handleSearchTerm(res) {
-    this.searchTerm = res;
-  }
-
 }

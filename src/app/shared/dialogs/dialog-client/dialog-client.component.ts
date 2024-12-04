@@ -25,7 +25,8 @@ import { finalize, map, ReplaySubject } from 'rxjs';
 export class DialogClientComponent {
   public isNewClient: boolean = true;
   public title: string = 'Novo cliente';
-  protected user: User;
+  protected myUser: User;
+  protected canEdit: boolean = true;
 
   public form: FormGroup;
 
@@ -84,17 +85,13 @@ export class DialogClientComponent {
       number: [null, [Validators.required]],
     });
 
-    this._sessionQuery.user$.subscribe((user) => {
-      this.user = user;
-    });
-
     if (this._data?.client) {
       this.isNewClient = false;
       this.title = 'Editar cliente';
       this.form.patchValue(this._data?.client);
       this.atualizarCidades(this._data?.client?.state);
 
-      if (this.user?.role == 'Client') {
+      if (this.myUser?.role == 'Client') {
         this.form.disable();
       }
     }
@@ -109,6 +106,20 @@ export class DialogClientComponent {
 
     this.cityFilterCtrl.valueChanges.pipe().subscribe(() => {
       this.filterCitys();
+    });
+
+    this._sessionQuery.user$.subscribe((user) => {
+      this.myUser = user;
+
+      // Regras de Negócio para Clientes
+      if (this.myUser?.role == 'Manager') {
+        if (
+          ['Approved', 'Disapproved'].includes(this._data?.client?.status)
+        ) {
+          this.form.disable();
+          this.canEdit = false;
+        }
+      }
     });
   }
 

@@ -7,7 +7,7 @@
   }
 
   <div class="d-flex align-items-center justify-content-between">
-    <span class="fw-bold fs-5">{{title + (_data.isClient ? 'parceiro' : 'usuário')}}</span>
+    <span class="fw-bold fs-5">{{title + ('parceiro')}}</span>
     <div matRipple class="close" (click)="onCancel()">
       <i class="fa-solid fa-close"></i>
     </div>
@@ -17,23 +17,6 @@
 
   <form [formGroup]="form">
     <div class="row">
-      <div class="col-12 mb-3">
-        <!-- <div class="profile-upload">
-          <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" hidden>
-          <div class="upload-container" (click)="triggerFileInput()" [ngClass]="{'drag-over': isDragOver}"
-               (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
-            <div class="upload-placeholder" *ngIf="!profileImage">
-              <i class="fa-solid fa-upload"></i>
-              <p>Arraste a imagem aqui ou clique para fazer upload</p>
-            </div>
-            <img *ngIf="profileImage" [src]="profileImage" alt="Foto de Perfil" class="uploaded-image">
-            <div *ngIf="profileImage" class="remove-image" (click)="removeImage($event)">
-              <i class="fa-solid fa-trash"></i>
-            </div>
-          </div>
-        </div> -->
-      </div>
-
       <div class="col-md-6 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Nome</mat-label>
@@ -52,19 +35,19 @@
           <input matInput type="email" formControlName="email" pattern="{{ utils.patternEmail }}">
         </mat-form-field>
       </div>
-      <div class="col-md-6 col-12 mb-3" *ngIf="_data.isClient">
+      <div class="col-md-6 col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>CNPJ</mat-label>
           <input matInput type="text" formControlName="cnpj" mask="00.000.000/0000-00">
         </mat-form-field>
       </div>
-      <div class="col-md-6 col-12 mb-3" *ngIf="_data.isClient">
+      <div class="col-md-6 col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Empresa</mat-label>
           <input matInput type="text" formControlName="company_name">
         </mat-form-field>
       </div>
-      <div class="col-md-6 col-12 mb-3" *ngIf="_data.isClient">
+      <div class="col-md-6 col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>CRECI</mat-label>
           <input matInput type="text" formControlName="creci">
@@ -74,17 +57,7 @@
         <mat-form-field appearance="outline" required>
           <mat-label>Celular</mat-label>
           <input type="text" formControlName="phone" matInput mask="(00) 00000-0000||(00) 0000-0000"
-            title="Digite um número de celular válido (xx)xxxxx-xxxx" required />
-        </mat-form-field>
-      </div>
-      <div class="col-md-6 col-12 mb-3" *ngIf="!_data.isClient && myUser?.role == 'Admin'">
-        <mat-form-field>
-          <mat-label>Permissão</mat-label>
-          <mat-select formControlName="role" placeholder="Grupo">
-            @for (status of userPermissionSelect; track status) {
-            <mat-option [value]="status.value">{{ status.label }}</mat-option>
-            }
-          </mat-select>
+            placeholder="Telefone ou Celular" required />
         </mat-form-field>
       </div>
       <div class="col-12"></div>
@@ -92,8 +65,20 @@
       <div class="col-md-6 col-12 mb-3">
         <mat-form-field>
           <mat-label>Status</mat-label>
-          <mat-select formControlName="is_active" placeholder="Status">
-            @for (status of statusSelect; track status) {
+          <mat-select formControlName="validation" placeholder="Status">
+            @for (status of validationSelect; track status) {
+            <mat-option [value]="status.value">{{ status.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      }
+      @if(_data?.user?.validation == 'Accepted') {
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field>
+          <mat-label>Ativo</mat-label>
+          <mat-select formControlName="is_active" placeholder="Ativo">
+            @for (status of isActiveSelect; track status) {
             <mat-option [value]="status.value">{{ status.label }}</mat-option>
             }
           </mat-select>
@@ -104,12 +89,12 @@
       <div class="col-12 mb-3">
         <mat-form-field>
           <mat-label>Justificativa</mat-label>
-          <input matInput type="text" formControlName="justification" placeholder="Justificativa">
-        </mat-form-field>
+          <textarea matInput formControlName="justification" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [placeholder]="'Justificativa'">
+        </textarea> </mat-form-field>
       </div>
       }
     </div>
-    @if(_data?.isClient) {
     <div class="">
       <span class="fw-bolder">Anexos</span>
       <div id="files">
@@ -160,7 +145,6 @@
         <input type="file" (change)="onFileSelected($event)" [multiple]="true" title=" " />
       </div>
     </div>
-    }
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -171,7 +155,7 @@
           <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
         </div>
         <div class="col-auto">
-          <button matRipple id="submit" class="button primary" (click)="onSubmit(form)">{{isNewCollaborator ? 'Criar' :
+          <button matRipple id="submit" class="button primary" (click)="onSubmit(form)">{{isNewPartner ? 'Criar' :
             'Salvar'}}</button>
         </div>
       </div>

@@ -29,6 +29,7 @@ import {NgxMatSelectSearchModule} from 'ngx-mat-select-search';
 import { DialogPartnerAnalysisComponent } from './dialog-partner-analysis/dialog-partner-analysis.component';
 import { DialogSolicitationComponent } from './dialog-solicitation/dialog-solicitation.component';
 import { DialogFirstAccessComponent } from './dialog-first-access/dialog-first-access.component';
+import { DialogUserComponent } from './dialog-user/dialog-user.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { DialogFirstAccessComponent } from './dialog-first-access/dialog-first-a
     DialogPartnerAnalysisComponent,
     DialogSolicitationComponent,
     DialogFirstAccessComponent,
+    DialogUserComponent,
   ],
   imports: [
     CommonModule,

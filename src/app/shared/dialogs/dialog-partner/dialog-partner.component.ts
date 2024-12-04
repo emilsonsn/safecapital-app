@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { afterNextRender, Component, inject, Inject, Injector, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
@@ -13,6 +13,7 @@ import { Utils } from '@shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { SessionQuery } from '@store/session.query';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 
 @Component({
   selector: 'app-dialog-partner',
@@ -20,37 +21,45 @@ import { SessionQuery } from '@store/session.query';
   styleUrl: './dialog-partner.component.scss',
 })
 export class DialogPartnerComponent {
-  protected myUser: User;
-  public isNewCollaborator: boolean = true;
-  public title: string = 'Novo ';
-  public form: FormGroup;
-  public loading: boolean = false;
-  public profileImageFile: File | null = null;
-  profileImage: string | ArrayBuffer = null;
-  isDragOver: boolean = false;
 
+  // Utils
+  protected myUser: User;
+  public isNewPartner: boolean = true;
+  public title: string = 'Novo ';
+  public loading: boolean = false;
   public utils = Utils;
 
+  // Form
+  public form: FormGroup;
+  protected canEdit: boolean = true;
+  public profileImageFile: File | null = null;
+  protected profileImage: string | ArrayBuffer = null;
+  protected isDragOver: boolean = false;
+
   // Selects
-  public statusSelect: { label: string; value: string }[] = [
+  public validationSelect: { label: string; value: string }[] = [
     {
-      label: 'Ativo',
-      value: '1',
+      label: 'Aceito',
+      value: 'Accepted',
     },
     {
-      label: 'Inativo',
-      value: '0',
+      label: 'Pendente',
+      value: 'Pending',
+    },
+    {
+      label: 'Recusado',
+      value: 'Refused',
     },
   ];
 
-  public userPermissionSelect: { label: string; value: string }[] = [
+  public isActiveSelect: { label: string; value: number }[] = [
     {
-      label: 'Admin',
-      value: 'Admin',
+      label: 'Sim',
+      value: 1,
     },
     {
-      label: 'Colaborador',
-      value: 'Manager',
+      label: 'Não',
+      value: 0,
     },
   ];
 
@@ -66,35 +75,41 @@ export class DialogPartnerComponent {
   ) {}
 
   ngOnInit(): void {
+    this._sessionQuery.user$.subscribe((user) => {
+      this.myUser = user;
+    });
+
     this.form = this._fb.group({
       id: [null],
       name: [null, [Validators.required]],
       surname: [null, [Validators.required]],
       email: [null, [Validators.required]],
-      cnpj: [null],
       phone: [null, [Validators.required]],
+      cnpj: [null],
       company_name: [null],
       creci: [null],
-      password: [''],
-      is_active: [this._data?.user?.is_active ?? 'Pending'],
-      justification: [this._data?.user?.justification ?? ''],
-      role: [
-        this._data?.user?.role ?? this._data?.isClient ? 'Client' : 'Manager',
-      ],
+      justification: [''],
+      is_active: [1],
+      role: ['Client'],
+      validation: ['Pending'],
     });
 
     if (this._data?.user) {
-      this.isNewCollaborator = false;
+      this.isNewPartner = false;
       this.title = 'Editar ';
       this.form.patchValue(this._data.user);
-      // if (this._data.user.photo) {
-      //   this.profileImage = this._data.user.photo
-      // }
     }
 
-    this._sessionQuery.user$.subscribe((user) => {
-      this.myUser = user;
-    });
+    this.form.get('validation').valueChanges.subscribe((value) => {
+      if(['Refused', 'Pending'].includes(value)) {
+        this.form.get('is_active').patchValue(0);
+        this.form.get('is_active').disable();
+      }
+      else {
+        this.form.get('is_active').enable();
+        this.form.get('is_active').patchValue(this._data?.user.is_active ?? 1);
+      }
+    })
   }
 
   public onSubmit(form: FormGroup): void {
@@ -113,25 +128,23 @@ export class DialogPartnerComponent {
       formData.append(key, control.value);
     });
 
-    formData.append('role', this._data.isClient ? 'Client' : 'Manager');
-
     this.filesToSend.map((file, index) => {
       formData.append(`attachments[${index}][category]`, file.category);
       formData.append(`attachments[${index}][file]`, file.file);
     });
 
-    if (this.isNewCollaborator) {
-      this._postCollaborator(formData);
+    if (this.isNewPartner) {
+      this.post(formData);
     } else {
-      this._patchCollaborator(formData);
+      this.patch(formData);
     }
   }
 
-  _patchCollaborator(collaborator) {
+  protected patch(partner : FormData) {
     this._initOrStopLoading();
-    const id = +collaborator.get('id');
+    const id = +partner.get('id');
     this._userService
-      .patchUser(id, collaborator)
+      .patchUser(id, partner)
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {
@@ -146,11 +159,11 @@ export class DialogPartnerComponent {
       });
   }
 
-  _postCollaborator(collaborator) {
+  protected post(partner : FormData) {
     this._initOrStopLoading();
 
     this._userService
-      .postUser(collaborator)
+      .postUser(partner)
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {
@@ -248,19 +261,20 @@ export class DialogPartnerComponent {
     this.loading = !this.loading;
   }
 
-  validateCellphoneNumber(control: any) {
-    const phoneNumber = control.value;
-    if (phoneNumber && phoneNumber.replace(/\D/g, '').length !== 11) {
-      return false;
-    }
-    return true;
-  }
+  // Imports
+  // TextArea
+  private _injector = inject(Injector);
 
-  validatePhoneNumber(control: any) {
-    const phoneNumber = control.value;
-    if (phoneNumber && phoneNumber.replace(/\D/g, '').length !== 10) {
-      return false;
-    }
-    return true;
+  @ViewChild('autosize') autosize: CdkTextareaAutosize;
+
+  triggerResize() {
+    afterNextRender(
+      () => {
+        this.autosize.resizeToFitContent(true);
+      },
+      {
+        injector: this._injector,
+      }
+    );
   }
 }

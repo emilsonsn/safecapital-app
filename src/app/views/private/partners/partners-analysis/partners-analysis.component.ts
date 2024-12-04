@@ -94,7 +94,7 @@ export class PartnersAnalysisComponent {
   public openPartnerDialog(user?) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
-      maxWidth: '1000px',
+      maxWidth: '950px',
       maxHeight: '90%',
       hasBackdrop: true,
       closeOnNavigation: true,
@@ -103,7 +103,6 @@ export class PartnersAnalysisComponent {
     this._dialog
       .open(DialogPartnerComponent, {
         data: {
-          isClient: true,
           user,
         },
         ...dialogConfig,
@@ -124,7 +123,7 @@ export class PartnersAnalysisComponent {
   public openRequestDialog(request) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
-      maxWidth: '1000px',
+      maxWidth: '850px',
       maxHeight: '90%',
       hasBackdrop: true,
       closeOnNavigation: true,

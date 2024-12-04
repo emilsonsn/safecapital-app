@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
-import { CollaboratorRoutingModule } from './collaborator-routing.module';
-import { CollaboratorComponent } from './collaborator/collaborator.component';
+import { UserRoutingModule } from './users-routing.module';
+import { UsersComponent } from './users/users.component';
 import { MatButtonModule } from '@angular/material/button';
 import { SharedModule } from '@shared/shared.module';
 import {MatRipple} from "@angular/material/core";
@@ -11,11 +11,11 @@ import {MatDivider} from "@angular/material/divider";
 
 @NgModule({
   declarations: [
-    CollaboratorComponent
+    UsersComponent
   ],
   imports: [
     CommonModule,
-    CollaboratorRoutingModule,
+    UserRoutingModule,
     SharedModule,
     MatDialogModule,
     MatButtonModule,
@@ -23,4 +23,4 @@ import {MatDivider} from "@angular/material/divider";
     MatDivider
   ]
 })
-export class CollaboratorModule { }
+export class UsersModule { }

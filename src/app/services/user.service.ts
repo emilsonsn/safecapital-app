@@ -41,7 +41,7 @@ export class UserService {
     return this._http.post<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/create`, user);
   }
 
-  public patchUser(id: number, user: FormData): Observable<ApiResponse<User>> {
+  public patchUser(id: number, user: User | FormData): Observable<ApiResponse<User>> {
     return this._http.post<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/${id}?_method=PATCH`, user);
   }
 

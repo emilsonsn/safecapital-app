@@ -1,0 +1,85 @@
+<mat-dialog-content>
+
+  @if(loading) {
+  <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
+
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">{{title + ('usuário')}}</span>
+    <div matRipple class="close" (click)="onCancel()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome </mat-label>
+          <input matInput type="text" formControlName="name">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Sobrenome </mat-label>
+          <input matInput type="text" formControlName="surname">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail </mat-label>
+          <input matInput type="email" formControlName="email" pattern="{{ utils.patternEmail }}">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline" required>
+          <mat-label>Celular </mat-label>
+          <input type="text" formControlName="phone" matInput mask="(00) 00000-0000||(00) 0000-0000" placeholder="Telefone ou Celular"/>
+        </mat-form-field>
+      </div>
+      @if(myUser?.role == 'Admin') {
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field>
+          <mat-label>Permissão </mat-label>
+          <mat-select formControlName="role" placeholder="Grupo">
+            @for (status of userPermissionSelect; track status) {
+            <mat-option [value]="status.value">{{ status.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      }
+      @if(myUser?.role == 'Admin') {
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field>
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="is_active" placeholder="Status">
+            @for (status of statusSelect; track status) {
+            <mat-option [value]="status.value">{{ status.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      }
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="container">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button primary" (click)="onSubmit(form)">{{isNewUser ? 'Criar' :
+            'Salvar'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>
