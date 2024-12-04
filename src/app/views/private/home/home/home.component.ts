@@ -8,6 +8,9 @@ import { formatCurrency } from '@angular/common';
 import { HeaderService } from '@services/header.service';
 import { SessionQuery } from '@store/session.query';
 import { User } from '@models/user';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { DialogFirstAccessComponent } from '@shared/dialogs/dialog-first-access/dialog-first-access.component';
 
 @Component({
   selector: 'app-home',
@@ -17,21 +20,12 @@ import { User } from '@models/user';
 export class HomeComponent {
   protected user: User;
 
-  dashboardCards = signal<OrderData>({
-    ordersByDay: 0,
-    ordersByWeek: 0,
-    ordersByMonth: 0,
-    ordersByYear: 0,
-    pendingOrders: 0,
-    awaitingFinanceOrders: 0,
-    solicitationPendings: 0,
-    solicitationFinished: 0,
-  });
-
   constructor(
     private readonly _dashboardService: DashboardService,
     private readonly _headerService: HeaderService,
-    private readonly _sessionQuery: SessionQuery
+    private readonly _sessionQuery: SessionQuery,
+    private readonly _dialog: MatDialog,
+    private readonly _toastr: ToastrService
   ) {
     this._headerService.setTitle('Home');
     this._headerService.setSubTitle('');
@@ -43,7 +37,56 @@ export class HomeComponent {
     //   });
   }
 
-  itemsShopping: Signal<ISmallInformationCard[]> = computed<
+  ngOnInit() {
+    Chart.register(...registerables);
+
+    // Initialize the charts and store the instances
+    // this.lineChart = new Chart('lineChart', this.lineChart);
+    this.barChart = new Chart('barChart', this.barChart);
+
+    // this._dashboardService
+    //   .getPurchaseGraphicBar()
+    //   .subscribe((c: ApiResponse<{ month: string; total: number }[]>) => {
+    //     const months = c.data.map((d) => d.month); // Extract months
+    //     const totals = c.data.map((d) => d.total); // Extract totals
+
+    //     if (this.barChart && this.barChart instanceof Chart) {
+    //       this.barChart.data.labels = months;
+    //       this.barChart.data.datasets[0].data = totals;
+    //       this.barChart.update(); // Update chart
+    //     }
+    //   });
+
+    /*this._dashboardService.getPurchaseGraphicLine().subscribe((c: ApiResponse<{ month: string, total: number }[]>) => {
+      const months = c.data.map(d => d.month); // Extract months
+      const totals = c.data.map(d => d.total); // Extract totals
+
+      // Ensure charts are initialized before updating
+      if (this.lineChart && this.lineChart instanceof Chart) {
+        this.lineChart.data.labels = months;
+        this.lineChart.data.datasets[0].data = totals;
+        this.lineChart.update(); // Update chart
+      }
+    });*/
+
+    this._sessionQuery.user$.subscribe((user) => {
+      this.user = user;
+    });
+  }
+
+  // Charts e Cards
+  protected dashboardCards = signal<OrderData>({
+    ordersByDay: 0,
+    ordersByWeek: 0,
+    ordersByMonth: 0,
+    ordersByYear: 0,
+    pendingOrders: 0,
+    awaitingFinanceOrders: 0,
+    solicitationPendings: 0,
+    solicitationFinished: 0,
+  });
+
+  protected itemsShopping: Signal<ISmallInformationCard[]> = computed<
     ISmallInformationCard[]
   >(() => [
     {
@@ -95,7 +138,8 @@ export class HomeComponent {
       description: 'Total de compras do ano',
     },
   ]);
-  itemsRequests: Signal<ISmallInformationCard[]> = computed<
+
+  protected itemsRequests: Signal<ISmallInformationCard[]> = computed<
     ISmallInformationCard[]
   >(() => [
     {
@@ -131,7 +175,7 @@ export class HomeComponent {
     },
   ]);
 
-  lineChart: any = {
+  protected lineChart: any = {
     type: 'line',
     data: {
       labels: [
@@ -174,7 +218,7 @@ export class HomeComponent {
     },
   };
 
-  barChart: any = {
+  protected barChart: any = {
     type: 'bar',
     data: {
       labels: [
@@ -214,44 +258,8 @@ export class HomeComponent {
       },
     },
   };
-  filters: any = {
+
+  protected filters: any = {
     is_home: true,
   };
-
-  ngOnInit() {
-    Chart.register(...registerables);
-
-    // Initialize the charts and store the instances
-    // this.lineChart = new Chart('lineChart', this.lineChart);
-    this.barChart = new Chart('barChart', this.barChart);
-
-    // this._dashboardService
-    //   .getPurchaseGraphicBar()
-    //   .subscribe((c: ApiResponse<{ month: string; total: number }[]>) => {
-    //     const months = c.data.map((d) => d.month); // Extract months
-    //     const totals = c.data.map((d) => d.total); // Extract totals
-
-    //     if (this.barChart && this.barChart instanceof Chart) {
-    //       this.barChart.data.labels = months;
-    //       this.barChart.data.datasets[0].data = totals;
-    //       this.barChart.update(); // Update chart
-    //     }
-    //   });
-
-    /*this._dashboardService.getPurchaseGraphicLine().subscribe((c: ApiResponse<{ month: string, total: number }[]>) => {
-      const months = c.data.map(d => d.month); // Extract months
-      const totals = c.data.map(d => d.total); // Extract totals
-
-      // Ensure charts are initialized before updating
-      if (this.lineChart && this.lineChart instanceof Chart) {
-        this.lineChart.data.labels = months;
-        this.lineChart.data.datasets[0].data = totals;
-        this.lineChart.update(); // Update chart
-      }
-    });*/
-
-    this._sessionQuery.user$.subscribe((user) => {
-      this.user = user;
-    });
-  }
 }

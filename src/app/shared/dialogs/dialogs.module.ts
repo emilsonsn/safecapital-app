@@ -28,6 +28,7 @@ import {MatIcon} from "@angular/material/icon";
 import {NgxMatSelectSearchModule} from 'ngx-mat-select-search';
 import { DialogPartnerAnalysisComponent } from './dialog-partner-analysis/dialog-partner-analysis.component';
 import { DialogSolicitationComponent } from './dialog-solicitation/dialog-solicitation.component';
+import { DialogFirstAccessComponent } from './dialog-first-access/dialog-first-access.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { DialogSolicitationComponent } from './dialog-solicitation/dialog-solici
     DialogPartnerComponent,
     DialogClientComponent,
     DialogPartnerAnalysisComponent,
-    DialogSolicitationComponent
+    DialogSolicitationComponent,
+    DialogFirstAccessComponent,
   ],
   imports: [
     CommonModule,

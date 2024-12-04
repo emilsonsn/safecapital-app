@@ -81,24 +81,6 @@
           <input matInput type="text" formControlName="creci" mask="0*">
         </mat-form-field>
       </div>
-
-      <div class="col-12"></div>
-
-      @if(!this.userData) {
-      <div class="col-md-6 col-12 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>Senha</mat-label>
-          <input type="password" formControlName="password" matInput title="Senha" required />
-        </mat-form-field>
-      </div>
-      <div class="col-md-6 col-12 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>Confirmação de Senha</mat-label>
-          <input type="password" [(ngModel)]="confirm_password" [ngModelOptions]="{standalone: true}" matInput
-            title="Confirmação de Senha" required />
-        </mat-form-field>
-      </div>
-      }
     </div>
     <div class="">
       <span class="fw-bolder">Anexos</span>

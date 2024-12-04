@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { Utils } from '@shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
+import { SessionQuery } from '@store/session.query';
 
 @Component({
   selector: 'app-dialog-partner',
@@ -19,6 +20,7 @@ import { finalize } from 'rxjs';
   styleUrl: './dialog-partner.component.scss',
 })
 export class DialogPartnerComponent {
+  protected myUser: User;
   public isNewCollaborator: boolean = true;
   public title: string = 'Novo ';
   public form: FormGroup;
@@ -29,7 +31,7 @@ export class DialogPartnerComponent {
 
   public utils = Utils;
 
-  // Filters
+  // Selects
   public statusSelect: { label: string; value: string }[] = [
     {
       label: 'Ativo',
@@ -41,6 +43,17 @@ export class DialogPartnerComponent {
     },
   ];
 
+  public userPermissionSelect: { label: string; value: string }[] = [
+    {
+      label: 'Admin',
+      value: 'Admin',
+    },
+    {
+      label: 'Colaborador',
+      value: 'Manager',
+    },
+  ];
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     protected readonly _data: { isClient: boolean; user: User },
@@ -48,7 +61,8 @@ export class DialogPartnerComponent {
     private readonly _fb: FormBuilder,
     private readonly _dialog: MatDialog,
     private readonly _userService: UserService,
-    private readonly _toastr : ToastrService,
+    private readonly _toastr: ToastrService,
+    private readonly _sessionQuery: SessionQuery
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +78,9 @@ export class DialogPartnerComponent {
       password: [''],
       is_active: [this._data?.user?.is_active ?? 'Pending'],
       justification: [this._data?.user?.justification ?? ''],
+      role: [
+        this._data?.user?.role ?? this._data?.isClient ? 'Client' : 'Manager',
+      ],
     });
 
     if (this._data?.user) {
@@ -74,10 +91,18 @@ export class DialogPartnerComponent {
       //   this.profileImage = this._data.user.photo
       // }
     }
+
+    this._sessionQuery.user$.subscribe((user) => {
+      this.myUser = user;
+    });
   }
 
   public onSubmit(form: FormGroup): void {
-    if (!form.valid || this.loading || this.filesToSend.some(file => !file.category)) {
+    if (
+      !form.valid ||
+      this.loading ||
+      this.filesToSend.some((file) => !file.category)
+    ) {
       form.markAllAsTouched();
       return;
     }
@@ -95,13 +120,11 @@ export class DialogPartnerComponent {
       formData.append(`attachments[${index}][file]`, file.file);
     });
 
-    if(this.isNewCollaborator) {
+    if (this.isNewCollaborator) {
       this._postCollaborator(formData);
-    }
-    else {
+    } else {
       this._patchCollaborator(formData);
     }
-
   }
 
   _patchCollaborator(collaborator) {
@@ -151,13 +174,13 @@ export class DialogPartnerComponent {
     category: string;
   }[] = [];
 
-  protected filesToRemove : number[] = [];
-  protected filesFromBack : {
-    index : number,
-    id: number,
-    name : string,
-    path: string, // Wasabi
-    category : string,
+  protected filesToRemove: number[] = [];
+  protected filesFromBack: {
+    index: number;
+    id: number;
+    name: string;
+    path: string; // Wasabi
+    category: string;
   }[] = [];
 
   public allowedTypes = [

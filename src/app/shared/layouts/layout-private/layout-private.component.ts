@@ -7,6 +7,9 @@ import { UserService } from '@services/user.service';
 import { ApiResponse } from '@models/application';
 import { SessionService } from '@store/session.service';
 import { SessionQuery } from '@store/session.query';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogFirstAccessComponent } from '@shared/dialogs/dialog-first-access/dialog-first-access.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-layout-private',
@@ -93,7 +96,9 @@ export class LayoutPrivateComponent {
     private readonly _sidebarService: SidebarService,
     private readonly _userService: UserService,
     private readonly _sessionService: SessionService,
-    private readonly _sessionQuery: SessionQuery
+    private readonly _sessionQuery: SessionQuery,
+    private readonly _dialog : MatDialog,
+    private readonly _toastr : ToastrService,
   ) {}
 
   ngOnInit(): void {
@@ -127,6 +132,11 @@ export class LayoutPrivateComponent {
         }
       }
     });
+
+    // PRIMEIRO ACESSO
+    // if(true) {
+    //   this.openFirstAccessDialog();
+    // }
   }
 
   ngOnDestroy(): void {
@@ -134,4 +144,30 @@ export class LayoutPrivateComponent {
       this.resizeSubscription.unsubscribe();
     }
   }
+
+  protected openFirstAccessDialog() {
+    const dialogConfig: MatDialogConfig = {
+      width: '80%',
+      maxWidth: '1000px',
+      maxHeight: '90%',
+      hasBackdrop: true,
+      closeOnNavigation: true,
+    };
+
+    this._dialog
+      .open(DialogFirstAccessComponent, {
+        ...dialogConfig,
+      })
+      .afterClosed()
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this._toastr.success('Seja bem vindo!');
+          } else {
+            this.openFirstAccessDialog();
+          }
+        },
+      });
+  }
+
 }

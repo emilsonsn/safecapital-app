@@ -25,7 +25,6 @@ export class RegisterComponent {
 
   // Form
   public form: FormGroup;
-  protected confirm_password: String;
 
   constructor(
     private readonly _fb: FormBuilder,
@@ -43,14 +42,10 @@ export class RegisterComponent {
       phone: [null, [Validators.required]],
       company_name: [null, [Validators.required]],
       creci: [null, [Validators.required]],
-      password: [null, [Validators.required]],
     });
 
     if (this.userData) {
       this.form.patchValue(this.userData);
-
-      this.form.get('password').setValidators([]);
-      this.form.removeControl('password');
     }
   }
 
@@ -62,11 +57,6 @@ export class RegisterComponent {
 
     if (!this.filesToSend) {
       this._toastr.error('Anexe pelo menos um arquivo!');
-      return;
-    }
-
-    if (this.form.get('password').value != this.confirm_password) {
-      this._toastr.error('Senhas não coincidem!');
       return;
     }
 

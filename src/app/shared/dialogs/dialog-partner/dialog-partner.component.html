@@ -77,6 +77,16 @@
             title="Digite um número de celular válido (xx)xxxxx-xxxx" required />
         </mat-form-field>
       </div>
+      <div class="col-md-6 col-12 mb-3" *ngIf="!_data.isClient && myUser?.role == 'Admin'">
+        <mat-form-field>
+          <mat-label>Permissão</mat-label>
+          <mat-select formControlName="role" placeholder="Grupo">
+            @for (status of userPermissionSelect; track status) {
+            <mat-option [value]="status.value">{{ status.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
       <div class="col-12"></div>
       @if(_data?.user?.validation == 'Accepted' || _data?.user?.validation == 'Refused') {
       <div class="col-md-6 col-12 mb-3">
@@ -91,13 +101,13 @@
       </div>
       }
       @if(_data?.user?.validation == 'Refused') {
-        <div class="col-12 mb-3">
-          <mat-form-field>
-            <mat-label>Justificativa</mat-label>
-            <input matInput type="text" formControlName="justification" placeholder="Justificativa">
-          </mat-form-field>
-        </div>
-        }
+      <div class="col-12 mb-3">
+        <mat-form-field>
+          <mat-label>Justificativa</mat-label>
+          <input matInput type="text" formControlName="justification" placeholder="Justificativa">
+        </mat-form-field>
+      </div>
+      }
     </div>
     @if(_data?.isClient) {
     <div class="">

@@ -1,0 +1,56 @@
+<mat-dialog-content>
+
+  @if(loading) {
+  <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
+
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">Seja bem vindo {{user?.name}} !</span>
+    <div matRipple class="close" (click)="onCancel()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <div class="mb-2">
+    <span>Como este é seu primeiro acesso é necessário aceitar os termos e alterar a senha.</span>
+  </div>
+
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Senha</mat-label>
+          <input type="password" formControlName="password" matInput title="Senha" required />
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Confirmação de Senha</mat-label>
+          <input type="password" [(ngModel)]="confirm_password" [ngModelOptions]="{standalone: true}" matInput
+            title="Confirmação de Senha" required />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-checkbox color="primary" formControlName="accept_terms">Eu li e aceito os Termos de Uso e a Política de Privacidade.</mat-checkbox>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="container">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button primary" (click)="onSubmit()">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>
