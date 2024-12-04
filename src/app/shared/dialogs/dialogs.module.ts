@@ -30,6 +30,7 @@ import { DialogPartnerAnalysisComponent } from './dialog-partner-analysis/dialog
 import { DialogSolicitationComponent } from './dialog-solicitation/dialog-solicitation.component';
 import { DialogFirstAccessComponent } from './dialog-first-access/dialog-first-access.component';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
+import { DialogClientContractsComponent } from './dialog-client-contracts/dialog-client-contracts.component';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { DialogUserComponent } from './dialog-user/dialog-user.component';
     DialogSolicitationComponent,
     DialogFirstAccessComponent,
     DialogUserComponent,
+    DialogClientContractsComponent,
   ],
   imports: [
     CommonModule,

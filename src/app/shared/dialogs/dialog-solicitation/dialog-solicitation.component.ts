@@ -2,21 +2,16 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { afterNextRender, Component, inject, Inject, Injector, ViewChild } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Client } from '@models/client';
 import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
-import { Estados } from '@models/utils';
-import { ClientService } from '@services/client.service';
 import { SolicitationService } from '@services/solicitation.service';
 import { UtilsService } from '@services/utils.service';
 import { Utils } from '@shared/utils';
-import dayjs from 'dayjs';
 import { ToastrService } from 'ngx-toastr';
-import { finalize, map, ReplaySubject } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-solicitation',

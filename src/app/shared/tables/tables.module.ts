@@ -14,9 +14,11 @@ import {SharedModule} from "@shared/shared.module";
 import {AvatarModule} from "@shared/components/avatar/avatar.module";
 import { TablePartnersComponent } from './table-partners/table-partners.component';
 import { CardsSolicitationComponent } from './cards-solicitation/cards-solicitation.component';
+import { TableClientContractsComponent } from './table-client-contracts/table-client-contracts.component';
 
 const tables = [
   TableClientComponent,
+  TableClientContractsComponent,
   TableUserComponent,
   TablePartnersComponent,
   CardsSolicitationComponent,

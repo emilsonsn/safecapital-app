@@ -6,7 +6,7 @@
   </div>
 
   <div id="buttons">
-    <button matRipple class="button primary" (click)="openDialogClient()">
+    <button matRipple class="button primary" (click)="openClientDialog()">
       <i class="fa-solid fa-plus"></i> Cliente
     </button>
   </div>
@@ -68,6 +68,6 @@
 
 <div id="componentTable" class="col-12 mt-4">
   <app-table-client [loading]="loading" [filters]="filters" [searchTerm]="searchTerm"
-    (onClientClick)="openDialogClient($event)" (onDeleteClientClick)="onDeleteConfirm($event)">
+    (onClientClick)="openClientDialog($event)" (onContractsClientClick)="openContractClientDialog($event)" (onDeleteClientClick)="onDeleteConfirm($event)">
   </app-table-client>
 </div>

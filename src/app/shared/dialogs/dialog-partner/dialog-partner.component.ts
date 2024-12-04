@@ -65,7 +65,7 @@ export class DialogPartnerComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    protected readonly _data: { isClient: boolean; user: User },
+    protected readonly _data: { user: User },
     private readonly _dialogRef: MatDialogRef<DialogPartnerComponent>,
     private readonly _fb: FormBuilder,
     private readonly _dialog: MatDialog,

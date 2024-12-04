@@ -15,7 +15,7 @@ import { Utils } from '@shared/utils';
 import { SessionQuery } from '@store/session.query';
 import dayjs from 'dayjs';
 import { ToastrService } from 'ngx-toastr';
-import { finalize, map, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged, finalize, map, ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-client',
@@ -70,20 +70,32 @@ export class DialogClientComponent {
   ngOnInit(): void {
     this.form = this._fb.group({
       id: [null],
+      status: ['Pending', [Validators.required]],
+
+      // Dados Pessoais
       name: [null, [Validators.required]],
       surname: [null, [Validators.required]],
       birthday: [null, [Validators.required]],
       cpf: [null, [Validators.required]],
       phone: [null, [Validators.required]],
       email: [null, [Validators.required]],
-      status: ['Pending', [Validators.required]],
+
+      // Endereço
       cep: [null, [Validators.required]],
       street: [null, [Validators.required]],
       neighborhood: [null, [Validators.required]],
       city: [null, [Validators.required]],
       state: [null, [Validators.required]],
       number: [null, [Validators.required]],
+
+      // Financeiro
+      rental_value: [null, [Validators.required]], // valor do aluguel
+      condominium_fee: [null, [Validators.required]], // condominio
+      property_tax: [null, [Validators.required]], // iptu
+      policy_value: [0, [Validators.required]], // valor da apólice
     });
+
+    this.form.get('policy_value').disable();
 
     if (this._data?.client) {
       this.isNewClient = false;
@@ -96,6 +108,7 @@ export class DialogClientComponent {
       }
     }
 
+    // CEP
     this.form.get('state').valueChanges.subscribe((res) => {
       this.atualizarCidades(res);
     });
@@ -108,16 +121,32 @@ export class DialogClientComponent {
       this.filterCitys();
     });
 
+    // MyUser
     this._sessionQuery.user$.subscribe((user) => {
       this.myUser = user;
 
-      // Regras de Negócio para Clientes
+      // Regras de Negócio para Manager <-> Clientes
       if (this.myUser?.role == 'Manager') {
-        if (
-          ['Approved', 'Disapproved'].includes(this._data?.client?.status)
-        ) {
+        if (['Approved', 'Disapproved'].includes(this._data?.client?.status)) {
           this.form.disable();
           this.canEdit = false;
+        }
+      }
+    });
+
+    // Regras
+    this.form.valueChanges.pipe(distinctUntilChanged()).subscribe((res) => {
+      // (somatório * 12 * 0.1) [ 10% do valor total do ano]
+      if (res?.rental_value || res?.condominium_fee || res?.property_tax) {
+        const total =
+          +res?.rental_value + +res?.condominium_fee + +res.property_tax;
+
+        const newPolicyValue = total * 12 * 0.1;
+
+        if (this.form.get('policy_value')?.value !== total) {
+          this.form
+            .get('policy_value')
+            ?.patchValue(newPolicyValue, { emitEvent: false });
         }
       }
     });

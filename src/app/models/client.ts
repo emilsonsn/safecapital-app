@@ -9,8 +9,14 @@ export interface Client {
   city: string;
   state: string;
   status : ClientStatus;
+  contracts? : ClientContract[];
   created_at?: Date;
   updated_at?: Date;
+}
+
+export interface ClientContract {
+  category: string;
+  attachment : File | string;
 }
 
 export enum ClientStatus {

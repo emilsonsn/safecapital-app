@@ -12,11 +12,11 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 
 @Component({
-  selector: 'app-table-client',
-  templateUrl: './table-client.component.html',
-  styleUrl: './table-client.component.scss',
+  selector: 'app-table-client-contracts',
+  templateUrl: './table-client-contracts.component.html',
+  styleUrl: './table-client-contracts.component.scss',
 })
-export class TableClientComponent {
+export class TableClientContractsComponent {
   @Input()
   searchTerm?: string = '';
 

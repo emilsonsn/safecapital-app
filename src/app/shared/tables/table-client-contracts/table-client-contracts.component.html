@@ -62,12 +62,6 @@
           <td>
             <div class="d-flex justify-content-center">
 
-              @if(client?.status == 'Approved') {
-              <div matRipple class="buttonTemplate" (click)="onContractsClientClick.emit(client)">
-                <i class="fa-solid fa-file-contract"></i>
-              </div>
-              }
-
               <div matRipple class="buttonTemplate" (click)="onClientClick.emit(client)">
                 <i class="fa-solid fa-pen-to-square"></i>
               </div>

@@ -18,6 +18,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { User } from '@models/user';
 import { UserService } from '@services/user.service';
 import { SessionQuery } from '@store/session.query';
+import { DialogClientContractsComponent } from '@shared/dialogs/dialog-client-contracts/dialog-client-contracts.component';
 
 @Component({
   selector: 'app-client',
@@ -69,9 +70,28 @@ export class ClientComponent {
     });
   }
 
-  protected openDialogClient(client?: Client) {
+  protected openClientDialog(client?: Client) {
     this._dialog
       .open(DialogClientComponent, {
+        data: { client },
+        width: '80%',
+        maxWidth: '850px',
+        maxHeight: '90%',
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+          }, 200);
+        }
+      });
+  }
+
+  protected openContractClientDialog(client?: Client) {
+    this._dialog
+      .open(DialogClientContractsComponent, {
         data: { client },
         width: '80%',
         maxWidth: '850px',
