@@ -13,6 +13,7 @@ import { finalize } from 'rxjs';
 export class SettingsComponent {
   protected form: FormGroup;
   protected loading: boolean = false;
+  protected searchTerm: string = '';
 
   constructor(
     private readonly _headerService: HeaderService,
@@ -36,6 +37,19 @@ export class SettingsComponent {
 
     this.getSettings();
   }
+
+  handleSearchTerm(string){
+
+  }
+
+  openSettingDialog(data?){
+
+  }
+
+  deleteSetting(id){
+    
+  }
+
 
   protected onSubmit() {
     if (!this.form.valid || this.loading) {

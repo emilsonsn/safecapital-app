@@ -1,8 +1,10 @@
+import { ClientStatus } from "./client";
+
 export interface Settings {
-  start_approved_score: number;
-  end_approved_score: number;
-  start_pending_score: number;
-  end_pending_score: number;
-  start_disapproved_score: number;
-  end_disapproved_score: number;
+  id?: number;
+  description: string;
+  start_score: number;
+  end_score: number;
+  has_pending_issues: boolean;
+  status: ClientStatus;
 }

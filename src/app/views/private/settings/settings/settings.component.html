@@ -4,55 +4,29 @@
 </div>
 }
 
-<form [formGroup]="form">
-  <div class="row">
-    <div class="col-12">
-      <span class="fw-bold fs-6 mb-3">Limites de Score para Aprovação</span>
-    </div>
-    <div class="col-md-6 mb-3">
-      <mat-form-field appearance="outline" class="bgWhite">
-        <mat-label>Início - Aprovado </mat-label>
-        <input matInput type="text" formControlName="start_approved_score" mask="0*">
-      </mat-form-field>
-    </div>
-    <div class="col-md-6 mb-3">
-      <mat-form-field appearance="outline" class="bgWhite">
-        <mat-label>Fim - Aprovado </mat-label>
-        <input matInput type="text" formControlName="end_approved_score" mask="0*">
-      </mat-form-field>
-    </div>
-    <div class="col-12">
-      <span class="fw-bold fs-6 mb-3">Limites de Score para Pendente</span>
-    </div>
-    <div class="col-md-6 mb-3">
-      <mat-form-field appearance="outline" class="bgWhite">
-        <mat-label>Início - Pendente </mat-label>
-        <input matInput type="text" formControlName="start_pending_score" mask="0*">
-      </mat-form-field>
-    </div>
-    <div class="col-md-6 mb-3">
-      <mat-form-field appearance="outline" class="bgWhite">
-        <mat-label>Fim - Pendente </mat-label>
-        <input matInput type="text" formControlName="end_pending_score" mask="0*">
-      </mat-form-field>
-    </div>
-    <div class="col-12">
-      <span class="fw-bold fs-6 mb-3">Limites de Score para Reprovado</span>
-    </div>
-    <div class="col-md-6 mb-3">
-      <mat-form-field appearance="outline" class="bgWhite">
-        <mat-label>Início - Reprovado </mat-label>
-        <input matInput type="text" formControlName="start_disapproved_score" mask="0*">
-      </mat-form-field>
-    </div>
-    <div class="col-md-6 mb-3">
-      <mat-form-field appearance="outline" class="bgWhite">
-        <mat-label>Fim - Reprovado </mat-label>
-        <input matInput type="text" formControlName="end_disapproved_score" mask="0*">
-      </mat-form-field>
-    </div>
+<app-header-page-component [hasFilter]="false">
+
+  <div id="searchInput">
+    <app-search-input (onSearchInputChanged)="handleSearchTerm($event)">
+    </app-search-input>
   </div>
-  <div class="d-flex justify-content-end">
-    <button matRipple id="submit" class="button primary" style="width: 7rem;" (click)="onSubmit()">Salvar</button>
+
+  <div id="buttons">
+    <button matRipple class="button primary" (click)="openSettingDialog()">
+      <i class="fa-solid fa-plus"></i> Parceiro
+    </button>
   </div>
-</form>
+</app-header-page-component>
+
+<div id="componentTable" class="col-12 mt-4">
+  <app-table-settings
+  (onSettingClick)="openSettingDialog($event)"
+  (onDeleteSettingClick)="deleteSetting($event)"
+  [searchTerm]="searchTerm"
+  [loading]="loading"
+  >
+  </app-table-settings>
+</div>
+
+
+

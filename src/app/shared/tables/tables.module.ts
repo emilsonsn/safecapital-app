@@ -15,12 +15,14 @@ import {AvatarModule} from "@shared/components/avatar/avatar.module";
 import { TablePartnersComponent } from './table-partners/table-partners.component';
 import { CardsSolicitationComponent } from './cards-solicitation/cards-solicitation.component';
 import { TableClientContractsComponent } from './table-client-contracts/table-client-contracts.component';
+import { TableSettingsComponent } from './table-settings/table-settings.component';
 
 const tables = [
   TableClientComponent,
   TableClientContractsComponent,
   TableUserComponent,
   TablePartnersComponent,
+  TableSettingsComponent,
   CardsSolicitationComponent,
 ]
 

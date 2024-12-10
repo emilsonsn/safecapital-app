@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRippleModule } from '@angular/material/core';
+import { SharedModule } from '@shared/shared.module';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { MatRippleModule } from '@angular/material/core';
   ],
   imports: [
     CommonModule,
+    SharedModule,
     SettingsRoutingModule,
     MatFormFieldModule,
     FormsModule,

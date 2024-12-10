@@ -33,12 +33,12 @@
         </td>
       </tr>
         @if (!loading) {
-          <tr *ngIf="!users?.length">
+          <tr *ngIf="!settings?.length">
             <td [attr.colspan]="columns.length + 1" class="text-center">
               <div>Nenhum resultado encontrado</div>
             </td>
           </tr>
-          @for (partner of users; track partner) {
+          @for (setting of settings; track setting) {
             <tr
               class="table-line-hover"
               style="outline: none; cursor: pointer"
@@ -48,69 +48,36 @@
                   class="d-flex align-items-center gap-2"
                   style="white-space: nowrap"
                 >
-                  <!-- <app-avatar
-                    [imageUrl]="partner?.photo"
-                    [altText]="partner?.name"
-                    [color]="'#e7b403'"
-                    [onCircle]="true"
-                  ></app-avatar> -->
-                  {{ partner?.name }}
+                  {{ setting?.description }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ partner?.email }}
+                  {{ setting?.start_score }}
                 </div>
               </td>
               <td>
                 <div class="text-center">
-                  {{ partner?.company_name }}
-                </div>
-              </td>
-              <!-- <td>
-                <div class="text-center" style="text-wrap: nowrap;">
-                  {{ partner?.cnpj | cpfCnpjMask }}
-                </div>
-              </td>
-              <td>
-                <div class="text-center">
-                  {{ partner?.creci }}
-                </div>
-              </td> -->
-              <td>
-                <div class="text-center" style="text-wrap: nowrap;">
-                  {{ +partner?.phone | phoneMask }}
+                  {{ setting?.end_score }}
                 </div>
               </td>
               <td>
                 <div class="text-center" style="text-wrap: nowrap;">
-                  {{ partner?.created_at | date:"dd/MM/YYYY HH:mm:ss"  }}
+                  {{ setting?.has_pending_issues ? 'Sim' : 'Não' }}
                 </div>
               </td>
               <td>
-                <div class="status" [ngClass]="partner?.validation?.toLowerCase()">
-                  {{ partner?.validation | status  }}
-                </div>
-              </td>
-              <td>
-                <div class="active" [ngClass]="partner?.is_active ? 'accepted' : 'refused'" style="text-wrap: nowrap;">
-                  {{ partner?.is_active ? 'Sim' : 'Não'  }}
+                <div class="text-center" style="text-wrap: nowrap;">
+                  {{ setting?.status | status}}
                 </div>
               </td>
               <td>
                 <div class="d-flex justify-content-center">
-                  @if(partner.validation == 'Pending' || partner.validation == 'Return' ) {
-                    <div matRipple class="buttonTemplate" (click)="onRequestClick.emit(partner)">
-                      <i class="fa-solid fa-check"></i>
-                    </div>
-                  }
-                  @else {
-                    <div matRipple class="buttonTemplate" (click)="onUserClick.emit(partner)">
+                    <div matRipple class="buttonTemplate" (click)="onSettingClick.emit(setting)">
                       <i class="fa-solid fa-pen-to-square"></i>
                     </div>
-                  }
-
-                  <div matRipple class="buttonTemplate cancel" (click)="onDeleteUserClick.emit(partner?.id)">
+                  
+                  <div matRipple class="buttonTemplate cancel" (click)="onDeleteSettingClick.emit(setting?.id)">
                     <i class="fa-solid fa-trash"></i>
                   </div>
                 </div>
