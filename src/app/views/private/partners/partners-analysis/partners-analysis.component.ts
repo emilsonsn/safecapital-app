@@ -85,7 +85,7 @@ export class PartnersAnalysisComponent {
 
   ngOnInit() {
     this.formFilters = this._fb.group({
-      validation : ['Pending,Refused']
+      validation : ['Pending,Return'] //Refused
     });
 
     this.updateFilters();
