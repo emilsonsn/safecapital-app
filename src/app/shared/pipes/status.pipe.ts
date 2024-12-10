@@ -1,13 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { RequestStatus } from '@models/request';
 import { Status } from '@models/status';
+import { StatusUser } from '@models/user';
 
 @Pipe({
   name: 'status'
 })
 export class StatusPipe implements PipeTransform {
 
-  transform(value: string | Status | RequestStatus) {
+  transform(value: string | Status | RequestStatus | StatusUser) {
     switch (value) {
       case Status.Pending:
         return 'Pendente';
@@ -21,6 +22,8 @@ export class StatusPipe implements PipeTransform {
         return 'Finalizado';
       case Status.Rejected:
         return 'Rejeitado';
+      case StatusUser.Return:
+        return 'Retorno';        
       case Status.Payment:
         return 'Pagamento';
       case Status.Reimbursement:

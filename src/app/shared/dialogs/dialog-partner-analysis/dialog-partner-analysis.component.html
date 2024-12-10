@@ -64,9 +64,9 @@
       </mat-form-field>
     </div>
 
-    @if(form.get('validation').value == 'Refused') {
+    @if(justification) {
     <div class="mb-2">
-      <span class="fw-bolder">Descrição *</span>
+      <span class="fw-bolder">Justificativa *</span>
       <mat-form-field>
         <textarea matInput formControlName="justification" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
           cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [placeholder]="'Descrição'">

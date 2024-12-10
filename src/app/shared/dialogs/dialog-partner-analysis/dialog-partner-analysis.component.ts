@@ -10,6 +10,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Request } from '@models/request';
+import { Status } from '@models/status';
 import { StatusUser, User } from '@models/user';
 import { UserService } from '@services/user.service';
 import { ToastrService } from 'ngx-toastr';
@@ -24,6 +25,7 @@ export class DialogPartnerAnalysisComponent {
   public form: FormGroup;
   public loading: boolean = false;
   public title: string = 'Dados da Solicitação';
+  justification = false;
 
   protected fields = [
     {
@@ -81,8 +83,9 @@ export class DialogPartnerAnalysisComponent {
     this.form.get('validation')?.valueChanges.subscribe((status: string) => {
       const justificationControl = this.form.get('justification');
 
-      if (status === 'Refused') {
+      if (status === StatusUser.Refused || status === StatusUser.Return) {
         justificationControl?.setValidators([Validators.required]);
+        this.justification = true;
       } else {
         justificationControl?.clearValidators();
       }

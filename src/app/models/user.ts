@@ -20,6 +20,7 @@ export interface User {
 export enum StatusUser {
   Accepted = 'Accepted',
   Pending = 'Pending',
+  Return = 'Return',
   Refused = 'Refused',
 }
 
