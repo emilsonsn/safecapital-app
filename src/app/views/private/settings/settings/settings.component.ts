@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HeaderService } from '@services/header.service';
 import { SettingService } from '@services/settings.service';
+import { DialogSettingComponent } from '@shared/dialogs/dialog-setting/dialog-setting.component';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 
@@ -19,7 +21,9 @@ export class SettingsComponent {
     private readonly _headerService: HeaderService,
     private readonly _settingsService: SettingService,
     private readonly _fb: FormBuilder,
-    private readonly _toastr: ToastrService
+    private readonly _toastr: ToastrService,
+    private readonly _dialog: MatDialog,
+
   ) {
     this._headerService.setTitle('Configurações');
     this._headerService.setSubTitle('');
@@ -42,39 +46,50 @@ export class SettingsComponent {
 
   }
 
-  openSettingDialog(data?){
+  openSettingDialog(setting?){
+    const dialogConfig: MatDialogConfig = {
+      width: '80%',
+      maxWidth: '850px',
+      maxHeight: '90%',
+      hasBackdrop: true,
+      closeOnNavigation: true,
+    };
 
+    this._dialog
+      .open(DialogSettingComponent, {
+        data: setting ? { ...setting } : null,
+        ...dialogConfig,
+      })
+      .afterClosed()
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.loading = true;
+            setTimeout(() => {
+              this.loading = false;
+            }, 200);
+          }
+        },
+      });
   }
 
   deleteSetting(id){
-    
-  }
-
-
-  protected onSubmit() {
-    if (!this.form.valid || this.loading) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    this._initOrStopLoading();
-
-    this._settingsService
-      .patch(this.form.getRawValue())
-      .pipe(
-        finalize(() => {
-          this._initOrStopLoading();
-        })
-      )
-      .subscribe({
-        next: (res) => {
-          this._toastr.success(res.message);
-          this.getSettings();
-        },
-        error: (err) => {
-          this._toastr.error(err.error.error);
-        },
-      });
+    this._settingsService.delete(id)
+    .subscribe({
+      next: (res) => {
+        this._toastr.success(res.message);
+        if (res) {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.getSettings();
+          }, 200);
+        }
+      },
+      error: (err) => {
+        this._toastr.error(err.error.error);
+      },
+    })
   }
 
   protected getSettings() {

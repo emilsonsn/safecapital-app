@@ -31,6 +31,7 @@ import { DialogSolicitationComponent } from './dialog-solicitation/dialog-solici
 import { DialogFirstAccessComponent } from './dialog-first-access/dialog-first-access.component';
 import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { DialogClientContractsComponent } from './dialog-client-contracts/dialog-client-contracts.component';
+import { DialogSettingComponent } from './dialog-setting/dialog-setting.component';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { DialogClientContractsComponent } from './dialog-client-contracts/dialog
     DialogFirstAccessComponent,
     DialogUserComponent,
     DialogClientContractsComponent,
+    DialogSettingComponent
   ],
   imports: [
     CommonModule,

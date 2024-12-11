@@ -1,0 +1,75 @@
+<mat-dialog-content>
+
+  @if(loading) {
+  <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
+
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">{{title + ('configuração')}}</span>
+    <div matRipple class="close" (click)="onCancel()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-md-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <input matInput type="text" formControlName="description">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Score início</mat-label>
+          <input matInput type="text" [mask]="'separator.0'" formControlName="start_score">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Score fim</mat-label>
+          <input matInput type="text" [mask]="'separator.0'" formControlName="end_score">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Possui pendências</mat-label>
+          <mat-select formControlName="has_pending_issues">
+            <mat-option [value]="1">Sim</mat-option>
+            <mat-option [value]="0">Não</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let status of statuses" [value]="status">
+              {{ status| status }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+    
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="container">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button primary" (click)="onSubmit(form)">{{isNewSetting ? 'Criar' :
+            'Salvar'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>

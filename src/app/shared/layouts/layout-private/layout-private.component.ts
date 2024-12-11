@@ -2,7 +2,7 @@ import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { IMenuItem } from '@models/ItemsMenu';
 import { SidebarService } from '@services/sidebar.service';
 import { Subscription } from 'rxjs';
-import { User } from '@models/user';
+import { User, UserRole } from '@models/user';
 import { UserService } from '@services/user.service';
 import { ApiResponse } from '@models/application';
 import { SessionService } from '@store/session.service';
@@ -130,7 +130,7 @@ export class LayoutPrivateComponent {
         }
 
         // PRIMEIRO ACESSO
-        if (!user.terms) {
+        if (!user.terms && user.role == UserRole.Client) {
           this.openFirstAccessDialog();
         }
       }

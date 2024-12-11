@@ -24,8 +24,16 @@ export class SettingService {
     return this._http.get<ApiResponsePageable<Settings>>(`${environment.api}/${this.endpoint}/search`);
   }
 
-  public patch(settings: Settings): Observable<ApiResponse<Settings>> {
-    return this._http.patch<ApiResponse<Settings>>(`${environment.api}/${this.endpoint}/update`, settings);
+  public create(setting: Settings): Observable<ApiResponse<Settings>> {
+    return this._http.patch<ApiResponse<Settings>>(`${environment.api}/${this.endpoint}/create`, setting);
+  }
+
+  public patch(id: number, setting: Settings): Observable<ApiResponse<Settings>> {
+    return this._http.patch<ApiResponse<Settings>>(`${environment.api}/${this.endpoint}/${id}`, setting);
+  }
+
+  public delete(id: number): Observable<ApiResponse<Settings>> {
+    return this._http.delete<ApiResponse<Settings>>(`${environment.api}/${this.endpoint}/${id}`);
   }
 
 }

@@ -1,0 +1,35 @@
+@import "variables";
+
+
+
+
+#inputFileAdd {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  height: 2rem;
+  width: 12rem;
+  background-color: $white-400;
+  cursor: pointer;
+
+  #text {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  input#file-upload-button {
+    display: none;
+  }
+}
