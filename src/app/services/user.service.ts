@@ -1,4 +1,4 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@env/environment';
 import {ApiResponse, ApiResponsePageable, DeleteApiResponse, PageControl} from '@models/application';
@@ -65,7 +65,7 @@ export class UserService {
     });
   }
 
-  recoverPassword(email: string): Observable<any> {
+  public recoverPassword(email: string): Observable<any> {
     return this._http.post<any>(`${environment.api}/recoverPassword`, {email});
   }
 
@@ -79,6 +79,18 @@ export class UserService {
 
   public validateToken(token: string): Observable<ApiResponse<string>> {
     return this._http.post<ApiResponse<string>>(`${environment.api}/open/${this.sessionEndpoint}/check-token`, {token: token})
+  }
+
+  // Termos de Uso
+  public acceptTerms(): Observable<any> {
+    return this._http.post<any>(`${environment.api}/${this.sessionEndpoint}/accept-term`, null);
+  }
+
+  // Register User
+  public getUserByEmail(email : string): Observable<ApiResponse<User>> {
+    const params = new HttpParams().set('email', email);
+
+    return this._http.get<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/email`, {params});
   }
 
   // Position Service
@@ -109,11 +121,11 @@ export class UserService {
     return this._http.delete<DeleteApiResponse>(`${environment.api}/${this.sessionEndpoint}/sector/${id}`);
   }
 
-  getUsersAll() {
+  public getUsersAll() {
     return this._http.get<ApiResponse<User[]>>(`${environment.api}/${this.sessionEndpoint}/all`);
   }
 
-  updatePassword(data: { code: string, password: string }): Observable<any> {
+  public updatePassword(data: { code: string, password: string }): Observable<any> {
     return this._http.post<any>(`${environment.api}/updatePassword`, data);
   }
 }

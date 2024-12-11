@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { User } from '@models/user';
 import { SolicitationService } from '@services/solicitation.service';
+import { UserService } from '@services/user.service';
 import { UtilsService } from '@services/utils.service';
 import { Utils } from '@shared/utils';
 import { SessionQuery } from '@store/session.query';
@@ -26,7 +27,6 @@ export class DialogFirstAccessComponent {
   public form: FormGroup;
   protected user : User;
   public loading: boolean = false;
-  protected confirm_password: String;
 
   public utils = Utils;
 
@@ -38,11 +38,11 @@ export class DialogFirstAccessComponent {
     private readonly _toastr: ToastrService,
     private readonly _utilsService: UtilsService,
     private readonly _sessionQuery: SessionQuery,
+    private readonly _userService: UserService,
   ) {}
 
   ngOnInit(): void {
     this.form = this._fb.group({
-      password: [null, [Validators.required]],
       accept_terms: [null, [Validators.required]],
     });
 
@@ -54,12 +54,7 @@ export class DialogFirstAccessComponent {
   public onSubmit(): void {
     if (!this.form.valid || this.loading) {
       this.form.markAllAsTouched();
-      this._toastr.error('Preencha todos os campos!');
-      return;
-    }
-
-    if (this.form?.get('password')?.value != this.confirm_password) {
-      this._toastr.error('Senhas não coincidem!');
+      this._toastr.error('Necessário aceitar os termos de uso!');
       return;
     }
 
@@ -69,19 +64,19 @@ export class DialogFirstAccessComponent {
   protected post() {
     this._initOrStopLoading();
 
-    // this._solicitationService.post(this.form.getRawValue())
-    //   .pipe(finalize(() => {
-    //     this._initOrStopLoading();
-    //   }))
-    //   .subscribe({
-    //     next: (res) => {
-    //       this._toastr.success(res.message);
-    //       this._dialogRef.close(true);
-    //     },
-    //     error: (err) => {
-    //       this._toastr.error(err.error.error);
-    //     },
-    //   })
+    this._userService.acceptTerms()
+      .pipe(finalize(() => {
+        this._initOrStopLoading();
+      }))
+      .subscribe({
+        next: (res) => {
+          this._toastr.success(res.message);
+          this._dialogRef.close(true);
+        },
+        error: (err) => {
+          this._toastr.error(err.error.error);
+        },
+      })
   }
 
   // protected prepareFormData(form: FormGroup) {

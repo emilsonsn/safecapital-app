@@ -11,6 +11,7 @@ export interface User {
   is_active: boolean;
   role: UserRole;
   validation : StatusUser;
+  terms? : boolean;
   attachments?: Attachment[];
   justification? : string;
   created_at?: string;

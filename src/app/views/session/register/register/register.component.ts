@@ -1,5 +1,10 @@
 import { Component, Inject, Input } from '@angular/core';
-import { FormBuilder, FormGroup, RequiredValidator, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  RequiredValidator,
+  Validators,
+} from '@angular/forms';
 import { UserService } from '@services/user.service';
 import dayjs from 'dayjs';
 import { Utils } from '@shared/utils';
@@ -50,7 +55,11 @@ export class RegisterComponent {
   }
 
   public onSubmit(): void {
-    if (!this.form.valid || this.loading) {
+    if (
+      !this.form.valid ||
+      this.loading ||
+      (!this.filesFromBack && this.filesToSend.some((file) => !file.category))
+    ) {
       this.form.markAllAsTouched();
       return;
     }
@@ -62,8 +71,38 @@ export class RegisterComponent {
 
     this._initOrStopLoading();
 
+    if (!this.userData) {
+      this.post();
+    } else {
+      this.patch();
+    }
+  }
+
+  private post() {
     this._userService
       .postUser(this.prepareFormData({ ...this.form.getRawValue() }))
+      .pipe(
+        finalize(() => {
+          this._initOrStopLoading();
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this._toastr.success(res.message);
+          this.isSuccess = true;
+        },
+        error: (err) => {
+          this._toastr.error(err.error.error);
+        },
+      });
+  }
+
+  private patch() {
+    this._userService
+      .patchUser(
+        this.userData.id,
+        this.prepareFormData({ ...this.form.getRawValue() })
+      )
       .pipe(
         finalize(() => {
           this._initOrStopLoading();
@@ -88,7 +127,8 @@ export class RegisterComponent {
     });
 
     this.filesToSend.map((file, index) => {
-      formData.append(`attachments[${index}]`, file.file);
+      formData.append(`attachments[${index}][category]`, file.category);
+      formData.append(`attachments[${index}][file]`, file.file);
     });
 
     formData.append('role', 'Client');
@@ -102,6 +142,16 @@ export class RegisterComponent {
     id: number;
     preview: string;
     file: File;
+    category: string;
+  }[] = [];
+
+  protected filesToRemove: number[] = [];
+  protected filesFromBack: {
+    index: number;
+    id: number;
+    name: string;
+    path: string; // Wasabi
+    category: string;
   }[] = [];
 
   public allowedTypes = [
@@ -137,6 +187,7 @@ export class RegisterComponent {
           id: this.filesToSend.length + 1,
           preview: base64,
           file: file,
+          category: null,
         });
       } else this._toastr.error(`${file.type} não é permitido`);
     }
@@ -152,6 +203,11 @@ export class RegisterComponent {
     const fileUrl = URL.createObjectURL(e.file);
 
     window.open(fileUrl, '_blank');
+  }
+
+  public prepareFileToRemoveFromBack(fileId, index) {
+    this.filesFromBack.splice(index, 1);
+    this.filesToRemove.push(fileId);
   }
 
   // Getters

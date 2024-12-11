@@ -1,10 +1,19 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { StatusUser, User, UserRole } from '@models/user';
+import { AuthService } from '@services/auth.service';
+import { LocalStorageService } from '@services/local-storage.service';
 import { UserService } from '@services/user.service';
 import { Utils } from '@shared/utils';
+import { SessionService } from '@store/session.service';
 import { ToastrService } from 'ngx-toastr';
+import { finalize } from 'rxjs';
 
 export interface RegisterAutenticateEmitter {
   isNewUser: boolean;
@@ -29,13 +38,15 @@ export class RegisterAutenticateComponent {
     private readonly _fb: FormBuilder,
     private readonly _userService: UserService,
     private readonly _router: Router,
-    private readonly _toastr: ToastrService
+    private readonly _toastr: ToastrService,
+    private readonly _authService: AuthService,
+    private readonly _storage: LocalStorageService,
   ) {}
 
   ngOnInit() {
     this.form = this._fb.group({
       email: [null, [Validators.required]],
-      password: [null],
+      password: [{ value: null, disabled: true }, [Validators.required]],
     });
   }
 
@@ -55,41 +66,60 @@ export class RegisterAutenticateComponent {
   }
 
   protected searchForUser() {
-    // Faz o search no endpoint específico para retornar o usuário que já se cadastrou
-    // Se encontrar o usuário, adiciona password e atribui o usuário à user
+    this._userService
+      .getUserByEmail(this.form.get('email').value)
+      .pipe(
+        finalize(() => {
+          if (this._user) {
+            this.form.get('password').enable();
+            this._searchUserState = false;
+          } else {
+            this.autenticateUser();
+          }
 
-    // this.user = User da requisição
-
-    this._user = {
-      name: 'a',
-      phone: 'a',
-      surname: 'a',
-      company_name: 'a',
-      cnpj: 'a',
-      creci: 'a',
-      email: 'a',
-      password: 'a',
-      is_active: true,
-      role: UserRole.Client,
-      validation: StatusUser.Pending,
-    };
-
-    // this._user = null;
-
-    if (this._user) {
-      setTimeout(() => {
-        if (this._user) {
-          this.form.addControl('password', Validators.required);
-          this._searchUserState = false;
-        }
-      }, 500);
-      this._initOrStopLoading();
-    } else {
-      this.autenticateUser();
-    }
+          this._initOrStopLoading();
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this._user = res.data;
+        },
+        error: (err) => {
+          // this._toastr.error(err.error.error);
+        },
+      });
   }
 
   protected autenticateUser() {
+    if (this._user) {
+      const { email, password } = this.form.getRawValue();
+
+      this._authService
+        .login({ email, password })
+        .pipe(
+          finalize(() => {
+            this._initOrStopLoading();
+          })
+        )
+        .subscribe({
+          next: (res) => {
+            this._toastr.success('Seja bem vindo!');
+
+            this._storage.set('access_token', res.access_token);
+
+            this.AutenticateEmitter.emit({
+              isNewUser: false,
+              user: this._user,
+            });
+          },
+          error: (err) => {
+            this._toastr.error('Não foi possível autenticar o usuário!');
+          },
+        });
+
+      return;
+    }
+
     this.AutenticateEmitter.emit({
       isNewUser: this._user ? false : true,
       user: this._user ?? null,

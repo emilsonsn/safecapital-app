@@ -16,27 +16,21 @@
   <mat-divider class="my-3"></mat-divider>
 
   <div class="mb-2">
-    <span>Como este é seu primeiro acesso é necessário aceitar os termos e alterar a senha.</span>
+    <span>Como este é seu primeiro acesso é necessário aceitar os termos.</span>
   </div>
 
   <form [formGroup]="form">
-    <div class="row">
-      <div class="col-md-6 col-12 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>Senha</mat-label>
-          <input type="password" formControlName="password" matInput title="Senha" required />
-        </mat-form-field>
-      </div>
-      <div class="col-md-6 col-12 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>Confirmação de Senha</mat-label>
-          <input type="password" [(ngModel)]="confirm_password" [ngModelOptions]="{standalone: true}" matInput
-            title="Confirmação de Senha" required />
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-checkbox color="primary" formControlName="accept_terms">Eu li e aceito os Termos de Uso e a Política de Privacidade.</mat-checkbox>
-      </div>
+    <div class="d-flex flex-md-row flex-column gap-md-4 gap-1">
+      <a class="link">
+        Termos de Uso
+      </a>
+      <a class="link">
+        Política de Privacidade
+      </a>
+    </div>
+    <div class="mt-2">
+      <mat-checkbox color="primary" formControlName="accept_terms">Eu li e aceito os Termos de Uso e a Política de
+        Privacidade.</mat-checkbox>
     </div>
   </form>
 </mat-dialog-content>

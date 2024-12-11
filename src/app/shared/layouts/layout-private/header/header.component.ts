@@ -44,7 +44,11 @@ export class HeaderComponent implements OnInit {
       this.activeLabel = title;
     })
 
-    this._sessionService.getUserFromBack().subscribe();
+    this._sessionQuery.user$.subscribe((user) => {
+      if(!user) {
+        this._sessionService.getUserFromBack().subscribe();
+      }
+    });
 
   }
 

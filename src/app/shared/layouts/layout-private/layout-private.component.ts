@@ -82,7 +82,7 @@ export class LayoutPrivateComponent {
     {
       label: 'Configurações',
       icon: 'fa-solid fa-gear',
-      route: '/painel/settings'
+      route: '/painel/settings',
     },
   ];
 
@@ -97,8 +97,8 @@ export class LayoutPrivateComponent {
     private readonly _userService: UserService,
     private readonly _sessionService: SessionService,
     private readonly _sessionQuery: SessionQuery,
-    private readonly _dialog : MatDialog,
-    private readonly _toastr : ToastrService,
+    private readonly _dialog: MatDialog,
+    private readonly _toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -110,10 +110,9 @@ export class LayoutPrivateComponent {
       if (user) {
         this.user = user;
 
-        if (user?.role == 'Admin' ) {
+        if (user?.role == 'Admin') {
           this.permitedMenuItem = this.menuItem;
-        }
-        else if (user?.role == 'Manager') {
+        } else if (user?.role == 'Manager') {
           this.permitedMenuItem = this.menuItem.filter(
             (item) =>
               item.label == 'Home' ||
@@ -121,8 +120,7 @@ export class LayoutPrivateComponent {
               item.label == 'Chamados' ||
               item.label == 'Parceiros'
           );
-        }
-        else if (user?.role == 'Client') {
+        } else if (user?.role == 'Client') {
           this.permitedMenuItem = this.menuItem.filter(
             (item) =>
               item.label == 'Home' ||
@@ -130,13 +128,13 @@ export class LayoutPrivateComponent {
               item.label == 'Chamados'
           );
         }
+
+        // PRIMEIRO ACESSO
+        if (!user.terms) {
+          this.openFirstAccessDialog();
+        }
       }
     });
-
-    // PRIMEIRO ACESSO
-    // if(true) {
-    //   this.openFirstAccessDialog();
-    // }
   }
 
   ngOnDestroy(): void {
@@ -169,5 +167,4 @@ export class LayoutPrivateComponent {
         },
       });
   }
-
 }

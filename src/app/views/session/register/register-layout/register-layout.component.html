@@ -1,12 +1,12 @@
 <div id="template">
-  <div id="leftSideTemplate">
-    <div id="leftSideContent">
-      <ng-content></ng-content>
-    </div>
-  </div>
   <div id="rightSideTemplate" class="d-md-flex d-none">
     <div id="rightSideContent">
       <ng-lottie width="500px" containerClass="moving-box" [options]="options" />
+    </div>
+  </div>
+  <div id="leftSideTemplate">
+    <div id="leftSideContent">
+      <ng-content></ng-content>
     </div>
   </div>
 </div>
