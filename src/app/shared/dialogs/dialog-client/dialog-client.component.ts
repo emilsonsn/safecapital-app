@@ -23,7 +23,6 @@ import { distinctUntilChanged, finalize, map, ReplaySubject } from 'rxjs';
   styleUrl: './dialog-client.component.scss',
 })
 export class DialogClientComponent {
-
   // Utils
   public utils = Utils;
   public isNewClient: boolean = true;
@@ -31,7 +30,7 @@ export class DialogClientComponent {
   protected myUser: User;
   protected canEdit: boolean = true;
   public loading: boolean = false;
-  protected tabIndex : number = 0;
+  protected tabIndex: number = 0;
   protected habilitateCondominumFee = false;
 
   // Form
@@ -112,10 +111,9 @@ export class DialogClientComponent {
         this.form.disable();
       }
 
-      if(this._data.client.condominium_fee > 0) {
+      if (this._data.client.condominium_fee > 0) {
         this.habilitateCondominumFee = true;
       }
-
     }
 
     // CEP
@@ -146,25 +144,23 @@ export class DialogClientComponent {
 
     // Regras
     this.form.valueChanges.pipe(distinctUntilChanged()).subscribe((res) => {
-      // (somatório * 12 * 0.1) [ 10% do valor total do ano]
-      if (res?.rental_value || res?.condominium_fee || res?.property_tax) {
-        const total =
-          +res?.rental_value + +res?.condominium_fee + +res.property_tax;
+      const rentalValue = res?.rental_value ? +res.rental_value : 0;
+      const condominiumFee = res?.condominium_fee ? +res.condominium_fee : 0;
+      const propertyTax = res?.property_tax ? +res.property_tax : 0;
 
-        const newPolicyValue = total * 12 * 0.1;
+      const total = rentalValue + condominiumFee + propertyTax;
+      const newPolicyValue = total * 12 * 0.1;
 
-        if (this.form.get('policy_value')?.value !== total) {
-          this.form
-            .get('policy_value')
-            ?.patchValue(newPolicyValue, { emitEvent: false });
-        }
+      if (this.form.get('policy_value')?.value !== newPolicyValue) {
+        this.form
+          .get('policy_value')
+          ?.patchValue(newPolicyValue, { emitEvent: false });
       }
     });
 
-    if(this.habilitateCondominumFee) {
+    if (this.habilitateCondominumFee) {
       this.form.get('condominium_fee').enable();
-    }
-    else {
+    } else {
       this.form.get('condominium_fee').disable();
     }
   }
@@ -310,12 +306,11 @@ export class DialogClientComponent {
   }
 
   protected toggleCondiminiumFee() {
-    if(this.form.get('condominium_fee').enabled) {
+    if (this.form.get('condominium_fee').enabled) {
       this.form.get('condominium_fee').patchValue(0);
       this.form.get('condominium_fee').disable();
-      this.form.get('condominium_fee').setValidators(null);
-    }
-    else {
+      this.form.get('condominium_fee').setValidators([]);
+    } else {
       this.form.get('condominium_fee').enable();
       this.form.get('condominium_fee').setValidators(Validators.required);
     }
