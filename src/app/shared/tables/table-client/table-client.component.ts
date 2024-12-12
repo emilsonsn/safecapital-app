@@ -123,7 +123,7 @@ export class TableClientComponent {
     this._initOrStopLoading();
 
     this._clientService
-      .getClients(this.pageControl, this.filters)
+      .getList(this.pageControl, this.filters)
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {

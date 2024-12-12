@@ -38,28 +38,12 @@
               {{ client?.name }}
             </div>
           </td>
-
           <td>
-            <div class="text-center">
-              {{ client?.phone | phoneMask }}
+            <div class="d-flex align-items-center gap-2" style="white-space: nowrap">
+              {{ client?.name }}
             </div>
           </td>
-          <td>
-            <div class="text-center">
-              {{ client?.email }}
-            </div>
-          </td>
-          <td>
-            <div class="text-center">
-              {{ client?.cpf | cpfCnpjMask }}
-            </div>
-          </td>
-          <td>
-            <div class="status" [ngClass]="client?.status?.toLowerCase()">
-              {{ client?.status | status }}
-            </div>
-          </td>
-          <td>
+          <!-- <td>
             <div class="d-flex justify-content-center">
 
               <div matRipple class="buttonTemplate" (click)="onClientClick.emit(client)">
@@ -67,7 +51,7 @@
               </div>
 
             </div>
-          </td>
+          </td> -->
         </tr>
         }
         }

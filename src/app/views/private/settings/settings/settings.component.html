@@ -1,10 +1,10 @@
-@if(loading) {
-<div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
-  <mat-spinner></mat-spinner>
-</div>
-}
 
 <app-header-page-component [hasFilter]="false">
+  @if(loading) {
+  <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
 
   <div id="searchInput">
     <app-search-input (onSearchInputChanged)="handleSearchTerm($event)">

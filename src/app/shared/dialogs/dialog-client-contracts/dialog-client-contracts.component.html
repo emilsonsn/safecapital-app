@@ -7,7 +7,8 @@
   }
 
   <div class="d-flex align-items-center justify-content-between">
-    <span class="fw-bold fs-5">{{"Cliente " + (_data?.client?.name ?? '-')}}</span>
+    <span class="fw-bold fs-5">{{"Cliente " + (_data?.client?.name ?? '-') + " | ID : " + (_data?.client?.id ??
+      '-')}}</span>
     <div matRipple class="close" (click)="onCancel()">
       <i class="fa-solid fa-close"></i>
     </div>
@@ -15,17 +16,48 @@
 
   <mat-divider class="my-3"></mat-divider>
 
-  <div id="componentTable" class="col-12 mt-4">
-    <app-table-client-contracts>
-
-    </app-table-client-contracts>
-  </div>
+  <form [formGroup]="form">
+    <div class="mt-3">
+      <span class="fw-bold fs-6 mb-2">Anexos</span>
+      <div id="files">
+        @for(img of filesToSend; track img) {
+        <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
+          <div class="file" matTooltip="{{img.file.name}}" (click)="openFileInAnotherTab(img)">
+            <div class="delete">
+              <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
+            </div>
+            @if(img.preview) {
+            <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
+            }
+            @else {
+            <i class="fa-solid fa-file"></i>
+            }
+          </div>
+        </div>
+        }
+      </div>
+      @if(!form.disabled) {
+      <div matRipple id="inputFileAdd" class="mt-2">
+        <div id="text">
+          <i class="fa-solid fa-plus"></i>
+          <span>Adicionar Arquivo</span>
+        </div>
+        <input type="file" (change)="onFileSelected($event)" [multiple]="false" title=" " />
+      </div>
+      }
+    </div>
+  </form>
 
 </mat-dialog-content>
 <mat-dialog-actions>
   <div class="container">
     <div id="actionsDialog" class="flex-sm-row flex-column">
       <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="submit" class="button primary" (click)="onSubmit()">
+            Confirmar
+          </button>
+        </div>
         <div class="col-auto">
           <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Fechar</button>
         </div>

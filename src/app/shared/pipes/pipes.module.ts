@@ -6,6 +6,7 @@ import { PhoneMaskPipe } from './phone-mask.pipe';
 import { CpfCnpjMaskPipe } from './cpf-cnpj-mask.pipe';
 import { SolicitationStatusPipe } from './solicitation-status.pipe';
 import { CompanyPositionPipe } from './company-position.pipe';
+import { UserRolePipe } from './user-role.pipe';
 
 const pipes = [
   PaymentFormPipe,
@@ -13,13 +14,13 @@ const pipes = [
   PhoneMaskPipe,
   CpfCnpjMaskPipe,
   SolicitationStatusPipe,
-  CompanyPositionPipe
+  CompanyPositionPipe,
+  UserRolePipe
 ];
 
 @NgModule({
   declarations: [
     pipes,
-    CompanyPositionPipe
   ],
   imports: [
     CommonModule

@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class PhoneMaskPipe implements PipeTransform {
 
-  transform(value: number): string {
+  transform(value): string {
     if (!value) return '';
 
     let cleaned = value.toString().replace(/\D/g, '');

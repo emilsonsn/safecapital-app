@@ -8,15 +8,24 @@ export interface Client {
   address: string;
   city: string;
   state: string;
-  status : ClientStatus;
-  contracts? : ClientContract[];
+  status: ClientStatus;
+  rental_value : number;
+  property_tax : number;
+  condominium_fee : number;
+  policy_value : number;
+  contracts?: ClientContract[];
   created_at?: Date;
   updated_at?: Date;
 }
 
 export interface ClientContract {
   category: string;
-  attachment : File | string;
+  attachment: File | string;
+}
+
+export interface ClientPolicyDocument {
+  client_id: number;
+  file: File | string;
 }
 
 export enum ClientStatus {

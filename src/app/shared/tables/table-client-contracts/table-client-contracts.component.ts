@@ -39,41 +39,23 @@ export class TableClientContractsComponent {
 
   public columns = [
     {
-      slug: 'name',
+      slug: 'contract',
       order: true,
-      title: 'Nome',
+      title: 'Contrato',
       align: 'start',
     },
     {
-      slug: 'phone',
+      slug: 'created_at',
       order: true,
-      title: 'Whatsapp',
-      align: 'justify-content-center',
+      title: 'Criado em',
+      align: 'start',
     },
-    {
-      slug: 'Telefone',
-      order: true,
-      title: 'E-mail',
-      align: 'justify-content-center',
-    },
-    {
-      slug: 'cpf',
-      order: true,
-      title: 'CPF',
-      align: 'justify-content-center',
-    },
-    {
-      slug: 'status',
-      order: true,
-      title: 'Status',
-      align: 'justify-content-center',
-    },
-    {
-      slug: '',
-      order: true,
-      title: 'Ações',
-      align: 'justify-content-center',
-    },
+    // {
+    //   slug: '',
+    //   order: true,
+    //   title: 'Ações',
+    //   align: 'justify-content-center',
+    // },
   ];
 
   public pageControl: PageControl = {
@@ -123,7 +105,7 @@ export class TableClientContractsComponent {
     this._initOrStopLoading();
 
     this._clientService
-      .getClients(this.pageControl, this.filters)
+      .getList(this.pageControl, this.filters)
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {

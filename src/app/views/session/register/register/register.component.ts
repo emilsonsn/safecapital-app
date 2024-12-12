@@ -50,7 +50,10 @@ export class RegisterComponent {
     });
 
     if (this.userData) {
-      this.form.patchValue(this.userData);
+      // this.form.patchValue(this.userData);
+
+      this.searchForUser();
+
     }
   }
 
@@ -211,6 +214,22 @@ export class RegisterComponent {
   }
 
   // Getters
+  private searchForUser() {
+    this._initOrStopLoading();
+
+    this._userService.getUserById(this.userData.id)
+      .pipe(finalize(() => {
+        this._initOrStopLoading();
+      }))
+      .subscribe({
+        next: (res) => {
+          this.form.patchValue(res.data);
+        },
+        error : (err) => {
+          this._toastr.error(err.error.error);
+        }
+      })
+  }
 
   // Utils
   private _initOrStopLoading(): void {

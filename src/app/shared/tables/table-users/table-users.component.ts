@@ -36,12 +36,6 @@ export class TableUserComponent {
       align: "start",
     },
     {
-      slug: "role",
-      order: true,
-      title: "Cargo",
-      align: "justify-content-center",
-    },
-    {
       slug: "phone",
       order: true,
       title: "Telefone",
@@ -51,6 +45,12 @@ export class TableUserComponent {
       slug: "email",
       order: true,
       title: "E-mail",
+      align: "justify-content-center",
+    },
+    {
+      slug: "role",
+      order: true,
+      title: "Cargo",
       align: "justify-content-center",
     },
     {

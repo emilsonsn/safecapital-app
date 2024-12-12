@@ -123,7 +123,7 @@ export class ClientComponent {
   protected deleteClient(id: number) {
     this._initOrStopLoading();
     this._clientService
-      .deleteClient(id)
+      .delete(id)
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {

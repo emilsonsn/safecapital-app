@@ -23,17 +23,21 @@ import { distinctUntilChanged, finalize, map, ReplaySubject } from 'rxjs';
   styleUrl: './dialog-client.component.scss',
 })
 export class DialogClientComponent {
+
+  // Utils
+  public utils = Utils;
   public isNewClient: boolean = true;
   public title: string = 'Novo cliente';
   protected myUser: User;
   protected canEdit: boolean = true;
+  public loading: boolean = false;
+  protected tabIndex : number = 0;
+  protected habilitateCondominumFee = false;
 
+  // Form
   public form: FormGroup;
 
-  public loading: boolean = false;
-
-  public states: string[] = Object.values(Estados);
-
+  // Selects
   public statusSelect: { label: string; value: string }[] = [
     {
       label: 'Aprovado',
@@ -54,7 +58,7 @@ export class DialogClientComponent {
   public cityFilterCtrl: FormControl<any> = new FormControl<string>('');
   public filteredCitys: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
-  public utils = Utils;
+  public states: string[] = Object.values(Estados);
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -87,10 +91,11 @@ export class DialogClientComponent {
       city: [null, [Validators.required]],
       state: [null, [Validators.required]],
       number: [null, [Validators.required]],
+      complement: [null],
 
       // Financeiro
       rental_value: [null, [Validators.required]], // valor do aluguel
-      condominium_fee: [null, [Validators.required]], // condominio
+      condominium_fee: [null], // condominio
       property_tax: [null, [Validators.required]], // iptu
       policy_value: [0, [Validators.required]], // valor da apólice
     });
@@ -106,6 +111,11 @@ export class DialogClientComponent {
       if (this.myUser?.role == 'Client') {
         this.form.disable();
       }
+
+      if(this._data.client.condominium_fee > 0) {
+        this.habilitateCondominumFee = true;
+      }
+
     }
 
     // CEP
@@ -150,6 +160,13 @@ export class DialogClientComponent {
         }
       }
     });
+
+    if(this.habilitateCondominumFee) {
+      this.form.get('condominium_fee').enable();
+    }
+    else {
+      this.form.get('condominium_fee').disable();
+    }
   }
 
   public onSubmit(form: FormGroup): void {
@@ -175,7 +192,7 @@ export class DialogClientComponent {
     this._initOrStopLoading();
 
     this._clientService
-      .postClient(this.prepareFormData(this.form))
+      .post(this.prepareFormData(this.form))
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {
@@ -194,7 +211,7 @@ export class DialogClientComponent {
     this._initOrStopLoading();
 
     this._clientService
-      .patchClient(id, this.prepareFormData(this.form))
+      .patch(id, this.prepareFormData(this.form))
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {
@@ -289,6 +306,18 @@ export class DialogClientComponent {
           this.form.get('state').patchValue(res.uf);
         }
       });
+    }
+  }
+
+  protected toggleCondiminiumFee() {
+    if(this.form.get('condominium_fee').enabled) {
+      this.form.get('condominium_fee').patchValue(0);
+      this.form.get('condominium_fee').disable();
+      this.form.get('condominium_fee').setValidators(null);
+    }
+    else {
+      this.form.get('condominium_fee').enable();
+      this.form.get('condominium_fee').setValidators(Validators.required);
     }
   }
 
