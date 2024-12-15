@@ -1,11 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SettingsComponent } from './settings/settings.component';
+import { CreditComponent } from './credit/credit.component';
+import { TaxComponent } from './tax/tax.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: SettingsComponent
+    path: 'credit',
+    component: CreditComponent,
+  },
+  {
+    path: 'tax',
+    component: TaxComponent,
   },
 ];
 

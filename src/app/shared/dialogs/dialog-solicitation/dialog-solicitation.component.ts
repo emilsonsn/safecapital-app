@@ -37,7 +37,7 @@ export class DialogSolicitationComponent {
 
   ngOnInit(): void {
     this.form = this._fb.group({
-      contract_number : [null, [Validators.required]],
+      contract_number : [null],
       subject : [null, [Validators.required]],
       status : [this._data?.solicitation?.status ?? 'Received'],
     });

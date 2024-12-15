@@ -75,6 +75,11 @@ export class LayoutPrivateComponent {
       route: '/painel/solicitation',
     },
     {
+      label: 'Inadimplência',
+      icon: 'fa-solid fa-circle-exclamation',
+      route: '/painel/defaulter',
+    },
+    {
       label: 'Usuários',
       icon: 'fa-solid fa-users',
       route: '/painel/users',
@@ -83,6 +88,19 @@ export class LayoutPrivateComponent {
       label: 'Configurações',
       icon: 'fa-solid fa-gear',
       route: '/painel/settings',
+      active: false,
+      children: [
+        {
+          label: 'Taxa',
+          icon: 'fa-solid fa-money-bill',
+          route: '/painel/settings/tax',
+        },
+        {
+          label: 'Crédito',
+          icon: 'fa-solid fa-sliders',
+          route: '/painel/settings/credit',
+        },
+      ],
     },
   ];
 

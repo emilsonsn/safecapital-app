@@ -1,4 +1,13 @@
-import { Component, Inject } from '@angular/core';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { CurrencyPipe } from '@angular/common';
+import {
+  afterNextRender,
+  Component,
+  inject,
+  Inject,
+  Injector,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -6,7 +15,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Client } from '@models/client';
+import { Client, PaymentFormEnum } from '@models/client';
 import { User } from '@models/user';
 import { Estados } from '@models/utils';
 import { ClientService } from '@services/client.service';
@@ -21,6 +30,7 @@ import { distinctUntilChanged, finalize, map, ReplaySubject } from 'rxjs';
   selector: 'app-dialog-client',
   templateUrl: './dialog-client.component.html',
   styleUrl: './dialog-client.component.scss',
+  providers: [CurrencyPipe],
 })
 export class DialogClientComponent {
   // Utils
@@ -52,6 +62,17 @@ export class DialogClientComponent {
     },
   ];
 
+  public paymentFormSelect: { label: string; value: PaymentFormEnum }[] = [
+    {
+      label: 'À Vista',
+      value: PaymentFormEnum.INCASH,
+    },
+    {
+      label: 'Faturado',
+      value: PaymentFormEnum.INVOICED,
+    },
+  ];
+
   public citys: string[] = [];
   public cityCtrl: FormControl<any> = new FormControl<any>(null);
   public cityFilterCtrl: FormControl<any> = new FormControl<string>('');
@@ -67,6 +88,7 @@ export class DialogClientComponent {
     private readonly _toastr: ToastrService,
     private readonly _utilsService: UtilsService,
     private readonly _clientService: ClientService,
+    private readonly _currencyPipe: CurrencyPipe,
     protected readonly _sessionQuery: SessionQuery
   ) {}
 
@@ -82,6 +104,7 @@ export class DialogClientComponent {
       cpf: [null, [Validators.required]],
       phone: [null, [Validators.required]],
       email: [null, [Validators.required]],
+      description: [null, [Validators.required]],
 
       // Endereço
       cep: [null, [Validators.required]],
@@ -97,6 +120,7 @@ export class DialogClientComponent {
       condominium_fee: [null], // condominio
       property_tax: [null, [Validators.required]], // iptu
       policy_value: [0, [Validators.required]], // valor da apólice
+      payment_form: [null, [Validators.required]], // valor da apólice
     });
 
     this.form.get('policy_value').disable();
@@ -316,6 +340,31 @@ export class DialogClientComponent {
     }
   }
 
+  protected getPolicyDescription() {
+    const policyValue = this.form?.get('policy_value')?.value;
+    const installmentValue = policyValue / 12;
+
+    if (this.form?.get('payment_form').value == PaymentFormEnum.INCASH) {
+      return this._currencyPipe.transform(
+        policyValue,
+        'BRL',
+        'symbol',
+        '1.2-2'
+      );
+    } else if (
+      this.form?.get('payment_form').value == PaymentFormEnum.INVOICED
+    ) {
+      return `12x de ${this._currencyPipe.transform(
+        installmentValue,
+        'BRL',
+        'symbol',
+        '1.2-2'
+      )}`;
+    } else {
+      return this._currencyPipe.transform(0, 'BRL', 'symbol', '1.2-2');
+    }
+  }
+
   public onCancel(): void {
     this._dialogRef.close();
   }
@@ -395,5 +444,22 @@ export class DialogClientComponent {
   public prepareFileToRemoveFromBack(fileId, index) {
     this.filesFromBack.splice(index, 1);
     this.filesToRemove.push(fileId);
+  }
+
+  // Imports
+  // TextArea
+  private _injector = inject(Injector);
+
+  @ViewChild('autosize') autosize: CdkTextareaAutosize;
+
+  triggerResize() {
+    afterNextRender(
+      () => {
+        this.autosize.resizeToFitContent(true);
+      },
+      {
+        injector: this._injector,
+      }
+    );
   }
 }

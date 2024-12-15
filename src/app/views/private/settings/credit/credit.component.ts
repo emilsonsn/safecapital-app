@@ -8,11 +8,11 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrl: './settings.component.scss',
+  selector: 'app-credit',
+  templateUrl: './credit.component.html',
+  styleUrl: './credit.component.scss',
 })
-export class SettingsComponent {
+export class CreditComponent {
   protected form: FormGroup;
   protected loading: boolean = false;
   protected searchTerm: string = '';

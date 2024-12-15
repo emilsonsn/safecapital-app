@@ -50,6 +50,14 @@ const routes: Routes = [
         }
       },
       {
+        path: 'defaulter',
+        loadChildren: () => import('./defaulter/defaulter.module').then(m => m.DefaulterModule),
+        canActivate: [permissionGuard],
+        data: {
+          page: 'defaulter'
+        }
+      },
+      {
         path: 'settings',
         loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
         canActivate: [permissionGuard],

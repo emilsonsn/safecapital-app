@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { KanbanDefaulterComponent } from './kanban-defaulter/kanban-defaulter.component';
 
 const components: any[] = [
   AccountManagerComponent,
@@ -22,6 +23,7 @@ const components: any[] = [
   KanbanComponent,
   HeaderPageComponent,
   SearchInputComponent,
+  KanbanDefaulterComponent,
 ]
 
 @NgModule({

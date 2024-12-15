@@ -33,6 +33,7 @@ import { DialogUserComponent } from './dialog-user/dialog-user.component';
 import { DialogClientContractsComponent } from './dialog-client-contracts/dialog-client-contracts.component';
 import { DialogSettingComponent } from './dialog-setting/dialog-setting.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { DialogOccurrenceComponent } from './dialog-occurrence/dialog-occurrence.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     DialogUserComponent,
     DialogClientContractsComponent,
     DialogSettingComponent,
+    DialogOccurrenceComponent,
   ],
   imports: [
     CommonModule,

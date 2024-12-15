@@ -1,0 +1,30 @@
+<form [formGroup]="form">
+  <div class="row">
+    @if(loading) {
+    <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+      <mat-spinner></mat-spinner>
+    </div>
+    }
+
+    <div class="col-md-6 mb-3">
+      <mat-form-field appearance="outline" class="bgWhite">
+        <mat-label>Porcentagem</mat-label>
+        <input matInput type="text" formControlName="percentage">
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <mat-form-field appearance="outline" class="bgWhite">
+        <mat-label>Taxa</mat-label>
+        <input matInput type="text" formControlName="tax">
+      </mat-form-field>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <div class="col-auto">
+        <button matRipple id="submit" class="button primary" (click)="onSubmit()">Salvar</button>
+      </div>
+    </div>
+
+  </div>
+</form>

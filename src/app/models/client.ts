@@ -13,6 +13,7 @@ export interface Client {
   property_tax : number;
   condominium_fee : number;
   policy_value : number;
+  payment_form : PaymentFormEnum;
   contracts?: ClientContract[];
   created_at?: Date;
   updated_at?: Date;
@@ -26,6 +27,11 @@ export interface ClientContract {
 export interface ClientPolicyDocument {
   client_id: number;
   file: File | string;
+}
+
+export enum PaymentFormEnum {
+  INCASH = 'INCASH',
+  INVOICED = 'INVOICED',
 }
 
 export enum ClientStatus {

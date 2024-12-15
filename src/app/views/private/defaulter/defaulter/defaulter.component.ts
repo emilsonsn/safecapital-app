@@ -18,18 +18,24 @@ import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
 import { KanbanSolicitationStatus } from '@shared/components/kanban/kanban.component';
 import { DialogSolicitationComponent } from '@shared/dialogs/dialog-solicitation/dialog-solicitation.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { SolicitationChatComponent } from '../solicitation-chat/solicitation-chat.component';
 import { SolicitationService } from '@services/solicitation.service';
 import { Order, PageControl } from '@models/application';
-import { debounceTime, finalize, map, ReplaySubject, Subject, takeUntil } from 'rxjs';
+import {
+  debounceTime,
+  finalize,
+  map,
+  ReplaySubject,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 import { UserService } from '@services/user.service';
 
 @Component({
-  selector: 'app-solicitation',
-  templateUrl: './solicitation.component.html',
-  styleUrl: './solicitation.component.scss',
+  selector: 'app-defaulter',
+  templateUrl: './defaulter.component.html',
+  styleUrl: './defaulter.component.scss',
 })
-export class SolicitationComponent {
+export class DefaulterComponent {
   protected _onDestroy = new Subject<void>();
   public filters;
   public loading: boolean = false;
@@ -99,7 +105,7 @@ export class SolicitationComponent {
     private readonly _sessionQuery: SessionQuery,
     private cdr: ChangeDetectorRef,
     private readonly _matBottomSheet: MatBottomSheet,
-    private readonly _userService : UserService,
+    private readonly _userService: UserService
   ) {
     this._headerService.setTitle('Chamados');
     this._headerService.setSubTitle('');
@@ -123,7 +129,7 @@ export class SolicitationComponent {
     });
 
     this.formFilters = this._fb.group({
-      user_id : ['']
+      user_id: [''],
     });
 
     this.getSolicitationData();
@@ -147,20 +153,20 @@ export class SolicitationComponent {
       name: 'Em Análise',
       color: '#FF00FF',
     },
-    // {
-    //   id: 3,
-    //   slug: SolicitationStatusEnum.Awaiting,
-    //   name: 'Esperando imobiliária',
-    //   color: '#FFFFFF',
-    // },
-    // {
-    //   id: 4,
-    //   slug: SolicitationStatusEnum.PaymentProvisioned,
-    //   name: 'Pagamento provisionado',
-    //   color: '#FF00FF',
-    // },
     {
       id: 3,
+      slug: SolicitationStatusEnum.Awaiting,
+      name: 'Esperando imobiliária',
+      color: '#FFFFFF',
+    },
+    {
+      id: 4,
+      slug: SolicitationStatusEnum.PaymentProvisioned,
+      name: 'Pagamento provisionado',
+      color: '#FF00FF',
+    },
+    {
+      id: 5,
       slug: SolicitationStatusEnum.Completed,
       name: 'Finalizado',
       color: '#FF00FF',
@@ -177,7 +183,7 @@ export class SolicitationComponent {
     this._solicitationService
       .getList(this.pageControl, {
         ...this.filters,
-        searchTerm : this.searchTerm
+        searchTerm: this.searchTerm,
       })
       .pipe(
         finalize(() => {
@@ -232,20 +238,19 @@ export class SolicitationComponent {
   }
 
   protected openSolicitationChat(solicitation: Solicitation): void {
-    this._matBottomSheet.open(SolicitationChatComponent, {
-      data: { solicitation },
-      disableClose: true,
-      hasBackdrop: false,
-    });
+    console.log("não haverá chat para inadimplente");
   }
 
   protected taskMoved(solicitation: Solicitation) {
     this._initOrStopLoading();
 
-    this._solicitationService.patch(solicitation.id, solicitation)
-      .pipe(finalize(() => {
-        this._initOrStopLoading();
-      }))
+    this._solicitationService
+      .patch(solicitation.id, solicitation)
+      .pipe(
+        finalize(() => {
+          this._initOrStopLoading();
+        })
+      )
       .subscribe({
         next: (res) => {
           // O kanban atualiza visualmente, sem necessidade de fazer search
@@ -253,7 +258,7 @@ export class SolicitationComponent {
         error: (err) => {
           this._toastrService.error(err.error.error);
         },
-      })
+      });
   }
 
   // Filters
