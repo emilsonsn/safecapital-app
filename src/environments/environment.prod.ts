@@ -4,7 +4,7 @@ export const environment = {
   production: false,
   appName: 'safecapital App',
   home: '/painel',
-  api: 'http://plataforma.safecapitalgarantias.com.br:3001/api',
+  api: 'https://plataforma.safecapitalgarantias.com.br:3001/api',
   // // api: 'http://127.0.0.1:8000/api',
   version: require('../../package.json').version
 };
