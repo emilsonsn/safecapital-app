@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HeaderService } from '@services/header.service';
 import { SettingService } from '@services/settings.service';
+import { TaxSettingService } from '@services/tax-setting.service';
 import { DialogSettingComponent } from '@shared/dialogs/dialog-setting/dialog-setting.component';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
@@ -18,7 +19,7 @@ export class TaxComponent {
 
   constructor(
     private readonly _headerService: HeaderService,
-    private readonly _settingsService: SettingService,
+    private readonly _taxSettingService: TaxSettingService,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
     private readonly _dialog: MatDialog
@@ -43,7 +44,7 @@ export class TaxComponent {
   protected getSettings() {
     this._initOrStopLoading();
 
-    this._settingsService
+    this._taxSettingService
       .getList()
       .pipe(
         finalize(() => {
