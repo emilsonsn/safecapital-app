@@ -217,7 +217,9 @@ export class RegisterComponent {
   private searchForUser() {
     this._initOrStopLoading();
 
-    this._userService.getUserById(this.userData.id)
+
+
+    this._userService.getUser()
       .pipe(finalize(() => {
         this._initOrStopLoading();
       }))

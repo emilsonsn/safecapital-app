@@ -5,13 +5,13 @@
   height: 100%;
   display: flex;
 
-  #leftSideTemplate {
+  #rightSideTemplate {
     width: 50%;
     height: 100%;
     flex: 1;
     background-color: #162b3e;
 
-    #leftSideContent {
+    #rightSideContent {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -44,14 +44,14 @@
     }
   }
 
-  #rightSideTemplate {
+  #leftSideTemplate {
     width: 50%;
     height: 100%;
     flex: 1;
-    background-color: #85b5b5;
+    background-color: #162b3e;
     overflow: hidden;
 
-    #rightSideContent {
+    #leftSideContent {
       width: 100%;
       display: flex;
       justify-content: center;
