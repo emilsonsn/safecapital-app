@@ -29,25 +29,25 @@
           </mat-form-field>
         </div>
         @if(user?.role == 'Admin' || user?.role == 'Manager') {
-          <div class="col-md-4 mb-md-0 mb-2">
-            <mat-form-field>
-              <mat-select formControlName="user_id" placeholder="Parceiro">
-                <mat-option>
-                  <ngx-mat-select-search [formControl]="partnerFilterCtrl" placeholderLabel="Procure pelo usuário"
-                    i18n-placeholderLabel noEntriesFoundLabel="Usuário não encontrado" i18n-noEntriesFoundLabel>
-                  </ngx-mat-select-search>
-                </mat-option>
-                @if(formFilters?.get('user_id').value) {
-                  <mat-option [value]="''" (click)="formFilters?.get('user_id').setValue(''); updateFilters()">
-                    Limpar Filtro
-                  </mat-option>
-                }
-                <mat-option *ngFor="let user of filteredPartners | async" [value]="user.id">
-                  {{ user.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+        <div class="col-md-4 mb-md-0 mb-2">
+          <mat-form-field>
+            <mat-select formControlName="user_id" placeholder="Parceiro">
+              <mat-option>
+                <ngx-mat-select-search [formControl]="partnerFilterCtrl" placeholderLabel="Procure pelo usuário"
+                  i18n-placeholderLabel noEntriesFoundLabel="Usuário não encontrado" i18n-noEntriesFoundLabel>
+                </ngx-mat-select-search>
+              </mat-option>
+              @if(formFilters?.get('user_id').value) {
+              <mat-option [value]="''" (click)="formFilters?.get('user_id').setValue(''); updateFilters()">
+                Limpar Filtro
+              </mat-option>
+              }
+              <mat-option *ngFor="let user of filteredPartners | async" [value]="user.id">
+                {{ user.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
         }
 
       </div>
@@ -68,6 +68,7 @@
 
 <div id="componentTable" class="col-12 mt-4">
   <app-table-client [loading]="loading" [filters]="filters" [searchTerm]="searchTerm"
-    (onClientClick)="openClientDialog($event)" (onContractsClientClick)="openContractClientDialog($event)" (onDeleteClientClick)="onDeleteConfirm($event)">
+    (onClientClick)="openClientDialog($event)" (onClientApproveClick)="openClientApproveDialog($event)"
+    (onClientContractsClick)="openClientContractDialog($event)" (onDeleteClientClick)="onDeleteConfirm($event)">
   </app-table-client>
 </div>

@@ -34,6 +34,7 @@ import { DialogClientContractsComponent } from './dialog-client-contracts/dialog
 import { DialogSettingComponent } from './dialog-setting/dialog-setting.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DialogOccurrenceComponent } from './dialog-occurrence/dialog-occurrence.component';
+import { DialogClientApproveComponent } from './dialog-client-approve/dialog-client-approve.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { DialogOccurrenceComponent } from './dialog-occurrence/dialog-occurrence
     DialogClientContractsComponent,
     DialogSettingComponent,
     DialogOccurrenceComponent,
+    DialogClientApproveComponent,
   ],
   imports: [
     CommonModule,

@@ -16,6 +16,7 @@ import { TablePartnersComponent } from './table-partners/table-partners.componen
 import { CardsSolicitationComponent } from './cards-solicitation/cards-solicitation.component';
 import { TableClientContractsComponent } from './table-client-contracts/table-client-contracts.component';
 import { TableSettingsComponent } from './table-settings/table-settings.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const tables = [
   TableClientComponent,
@@ -34,6 +35,7 @@ const tables = [
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
+    MatTooltipModule,
     MatIconButton,
     MatMenuModule,
     MatButtonModule,

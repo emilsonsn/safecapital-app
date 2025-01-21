@@ -19,6 +19,7 @@ import { User } from '@models/user';
 import { UserService } from '@services/user.service';
 import { SessionQuery } from '@store/session.query';
 import { DialogClientContractsComponent } from '@shared/dialogs/dialog-client-contracts/dialog-client-contracts.component';
+import { DialogClientApproveComponent } from '@shared/dialogs/dialog-client-approve/dialog-client-approve.component';
 
 @Component({
   selector: 'app-client',
@@ -60,7 +61,7 @@ export class ClientComponent {
       this.user = user;
     });
 
-    this.getUsersFromBack();
+    if(this.user?.role == 'Admin' || this.user?.role == 'Manager') this.getUsersFromBack();
   }
 
   ngOnInit(): void {
@@ -89,7 +90,26 @@ export class ClientComponent {
       });
   }
 
-  protected openContractClientDialog(client?: Client) {
+  protected openClientApproveDialog(client?: Client) {
+    this._dialog
+      .open(DialogClientApproveComponent, {
+        data: { client },
+        width: '80%',
+        maxWidth: '850px',
+        maxHeight: '90%',
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+          }, 200);
+        }
+      });
+  }
+
+  protected openClientContractDialog(client?: Client) {
     this._dialog
       .open(DialogClientContractsComponent, {
         data: { client },

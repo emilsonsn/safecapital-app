@@ -1,0 +1,6 @@
+@if(role == 'Admin' || role == 'Manager') {
+  <app-defaulter></app-defaulter>
+}
+@else if(role == 'Client') {
+  <app-defaulter-client></app-defaulter-client>
+}

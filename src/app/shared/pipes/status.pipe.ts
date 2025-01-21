@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { RequestStatus } from '@models/request';
+import { ClientStatus } from '@models/client';
+import { SolicitationCategoryEnum, SolicitationStatusEnum } from '@models/solicitation';
 import { Status } from '@models/status';
 import { StatusUser } from '@models/user';
 
@@ -8,44 +9,59 @@ import { StatusUser } from '@models/user';
 })
 export class StatusPipe implements PipeTransform {
 
-  transform(value: string | Status | RequestStatus | StatusUser) {
+  transform(value) {
     switch (value) {
-      case Status.Pending:
+      case StatusUser.Pending.toString():
+      case Status.Pending.toString():
         return 'Pendente';
-      case Status.Resolved:
+      case Status.Resolved.toString():
         return 'Resolvido';
-      case Status.RequestFinance:
+      case Status.RequestFinance.toString():
         return 'Solicitado ao financeiro';
-      case Status.RequestManager:
+      case Status.RequestManager.toString():
         return 'Solicitado ao gerente'
-      case Status.Finished:
+      case Status.Finished.toString():
         return 'Finalizado';
-      case Status.Rejected:
+      case StatusUser.Refused.toString():
+      case Status.Rejected.toString():
         return 'Rejeitado';
-      case StatusUser.Return:
-        return 'Retorno';        
-      case Status.Payment:
+      case StatusUser.Return.toString():
+        return 'Retorno';
+      case Status.Payment.toString():
         return 'Pagamento';
-      case Status.Reimbursement:
+      case Status.Reimbursement.toString():
         return 'Reembolso';
-      case 'Accepted':
+      case StatusUser.Accepted.toString():
+      case ClientStatus.Accepted.toString():
         return 'Aceito';
-      case 'Refused':
-        return 'Rejeitado';
-      case 'Received':
+      case SolicitationStatusEnum.Received.toString():
         return 'Recebido';
-      case 'UnderAnalysis':
+      case SolicitationStatusEnum.UnderAnalysis.toString():
         return 'Em análise';
-      case 'Awaiting':
+      case SolicitationStatusEnum.Awaiting.toString():
         return 'Aguardando';
-      case 'PaymentProvisioned':
+      case SolicitationStatusEnum.PaymentProvisioned.toString():
         return 'Pagamento provisionado';
-      case 'Completed':
+      case SolicitationStatusEnum.Completed.toString():
         return 'Finalizado';
-      case 'Approved':
+      case ClientStatus.Approved.toString():
         return 'Aprovado';
-      case 'Disapproved':
+      case ClientStatus.Disapproved.toString():
         return 'Reprovado';
+      case SolicitationCategoryEnum.CommissionBonus.toString():
+        return 'Comissão e Bônus';
+      case SolicitationCategoryEnum.Marketing.toString():
+        return 'Marketing';
+      case SolicitationCategoryEnum.Legal.toString():
+        return 'Jurídico';
+      case SolicitationCategoryEnum.Default.toString():
+        return 'Inadimplência';
+      case SolicitationCategoryEnum.SuggestionsImprovements.toString():
+        return 'Sugestões/Melhorias';
+      case SolicitationCategoryEnum.WarrantyUpdate.toString():
+        return 'Atualização da Garantia';
+      case SolicitationCategoryEnum.ProposalContract.toString():
+        return 'Proposta ou Contrato';
 
       default:
         return 'Não encontrado';

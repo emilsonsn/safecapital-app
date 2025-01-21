@@ -15,9 +15,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { DefaulterManagerComponent } from './defaulter-manager/defaulter-manager.component';
+import { DefaulterClientComponent } from './defaulter-client/defaulter-client.component';
 
 @NgModule({
-  declarations: [DefaulterComponent],
+  declarations: [DefaulterComponent, DefaulterManagerComponent, DefaulterClientComponent],
   imports: [
     CommonModule,
     DefaulterRoutingModule,

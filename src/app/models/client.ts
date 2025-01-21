@@ -38,4 +38,6 @@ export enum ClientStatus {
   Approved = 'Approved',
   Pending = 'Pending',
   Disapproved = 'Disapproved',
+  Accepted = 'Accepted',
+  Active = 'Active',
 }

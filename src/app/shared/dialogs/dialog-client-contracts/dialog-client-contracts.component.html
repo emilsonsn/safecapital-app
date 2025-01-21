@@ -16,37 +16,48 @@
 
   <mat-divider class="my-3"></mat-divider>
 
-  <form [formGroup]="form">
-    <div class="mt-3">
-      <span class="fw-bold fs-6 mb-2">Anexos</span>
-      <div id="files">
-        @for(img of filesToSend; track img) {
-        <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
-          <div class="file" matTooltip="{{img.file.name}}" (click)="openFileInAnotherTab(img)">
-            <div class="delete">
-              <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
+  @if (false) { <!-- Se tiver contrato, deve aparecer o form pra anexar o documento. Senão, deve aparecer a tabela de contratos do cliente -->
+    <form [formGroup]="form">
+      <div class="mt-3">
+        <span class="fw-bold fs-6 mb-2">Anexos</span>
+        <div id="files">
+          @for(img of filesToSend; track img) {
+          <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
+            <div class="file" matTooltip="{{img.file.name}}" (click)="openFileInAnotherTab(img)">
+              <div class="delete">
+                <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
+              </div>
+              @if(img.preview) {
+              <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
+              }
+              @else {
+              <i class="fa-solid fa-file"></i>
+              }
             </div>
-            @if(img.preview) {
-            <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
-            }
-            @else {
-            <i class="fa-solid fa-file"></i>
-            }
           </div>
+          }
+        </div>
+        @if(!form.disabled) {
+        <div matRipple id="inputFileAdd" class="mt-2">
+          <div id="text">
+            <i class="fa-solid fa-plus"></i>
+            <span>Adicionar Arquivo</span>
+          </div>
+          <input #filesInput type="file" (change)="onFileSelected($event)" [multiple]="false" title=" " />
         </div>
         }
       </div>
-      @if(!form.disabled) {
-      <div matRipple id="inputFileAdd" class="mt-2">
-        <div id="text">
-          <i class="fa-solid fa-plus"></i>
-          <span>Adicionar Arquivo</span>
-        </div>
-        <input type="file" (change)="onFileSelected($event)" [multiple]="false" title=" " />
+    </form>
+  }
+  @else {
+    <div class="p-2">
+      <div style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; padding: 0.5rem;">
+        <app-table-client-contracts>
+
+        </app-table-client-contracts>
       </div>
-      }
     </div>
-  </form>
+  }
 
 </mat-dialog-content>
 <mat-dialog-actions>

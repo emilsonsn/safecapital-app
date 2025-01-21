@@ -1,19 +1,13 @@
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import {
-  afterNextRender,
   Component,
-  inject,
+  ElementRef,
   Inject,
-  Injector,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Client } from '@models/client';
-import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
 import { ClientService } from '@services/client.service';
-import { SolicitationService } from '@services/solicitation.service';
-import { UtilsService } from '@services/utils.service';
 import { Utils } from '@shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
@@ -114,6 +108,8 @@ export class DialogClientContractsComponent {
     'application/pdf',
   ];
 
+  @ViewChild('filesInput') fileInput!: ElementRef;
+
   public async convertFileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -150,6 +146,7 @@ export class DialogClientContractsComponent {
   public removeFileFromSendToFiles(index: number) {
     if (index > -1) {
       this.filesToSend.splice(index, 1);
+      this.fileInput.nativeElement.value = '';
     }
   }
 

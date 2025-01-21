@@ -30,7 +30,10 @@ export class TableClientComponent {
   onClientClick: EventEmitter<Client> = new EventEmitter<Client>();
 
   @Output()
-  onContractsClientClick: EventEmitter<Client> = new EventEmitter<Client>();
+  onClientApproveClick: EventEmitter<Client> = new EventEmitter<Client>();
+
+  @Output()
+  onClientContractsClick: EventEmitter<Client> = new EventEmitter<Client>();
 
   @Output()
   onDeleteClientClick: EventEmitter<number> = new EventEmitter<number>();

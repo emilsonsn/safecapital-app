@@ -133,17 +133,19 @@ export class LayoutPrivateComponent {
         } else if (user?.role == 'Manager') {
           this.permitedMenuItem = this.menuItem.filter(
             (item) =>
-              item.label == 'Home' ||
-              item.label == 'Clientes' ||
-              item.label == 'Chamados' ||
-              item.label == 'Parceiros'
+              item.label == 'Home'
+              || item.label == 'Clientes'
+              || item.label == 'Chamados'
+              || item.label == 'Inadimplência'
+              || item.label == 'Parceiros'
           );
         } else if (user?.role == 'Client') {
           this.permitedMenuItem = this.menuItem.filter(
             (item) =>
-              item.label == 'Home' ||
-              item.label == 'Clientes' ||
-              item.label == 'Chamados'
+              item.label == 'Home'
+              || item.label == 'Clientes'
+              || item.label == 'Inadimplência'
+              || item.label == 'Chamados'
           );
         }
 

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DefaulterComponent } from './defaulter/defaulter.component';
+import { DefaulterManagerComponent } from './defaulter-manager/defaulter-manager.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DefaulterComponent,
+    component: DefaulterManagerComponent,
   },
 ];
 

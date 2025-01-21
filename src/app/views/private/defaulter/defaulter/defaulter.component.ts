@@ -213,7 +213,7 @@ export class DefaulterComponent {
   public openSolicitationDialog(solicitation?: Solicitation) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
-      maxWidth: '1000px',
+      maxWidth: '725px',
       maxHeight: '90%',
       hasBackdrop: true,
       closeOnNavigation: true,

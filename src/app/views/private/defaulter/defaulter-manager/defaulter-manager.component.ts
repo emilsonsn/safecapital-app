@@ -3,11 +3,11 @@ import { UserRole } from '@models/user';
 import { SessionQuery } from '@store/session.query';
 
 @Component({
-  selector: 'app-solicitation-manager',
-  templateUrl: './solicitation-manager.component.html',
-  styleUrl: './solicitation-manager.component.scss',
+  selector: 'app-defaulter-manager',
+  templateUrl: './defaulter-manager.component.html',
+  styleUrl: './defaulter-manager.component.scss',
 })
-export class SolicitationManagerComponent {
+export class DefaulterManagerComponent {
   protected role: UserRole;
 
   constructor(private readonly _sessionQuery: SessionQuery) {}

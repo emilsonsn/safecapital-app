@@ -1,0 +1,42 @@
+<mat-dialog-content>
+
+  @if(loading) {
+  <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
+
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="fw-bold fs-5">{{"Cliente " + (_data?.client?.name ?? '-') + " | ID : " + (_data?.client?.id ??
+      '-')}}</span>
+    <div matRipple class="close" (click)="onCancel()">
+      <i class="fa-solid fa-close"></i>
+    </div>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <form [formGroup]="form">
+    <div class="mt-3">
+      <span class="fw-bold fs-6 mb-2">Aprovar</span>
+
+    </div>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="container">
+    <div id="actionsDialog" class="flex-sm-row flex-column">
+      <div id="buttonsDialog" class="flex-sm-row flex-column">
+        <div class="col-auto">
+          <button matRipple id="submit" class="button primary" (click)="onSubmit()">
+            Confirmar
+          </button>
+        </div>
+        <div class="col-auto">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>

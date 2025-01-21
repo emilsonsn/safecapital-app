@@ -147,18 +147,6 @@ export class SolicitationComponent {
       name: 'Em Análise',
       color: '#FF00FF',
     },
-    // {
-    //   id: 3,
-    //   slug: SolicitationStatusEnum.Awaiting,
-    //   name: 'Esperando imobiliária',
-    //   color: '#FFFFFF',
-    // },
-    // {
-    //   id: 4,
-    //   slug: SolicitationStatusEnum.PaymentProvisioned,
-    //   name: 'Pagamento provisionado',
-    //   color: '#FF00FF',
-    // },
     {
       id: 3,
       slug: SolicitationStatusEnum.Completed,
@@ -207,7 +195,7 @@ export class SolicitationComponent {
   public openSolicitationDialog(solicitation?: Solicitation) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
-      maxWidth: '1000px',
+      maxWidth: '725px',
       maxHeight: '90%',
       hasBackdrop: true,
       closeOnNavigation: true,
@@ -248,7 +236,7 @@ export class SolicitationComponent {
       }))
       .subscribe({
         next: (res) => {
-          // O kanban atualiza visualmente, sem necessidade de fazer search
+          // O kanban atualiza no front, sem necessidade de fazer search
         },
         error: (err) => {
           this._toastrService.error(err.error.error);

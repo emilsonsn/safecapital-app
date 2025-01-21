@@ -3,6 +3,7 @@ import { CurrencyPipe } from '@angular/common';
 import {
   afterNextRender,
   Component,
+  ElementRef,
   inject,
   Inject,
   Injector,
@@ -15,7 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Client, PaymentFormEnum } from '@models/client';
+import { Client, ClientStatus, PaymentFormEnum } from '@models/client';
 import { User } from '@models/user';
 import { Estados } from '@models/utils';
 import { ClientService } from '@services/client.service';
@@ -42,23 +43,33 @@ export class DialogClientComponent {
   public loading: boolean = false;
   protected tabIndex: number = 0;
   protected habilitateCondominumFee = false;
+  protected clientStatuses = ClientStatus;
 
   // Form
   public form: FormGroup;
 
   // Selects
+  // Pendente, Aprovado, Reprovado, Aceito, Ativo
   public statusSelect: { label: string; value: string }[] = [
-    {
-      label: 'Aprovado',
-      value: 'Approved',
-    },
     {
       label: 'Pendente',
       value: 'Pending',
     },
     {
+      label: 'Aprovado',
+      value: 'Approved',
+    },
+    {
       label: 'Reprovado',
       value: 'Disapproved',
+    },
+    {
+      label: 'Aceito',
+      value: 'Accepted',
+    },
+    {
+      label: 'Ativo',
+      value: 'Active',
     },
   ];
 
@@ -82,7 +93,7 @@ export class DialogClientComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    private readonly _data: { client: Client },
+    protected readonly _data: { client: Client },
     private readonly _dialogRef: MatDialogRef<DialogClientComponent>,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
@@ -104,7 +115,7 @@ export class DialogClientComponent {
       cpf: [null, [Validators.required]],
       phone: [null, [Validators.required]],
       email: [null, [Validators.required]],
-      description: [null, [Validators.required]],
+      observations: [null],
 
       // Endereço
       cep: [null, [Validators.required]],
@@ -116,11 +127,11 @@ export class DialogClientComponent {
       complement: [null],
 
       // Financeiro
-      rental_value: [null, [Validators.required]], // valor do aluguel
-      condominium_fee: [null], // condominio
-      property_tax: [null, [Validators.required]], // iptu
-      policy_value: [0, [Validators.required]], // valor da apólice
-      payment_form: [null, [Validators.required]], // valor da apólice
+      payment_form: [null, [Validators.required, Validators.min(0.01)]],
+      policy_value: [null, [Validators.required, Validators.min(0.01)]],
+      rental_value: [null, [Validators.required, Validators.min(0.01)]],
+      property_tax: [null, [Validators.required, Validators.min(0.01)]],
+      condominium_fee: [null, [Validators.min(0.01)]],
     });
 
     this.form.get('policy_value').disable();
@@ -159,9 +170,11 @@ export class DialogClientComponent {
 
       // Regras de Negócio para Manager <-> Clientes
       if (this.myUser?.role == 'Manager') {
-        if (['Approved', 'Disapproved'].includes(this._data?.client?.status)) {
+        if ([this.clientStatuses.Approved, this.clientStatuses.Disapproved].includes(this._data?.client?.status)) {
           this.form.disable();
           this.canEdit = false;
+          this.habilitateCondominumFee = false;
+          this.form.get('condominium_fee').disable();
         }
       }
     });
@@ -397,6 +410,8 @@ export class DialogClientComponent {
     'application/pdf',
   ];
 
+  @ViewChild('filesInput') fileInput!: ElementRef;
+
   public async convertFileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -432,6 +447,7 @@ export class DialogClientComponent {
   public removeFileFromSendToFiles(index: number) {
     if (index > -1) {
       this.filesToSend.splice(index, 1);
+      this.fileInput.nativeElement.value = '';
     }
   }
 
@@ -444,6 +460,27 @@ export class DialogClientComponent {
   public prepareFileToRemoveFromBack(fileId, index) {
     this.filesFromBack.splice(index, 1);
     this.filesToRemove.push(fileId);
+  }
+
+  // Getters
+  protected get paymentForm() {
+    return this.form.get('payment_form').value;
+  }
+
+  protected get policyValue() {
+    return this.form.get('policy_value').value;
+  }
+
+  protected get rentalValue() {
+    return this.form.get('rental_value').value;
+  }
+
+  protected get condominiumFee() {
+    return this.form.get('condominium_fee').value;
+  }
+
+  protected get propertyTax() {
+    return this.form.get('property_tax').value;
   }
 
   // Imports

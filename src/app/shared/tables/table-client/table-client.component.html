@@ -34,23 +34,23 @@
         @for (client of clients; track client) {
         <tr class="table-line-hover" style="outline: none; cursor: pointer">
           <td>
-            <div class="d-flex align-items-center gap-2" style="white-space: nowrap">
+            <div class="textNoWrap">
               {{ client?.name }}
             </div>
           </td>
 
           <td>
-            <div class="text-center">
+            <div class="text-center textNoWrap">
               {{ client?.phone | phoneMask }}
             </div>
           </td>
           <td>
-            <div class="text-center">
+            <div class="text-center textNoWrap">
               {{ client?.email }}
             </div>
           </td>
           <td>
-            <div class="text-center">
+            <div class="text-center textNoWrap">
               {{ client?.cpf | cpfCnpjMask }}
             </div>
           </td>
@@ -62,13 +62,19 @@
           <td>
             <div class="d-flex justify-content-center">
 
-              @if(client?.status == 'Approved') {
-              <div matRipple class="buttonTemplate" (click)="onContractsClientClick.emit(client)">
-                <i class="fa-solid fa-file-contract"></i>
-              </div>
+              @if(client?.status != 'Approved') {
+                <div matTooltip="Aprovar" matRipple class="buttonTemplate" (click)="onClientApproveClick.emit(client)">
+                  <i class="fa-solid fa-check"></i>
+                </div>
               }
 
-              <div matRipple class="buttonTemplate" (click)="onClientClick.emit(client)">
+              @if(client?.status == 'Approved') {
+                <div matTooltip="Contratos" matRipple class="buttonTemplate" (click)="onClientContractsClick.emit(client)">
+                  <i class="fa-solid fa-file-contract"></i>
+                </div>
+              }
+
+              <div matTooltip="Editar" matRipple class="buttonTemplate" (click)="onClientClick.emit(client)">
                 <i class="fa-solid fa-pen-to-square"></i>
               </div>
 

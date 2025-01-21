@@ -32,3 +32,13 @@ export enum SolicitationStatusEnum {
   PaymentProvisioned = 'PaymentProvisioned',
   Completed = 'Completed',
 }
+
+export enum SolicitationCategoryEnum {
+  ProposalContract = 'ProposalContract',
+  WarrantyUpdate = 'WarrantyUpdate',
+  Default = 'Default',
+  CommissionBonus = 'CommissionBonus',
+  SuggestionsImprovements = 'SuggestionsImprovements',
+  Marketing = 'Marketing',
+  Legal = 'Legal',
+}

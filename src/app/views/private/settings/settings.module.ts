@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRippleModule } from '@angular/material/core';
 import { SharedModule } from '@shared/shared.module';
 import { TaxComponent } from './tax/tax.component';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { TaxComponent } from './tax/tax.component';
     MatInputModule,
     MatProgressSpinnerModule,
     MatRippleModule,
+    CurrencyMaskModule,
     NgxMaskDirective,
     NgxMaskPipe,
   ]

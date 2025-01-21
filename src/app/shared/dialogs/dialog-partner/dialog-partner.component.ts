@@ -1,4 +1,4 @@
-import { afterNextRender, Component, inject, Inject, Injector, ViewChild } from '@angular/core';
+import { afterNextRender, Component, ElementRef, inject, Inject, Injector, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
@@ -203,6 +203,8 @@ export class DialogPartnerComponent {
     'application/pdf',
   ];
 
+  @ViewChild('filesInput') fileInput!: ElementRef;
+
   public async convertFileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -238,6 +240,7 @@ export class DialogPartnerComponent {
   public removeFileFromSendToFiles(index: number) {
     if (index > -1) {
       this.filesToSend.splice(index, 1);
+      this.fileInput.nativeElement.value = '';
     }
   }
 

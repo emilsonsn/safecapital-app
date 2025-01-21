@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, ElementRef, Inject, Input, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -164,6 +164,8 @@ export class RegisterComponent {
     'application/pdf',
   ];
 
+  @ViewChild('filesInput') fileInput!: ElementRef;
+
   public async convertFileToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -199,6 +201,7 @@ export class RegisterComponent {
   public removeFileFromSendToFiles(index: number) {
     if (index > -1) {
       this.filesToSend.splice(index, 1);
+      this.fileInput.nativeElement.value = '';
     }
   }
 

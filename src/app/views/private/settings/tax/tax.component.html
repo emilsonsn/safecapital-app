@@ -8,15 +8,17 @@
 
     <div class="col-md-6 mb-3">
       <mat-form-field appearance="outline" class="bgWhite">
-        <mat-label>Porcentagem</mat-label>
-        <input matInput type="text" currenceMask formControlName="percentage">
+        <mat-label>Porcentagem </mat-label>
+        <input matInput type="text" formControlName="percentage" mask="percent.2">
+        <i matSuffix class="fa-solid fa-percent me-3"></i>
       </mat-form-field>
     </div>
 
     <div class="col-md-6 mb-3">
       <mat-form-field appearance="outline" class="bgWhite">
-        <mat-label>Taxa</mat-label>
-        <input matInput type="text" formControlName="tax">
+        <mat-label>Taxa </mat-label>
+        <input matInput type="text" formControlName="tax" currencyMask>
+        <i matSuffix class="fa-solid fa-coins ms-2 me-3"></i>
       </mat-form-field>
     </div>
 

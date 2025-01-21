@@ -17,6 +17,8 @@ export class TaxComponent {
   protected form: FormGroup;
   protected loading: boolean = false;
 
+  protected a;
+
   constructor(
     private readonly _headerService: HeaderService,
     private readonly _taxSettingService: TaxSettingService,
@@ -38,7 +40,7 @@ export class TaxComponent {
   }
 
   protected onSubmit() {
-
+    console.log(this.form.getRawValue())
   }
 
   protected getSettings() {
@@ -65,4 +67,5 @@ export class TaxComponent {
   private _initOrStopLoading(): void {
     this.loading = !this.loading;
   }
+
 }

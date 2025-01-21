@@ -18,9 +18,22 @@
   <form [formGroup]="form">
     <div class="row">
       <div class="col-md-6 col-12 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>Número do Contrato </mat-label>
-          <input matInput type="text" formControlName="contract_number">
+        <mat-form-field>
+          <mat-select formControlName="contract_number" placeholder="Número do Contrato">
+            <mat-option>
+              <ngx-mat-select-search [formControl]="clientFilterCtrl" placeholderLabel="Procure pelo número do contrato"
+                i18n-placeholderLabel noEntriesFoundLabel="Contrato não encontrado" i18n-noEntriesFoundLabel>
+              </ngx-mat-select-search>
+            </mat-option>
+            @if(form?.get('contract_number')?.value) {
+            <mat-option [value]="''" (click)="form?.get('contract_number')?.setValue('')">
+              Limpar Filtro
+            </mat-option>
+            }
+            <mat-option *ngFor="let user of filteredClients | async" [value]="user.id">
+              {{ user.id }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
       <div class="col-12"></div>
@@ -30,6 +43,17 @@
           <textarea matInput formControlName="subject" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
             cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [placeholder]="'Descrição'">
           </textarea>
+        </mat-form-field>
+      </div>
+      <div class="col-12 mb-3">
+        <mat-form-field>
+          <mat-label>Categoria</mat-label>
+          <mat-select formControlName="category" placeholder="Selecione uma categoria">
+            @for (status of statuses; track status) {
+            <mat-option [value]="status">{{ status | status }}</mat-option>
+            }
+          </mat-select>
+
         </mat-form-field>
       </div>
     </div>
@@ -43,9 +67,9 @@
           <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
         </div>
         @if(isNewSolicitation) {
-          <div class="col-auto">
-            <button matRipple id="submit" class="button primary" (click)="onSubmit()">Criar</button>
-          </div>
+        <div class="col-auto">
+          <button matRipple id="submit" class="button primary" (click)="onSubmit()">Criar</button>
+        </div>
         }
       </div>
     </div>
