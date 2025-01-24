@@ -15,9 +15,7 @@ import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-co
 import { ToastrService } from 'ngx-toastr';
 import { SessionQuery } from '@store/session.query';
 import { UserRole } from '@models/user';
-import { Kanban } from '@models/Kanban';
-import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
-import { KanbanSolicitationStatus } from '@shared/components/kanban/kanban.component';
+import { Solicitation } from '@models/solicitation';
 import { DialogSolicitationComponent } from '@shared/dialogs/dialog-solicitation/dialog-solicitation.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SolicitationChatComponent } from '../solicitation-chat/solicitation-chat.component';

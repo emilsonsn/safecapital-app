@@ -107,7 +107,7 @@ export class DefaulterComponent {
     private readonly _matBottomSheet: MatBottomSheet,
     private readonly _userService: UserService
   ) {
-    this._headerService.setTitle('Chamados');
+    this._headerService.setTitle('Inadimplência');
     this._headerService.setSubTitle('');
 
     // _requestService.getCards().subscribe({

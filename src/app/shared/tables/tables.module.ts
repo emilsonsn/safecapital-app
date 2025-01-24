@@ -17,6 +17,7 @@ import { CardsSolicitationComponent } from './cards-solicitation/cards-solicitat
 import { TableClientContractsComponent } from './table-client-contracts/table-client-contracts.component';
 import { TableSettingsComponent } from './table-settings/table-settings.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CardsSolicitationDefaulterComponent } from './cards-solicitation-defaulter/cards-solicitation-defaulter.component';
 
 const tables = [
   TableClientComponent,
@@ -25,6 +26,7 @@ const tables = [
   TablePartnersComponent,
   TableSettingsComponent,
   CardsSolicitationComponent,
+  CardsSolicitationDefaulterComponent
 ]
 
 @NgModule({

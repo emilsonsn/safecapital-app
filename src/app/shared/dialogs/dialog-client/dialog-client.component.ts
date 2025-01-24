@@ -170,12 +170,16 @@ export class DialogClientComponent {
 
       // Regras de Negócio para Manager <-> Clientes
       if (this.myUser?.role == 'Manager') {
-        if ([this.clientStatuses.Approved, this.clientStatuses.Disapproved].includes(this._data?.client?.status)) {
-          this.form.disable();
-          this.canEdit = false;
-          this.habilitateCondominumFee = false;
-          this.form.get('condominium_fee').disable();
+        if (
+          [
+            this.clientStatuses.Approved,
+            this.clientStatuses.Disapproved,
+          ].includes(this._data?.client?.status)
+        ) {
+          this.desabilatateForm();
         }
+      } else if (this.myUser?.role == 'Client') {
+        this.desabilatateForm();
       }
     });
 
@@ -384,6 +388,13 @@ export class DialogClientComponent {
 
   private _initOrStopLoading(): void {
     this.loading = !this.loading;
+  }
+
+  public desabilatateForm(): void {
+    this.form.disable();
+    this.canEdit = false;
+    this.habilitateCondominumFee = false;
+    this.form.get('condominium_fee').disable();
   }
 
   // Files

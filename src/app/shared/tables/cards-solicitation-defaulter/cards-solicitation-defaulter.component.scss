@@ -1,0 +1,83 @@
+@import "_variables";
+
+#templateCardsSolicitation {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  // background: $white-100;
+  // border-radius: 4px;
+  // box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.11), 0 7px 10px -5px rgba(0, 0, 0, 0.06);\
+
+  #contentCards {
+    display: flex;
+    // justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    .cardSolicitation {
+      width: 15rem;
+      height: 13.5rem;
+      padding: 0.8rem;
+      border-radius: 5px;
+      box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+
+      .cardHeader {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+
+        .title {
+          font-size: 1.1rem;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          text-wrap: nowrap;
+        }
+
+        .status {
+          font-weight: 600;
+          border-radius: 5px;
+          color: $white-300;
+          background-color: rgb(54, 129, 194);
+          padding: 0.2rem 0.5rem;
+        }
+      }
+
+      .cardDescription {
+        height: 3rem;
+        margin: 6px 0;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        text-overflow: ellipsis;
+      }
+
+      .cardFooter {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+
+        .title {
+          font-size: 0.95em;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          text-wrap: nowrap;
+        }
+
+        #buttons {
+          display: flex;
+          justify-content: end;
+        }
+      }
+
+    }
+  }
+}

@@ -124,7 +124,11 @@ export class LayoutPrivateComponent {
       this._sidebarService.retractSidebar();
     });
 
+
     this._sessionQuery.user$.subscribe((user) => {
+      // if(!user) {
+      //   this._sessionService.getUserFromBack().subscribe();
+      // }
       if (user) {
         this.user = user;
 

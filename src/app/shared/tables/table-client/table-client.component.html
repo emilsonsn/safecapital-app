@@ -62,13 +62,13 @@
           <td>
             <div class="d-flex justify-content-center">
 
-              @if(client?.status != 'Approved') {
-                <div matTooltip="Aprovar" matRipple class="buttonTemplate" (click)="onClientApproveClick.emit(client)">
+              @if(client?.status == 'Approved') {
+                <div matTooltip="Aceitar" matRipple class="buttonTemplate" (click)="onClientApproveClick.emit(client)">
                   <i class="fa-solid fa-check"></i>
                 </div>
               }
 
-              @if(client?.status == 'Approved') {
+              @if(client?.status == 'Accepted') {
                 <div matTooltip="Contratos" matRipple class="buttonTemplate" (click)="onClientContractsClick.emit(client)">
                   <i class="fa-solid fa-file-contract"></i>
                 </div>

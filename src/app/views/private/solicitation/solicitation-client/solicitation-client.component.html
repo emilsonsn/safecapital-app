@@ -40,9 +40,8 @@
 
 <div id="componentTable" class="col-12 mt-4">
   <app-cards-solicitation
-  [loading]="loading"
-    [filters]="filters"
-    [searchTerm]="searchTerm"
+    [loading]="loading" [filters]="filters" [searchTerm]="searchTerm"
     (onOpenSolicitationChat)="openRequestChat($event)"
-    (onOpenSolicitationDetails)="openRequestDialog($event)"></app-cards-solicitation>
+    (onOpenSolicitationDetails)="openRequestDialog($event)">
+  </app-cards-solicitation>
 </div>

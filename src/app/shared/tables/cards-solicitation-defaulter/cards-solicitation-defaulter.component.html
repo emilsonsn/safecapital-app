@@ -1,0 +1,63 @@
+<div id="templateCardsSolicitation" class="p-md-0 p-2">
+  <div id="contentCards">
+    @if (!loading) {
+    <div *ngIf="!solicitations?.length">
+      <div class="text-center w-100">
+        <div>Nenhum resultado encontrado</div>
+      </div>
+    </div>
+    @for (solicitation of solicitations; track solicitation) {
+    <div class="cardSolicitation">
+      <div class="cardHeader">
+        <div class="title">
+          {{solicitation?.contract_number}}
+        </div>
+        <div class="status" [ngStyle]="{ 'background-color': statusMapping[solicitation?.status] }">
+          {{ solicitation?.status | status }}
+        </div>
+      </div>
+      <div class="cardDescription">
+        {{solicitation?.subject}}
+      </div>
+      <div class="cardFooter">
+        <div class="title">
+          Atualizado em: <br>{{ (solicitation?.updated_at | date:"dd/MM/YYYY HH:mm:ss") ?? '-'}}
+        </div>
+        <div id="buttons">
+          <div matRipple class="buttonTemplate"
+            (click)="onOpenSolicitationDetails.emit(solicitation); $event.stopPropagation()">
+            <i class="fa-solid fa-circle-info"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+    }
+    @else {
+    <div class="d-flex justify-content-center w-100">
+      <mat-spinner></mat-spinner>
+    </div>
+    }
+  </div>
+  <mat-paginator [length]="pageControl.itemCount" [pageSize]="pageControl.take" [showFirstLastButtons]="true"
+    [pageSizeOptions]="[10, 25, 50, 100]" [hidePageSize]="false" [pageIndex]="pageControl.page - 1"
+    (page)="pageEvent($event)" aria-label="Select page">
+  </mat-paginator>
+</div>
+
+<!--
+
+    <th [class.hasorder]="col.order" [ngStyle]="{ cursor: 'pointer' }"
+  [class.active-order]="pageControl.orderField === col.slug">
+  (click)="onClickOrderBy(col.slug, col.order)"
+  <div class="{{col.align}}" style="color: #a2a1a8">
+    {{ col.title }}
+    <i class="material-icons" *ngIf="pageControl.orderField === col.slug">
+      {{
+      pageControl.order === "DESC" ? "arrow_downward" : "arrow_upward"
+      }}
+    </i>
+  </div>
+  </th>
+
+-->
