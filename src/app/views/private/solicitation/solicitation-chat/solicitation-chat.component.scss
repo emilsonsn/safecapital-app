@@ -6,22 +6,31 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  background-color: $red1;
-  color: $white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+  // background-color: #14213d50;
+  color: $gray-700;
   cursor: pointer;
 
   &:hover {
-    background-color: $red1_opacity;
+    background-color: rgb(3 12 29 / 19%);
   }
+
+  i {
+    font-size: 1.2rem;
+  }
+}
+
+#divider {
+  width: 100%;
+  height: 0.5px;
+  background-color: #bdbdbd;
+  margin-bottom: 0.5rem;
 }
 
 #chatTemplate {
   #content {
-
-
     #messages {
       display: flex;
       flex-direction: column;
@@ -108,49 +117,97 @@
   }
 }
 
+:host {
+  display: block;
+
+  @media (min-width: 960px) {
+    max-width: 37vw;
+  }
+
+  @media (min-width: 1100px) {
+    max-width: 38vw;
+  }
+
+  @media (min-width: 1400px) {
+    max-width: 34vw;
+  }
+
+  @media (min-width: 1700px) {
+    max-width: 28.5vw;
+  }
+
+  @media (min-width: 2000px) {
+    max-width: 28vw;
+  }
+}
+
 ::ng-deep mat-bottom-sheet-container {
   max-height: 60vh !important;
 
   @media (min-width: 960px) {
     margin-left: 25rem;
-
-    #geralTemplate {
-      max-width: 42vw;
-    }
   }
 
   @media (min-width: 1100px) {
     margin-left: 35rem;
-
-    #geralTemplate {
-      max-width: 42vw;
-    }
   }
 
   @media (min-width: 1400px) {
     margin-left: 45rem;
-
-    #geralTemplate {
-      max-width: 35vw;
-    }
   }
 
   @media (min-width: 1700px) {
     margin-left: 65rem;
-
-    #geralTemplate {
-      max-width: 30vw;
-    }
   }
 
   @media (min-width: 2000px) {
     margin-left: 85rem;
-
-    #geralTemplate {
-      max-width: 28vw;
-    }
   }
 }
+
+// ::ng-deep mat-bottom-sheet-container {
+//   max-height: 60vh !important;
+
+//   @media (min-width: 960px) {
+//     margin-left: 25rem;
+
+//     #geralTemplate {
+//       max-width: 42vw;
+//     }
+//   }
+
+//   @media (min-width: 1100px) {
+//     margin-left: 35rem;
+
+//     #geralTemplate {
+//       max-width: 42vw;
+//     }
+//   }
+
+//   @media (min-width: 1400px) {
+//     margin-left: 45rem;
+
+//     #geralTemplate {
+//       max-width: 35vw;
+//     }
+//   }
+
+//   @media (min-width: 1700px) {
+//     margin-left: 65rem;
+
+//     #geralTemplate {
+//       max-width: 30vw;
+//     }
+//   }
+
+//   @media (min-width: 2000px) {
+//     margin-left: 85rem;
+
+//     #geralTemplate {
+//       max-width: 28vw;
+//     }
+//   }
+// }
 
 // Files
 #files {

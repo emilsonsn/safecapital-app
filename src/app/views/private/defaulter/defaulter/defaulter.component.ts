@@ -130,9 +130,10 @@ export class DefaulterComponent {
 
     this.formFilters = this._fb.group({
       user_id: [''],
+      category: ['DEFAULTER']
     });
 
-    this.getSolicitationData();
+    this.updateFilters();
   }
 
   // Kanban
@@ -271,6 +272,7 @@ export class DefaulterComponent {
   public clearFormFilters() {
     this.formFilters.patchValue({
       search_term: '',
+      category: 'DEFAULTER'
     });
     this.updateFilters();
   }

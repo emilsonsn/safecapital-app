@@ -35,6 +35,19 @@ export class SearchInputComponent {
       });
   }
 
+  protected clear() {
+    this.search.patchValue('');
+    this.form.get('search').patchValue('');
+    this.form.get('search').markAsPristine();
+    this.form.get('search').updateValueAndValidity();
+    this.showFilter = false;
+    this.onSearchInputChanged.emit('');
+  }
+
+  protected get searchValue() : string {
+    return this.form.get('search').value;
+  }
+
   // protected emitSearchInput() {
   //   setTimeout(() => {
   //     this.onSearchInputChanged.emit(this.form.get('search').value);

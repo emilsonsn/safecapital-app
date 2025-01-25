@@ -19,7 +19,8 @@
     <div class="row">
       <div class="col-md-6 col-12 mb-3">
         <mat-form-field>
-          <mat-select formControlName="contract_number" placeholder="Número do Contrato">
+          <mat-label>Número do Contrato </mat-label>
+          <mat-select formControlName="contract_number" placeholder="Selecione o contrato">
             <mat-option>
               <ngx-mat-select-search [formControl]="clientFilterCtrl" placeholderLabel="Procure pelo número do contrato"
                 i18n-placeholderLabel noEntriesFoundLabel="Contrato não encontrado" i18n-noEntriesFoundLabel>

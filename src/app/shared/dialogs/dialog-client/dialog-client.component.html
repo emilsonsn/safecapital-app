@@ -199,7 +199,7 @@
             </div>
             <img [src]="img.path" alt="{{img.name}}" style="max-width: 100%; max-height: 100%;" />
           </div>
-          <mat-form-field appearance="outline" style="width: 18rem;">
+          <mat-form-field appearance="outline">
             <mat-label>Descrição do Documento</mat-label>
             <input matInput type="text" [(ngModel)]="filesToSend[$index].category" [ngModelOptions]="{standalone: true}"
               required>

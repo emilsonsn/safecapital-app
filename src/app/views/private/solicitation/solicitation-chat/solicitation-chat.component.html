@@ -1,10 +1,11 @@
-<div id="geralTemplate">
-  <div id="header" class="d-flex align-items-center justify-content-between gap-2 mb-2">
-    <h5>{{ _data?.solicitation?.contract_number }}</h5>
+<div id="geralTemplate" style="width: 100%;">
+  <div id="header" class="d-flex align-items-center justify-content-between gap-2 my-2">
+    <h6 style="font-size: 1.15rem; margin: 0;">{{ _data?.solicitation?.contract_number }}</h6>
     <div id="close" matRipple (click)="closeChat()">
       <i class="fa-solid fa-close"></i>
     </div>
   </div>
+  <div id="divider"></div>
   <div id="chatTemplate">
     <div id="content">
       <div id="messages" #messagesContainer>
@@ -23,7 +24,7 @@
               {{ message?.message }}
             </div>
             <div class="hour" [ngStyle]="{'text-align' : ((message?.user_id == user?.id) || (message?.user?.role == 'Admin' || message?.user?.role == 'Manager'))? 'end' : 'start'  }">
-              {{ (message?.user?.role == 'Admin' || message?.user?.role == 'Manager') ? 'Suporte - Safe capital' : message?.user?.name }} - {{ message?.created_at | date:"dd/MM/YYYY hh:MM:SS" }}
+              {{ (message?.user?.role == 'Admin' || message?.user?.role == 'Manager') ? 'Suporte - Safe capital' : message?.user?.name }} - {{ message?.created_at | date:"dd/MM/YYYY HH:mm:ss" }}
             </div>
           </div>
         </div>

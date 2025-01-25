@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
   MAT_BOTTOM_SHEET_DATA,
@@ -48,6 +48,13 @@ export class SolicitationChatComponent {
       }
     });
 
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.onSubmit();
+    }
   }
 
   protected onSubmit() {

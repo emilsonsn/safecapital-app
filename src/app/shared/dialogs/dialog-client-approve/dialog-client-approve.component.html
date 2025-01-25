@@ -7,8 +7,7 @@
   }
 
   <div class="d-flex align-items-center justify-content-between">
-    <span class="fw-bold fs-5">{{"Cliente " + (_data?.client?.name ?? '-') + " | ID : " + (_data?.client?.id ??
-      '-')}}</span>
+    <span class="fw-bold fs-5">{{"Aceitar Cliente : " + (_data?.client?.name ?? '') + " - ID " + (_data?.client?.id ?? '-')}}</span>
     <div matRipple class="close" (click)="onCancel()">
       <i class="fa-solid fa-close"></i>
     </div>
@@ -17,9 +16,10 @@
   <mat-divider class="my-3"></mat-divider>
 
   <form [formGroup]="form">
-    <div class="mt-3">
-      <span class="fw-bold fs-6 mb-2">Aprovar</span>
-
+    <div class="row">
+      <div class="col-12">
+        <p style="font-size: 0.95em; margin: 0;">Deseja aceitar o cliente <span class="fw-bolder">{{_data?.client?.name ?? "-"}}</span>? <span class="fw-bold">Essa ação NÃO pode ser desfeita</span>.</p>
+      </div>
     </div>
   </form>
 

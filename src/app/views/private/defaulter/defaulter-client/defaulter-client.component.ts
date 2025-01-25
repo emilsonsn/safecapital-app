@@ -25,7 +25,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
   styleUrl: './defaulter-client.component.scss'
 })
 export class DefaulterClientComponent {
-public filters;
+  public filters;
   public loading: boolean = false;
   public formFilters: FormGroup;
   protected role: UserRole;
@@ -91,7 +91,12 @@ public filters;
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.formFilters = this._fb.group({
+      search_term: [''],
+      category: ['DEFAULTER']
+    });
+  }
 
   public openRequestDialog(solicitation? : Solicitation) {
     const dialogConfig: MatDialogConfig = {
@@ -152,7 +157,9 @@ public filters;
   public clearFormFilters() {
     this.formFilters.patchValue({
       search_term: '',
+      category: 'DEFAULTER'
     });
+
     this.updateFilters();
   }
 

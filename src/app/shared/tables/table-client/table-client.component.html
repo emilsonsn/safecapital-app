@@ -3,9 +3,9 @@
     <table class="table table-responsive">
       <thead>
         @for (col of columns; track col) {
-        <th [class.hasorder]="col.order" [ngStyle]="{ cursor: 'pointer' }"
+        <th [class.hasorder]="col.order"
           [class.active-order]="pageControl.orderField === col.slug">
-          <!--(click)="onClickOrderBy(col.slug, col.order)" -->
+          <!--(click)="onClickOrderBy(col.slug, col.order)"  [ngStyle]="{ cursor: 'pointer' }"-->
           <div class="{{col.align}}" style="color: #a2a1a8">
             {{ col.title }}
             <i class="material-icons" *ngIf="pageControl.orderField === col.slug">

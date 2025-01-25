@@ -60,7 +60,7 @@ export class DialogSolicitationComponent {
 
   ngOnInit(): void {
     this.form = this._fb.group({
-      contract_number : [null],
+      contract_number : [null, [Validators.required]],
       subject : [null, [Validators.required]],
       category : [null, [Validators.required]],
       status : [this._data?.solicitation?.status ?? 'Received'],
@@ -88,7 +88,7 @@ export class DialogSolicitationComponent {
   protected post() {
     this._initOrStopLoading();
 
-    this._solicitationService.post(this.form.getRawValue())
+    this._solicitationService.post({...this.form.getRawValue(), contract_number: (this.form.get('contract_number').value).toString()})
       .pipe(finalize(() => {
         this._initOrStopLoading();
       }))

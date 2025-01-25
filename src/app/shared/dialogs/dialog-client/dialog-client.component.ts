@@ -178,7 +178,8 @@ export class DialogClientComponent {
         ) {
           this.desabilatateForm();
         }
-      } else if (this.myUser?.role == 'Client') {
+      }
+      else if (this.myUser?.role == 'Client' && !this.isNewClient) {
         this.desabilatateForm();
       }
     });
@@ -190,12 +191,10 @@ export class DialogClientComponent {
       const propertyTax = res?.property_tax ? +res.property_tax : 0;
 
       const total = rentalValue + condominiumFee + propertyTax;
-      const newPolicyValue = total * 12 * 0.1;
+      const newPolicyValue = parseFloat((total * 12 * 0.1).toFixed(2));
 
       if (this.form.get('policy_value')?.value !== newPolicyValue) {
-        this.form
-          .get('policy_value')
-          ?.patchValue(newPolicyValue, { emitEvent: false });
+        this.form.get('policy_value')?.patchValue(newPolicyValue, { emitEvent: false });
       }
     });
 

@@ -37,7 +37,7 @@ export class TablePartnersComponent {
   onRequestClick: EventEmitter<User> = new EventEmitter<User>();
 
   @Output()
-  onDeleteUserClick: EventEmitter<number> = new EventEmitter<number>();
+  onDeleteUserClick: EventEmitter<User> = new EventEmitter<User>();
 
   public users: User[] = [];
 

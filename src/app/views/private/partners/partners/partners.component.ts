@@ -9,6 +9,7 @@ import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-co
 import { ToastrService } from 'ngx-toastr';
 import { DialogPartnerComponent } from '@shared/dialogs/dialog-partner/dialog-partner.component';
 import { DialogPartnerAnalysisComponent } from '@shared/dialogs/dialog-partner-analysis/dialog-partner-analysis.component';
+import { UserService } from '@services/user.service';
 
 @Component({
   selector: 'app-partners',
@@ -72,7 +73,7 @@ export class PartnersComponent {
     private readonly _router: Router,
     private readonly _dialog: MatDialog,
     private readonly _fb: FormBuilder,
-    private readonly _requestService: RequestService,
+    private readonly _userService: UserService,
     private readonly _toastrService: ToastrService,
   ) {
     this._headerService.setTitle('Parceiros');
@@ -150,7 +151,7 @@ export class PartnersComponent {
       });
   }
 
-  public deleteDialog(request) {
+  public deleteDialog(user) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '550px',
@@ -168,14 +169,14 @@ export class PartnersComponent {
       .subscribe({
         next: (res) => {
           if (res) {
-            this._requestService.deleteRequest(request.id).subscribe({
-              next: (resData) => {
+            this._userService.deleteUser(user.id).subscribe({
+              next: (res) => {
                 this.loading = true;
-                this._toastrService.success(resData.message);
+                this._toastrService.success(res.message);
                 setTimeout(() => {
                   this.loading = false;
                   this.itemsRequests().filter(
-                    (item) => item.title !== request.title
+                    (item) => item.title !== user.title
                   );
                 }, 200);
               },

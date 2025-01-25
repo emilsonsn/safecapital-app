@@ -38,11 +38,11 @@ export class HomeComponent {
   }
 
   ngOnInit() {
-    Chart.register(...registerables);
+    // Chart.register(...registerables);
 
     // Initialize the charts and store the instances
     // this.lineChart = new Chart('lineChart', this.lineChart);
-    this.barChart = new Chart('barChart', this.barChart);
+    // this.barChart = new Chart('barChart', this.barChart);
 
     // this._dashboardService
     //   .getPurchaseGraphicBar()

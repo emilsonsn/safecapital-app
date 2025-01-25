@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DialogPartnerComponent } from '@shared/dialogs/dialog-partner/dialog-partner.component';
 import { DialogPartnerAnalysisComponent } from '@shared/dialogs/dialog-partner-analysis/dialog-partner-analysis.component';
 import { StatusUser } from '@models/user';
+import { UserService } from '@services/user.service';
 
 enum PartnerStatusSelect {
   Pending = 'Pending',
@@ -22,7 +23,7 @@ enum PartnerStatusSelect {
   styleUrl: './partners-analysis.component.scss',
 })
 export class PartnersAnalysisComponent {
-  public formFilters : FormGroup;
+  public formFilters: FormGroup;
   public filters;
   public loading: boolean = false;
   public searchTerm: string = '';
@@ -63,14 +64,16 @@ export class PartnersAnalysisComponent {
   ]);
 
   // Selects
-  protected statuses = Object.values(StatusUser).filter(status => status != StatusUser.Accepted);
+  protected statuses = Object.values(StatusUser).filter(
+    (status) => status != StatusUser.Accepted
+  );
 
   constructor(
     private readonly _headerService: HeaderService,
     private readonly _router: Router,
     private readonly _dialog: MatDialog,
     private readonly _fb: FormBuilder,
-    private readonly _requestService: RequestService,
+    private readonly _userService: UserService,
     private readonly _toastrService: ToastrService
   ) {
     this._headerService.setTitle('Análise de Parceiros');
@@ -85,7 +88,7 @@ export class PartnersAnalysisComponent {
 
   ngOnInit() {
     this.formFilters = this._fb.group({
-      validation : ['Pending,Return'] //Refused
+      validation: ['Pending,Return,Refused'], //Refused
     });
 
     this.updateFilters();
@@ -147,7 +150,7 @@ export class PartnersAnalysisComponent {
       });
   }
 
-  public deleteDialog(request) {
+  public deleteDialog(user) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '550px',
@@ -165,14 +168,14 @@ export class PartnersAnalysisComponent {
       .subscribe({
         next: (res) => {
           if (res) {
-            this._requestService.deleteRequest(request.id).subscribe({
-              next: (resData) => {
+            this._userService.deleteUser(user.id).subscribe({
+              next: (res) => {
                 this.loading = true;
-                this._toastrService.success(resData.message);
+                this._toastrService.success(res.message);
                 setTimeout(() => {
                   this.loading = false;
                   this.itemsRequests().filter(
-                    (item) => item.title !== request.title
+                    (item) => item.title !== user.title
                   );
                 }, 200);
               },
@@ -189,7 +192,7 @@ export class PartnersAnalysisComponent {
 
   public clearFormFilters() {
     this.formFilters.patchValue({
-      status: 'Pending',
+      validation: 'Pending,Return,Refused',
     });
     this.updateFilters();
   }

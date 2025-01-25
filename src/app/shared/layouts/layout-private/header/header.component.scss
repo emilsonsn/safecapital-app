@@ -13,6 +13,7 @@ header {
   height: $header-height;
   width: 100%;
   background-color: $header-background;
+  flex-wrap: wrap;
 
   .title {
     display: flex;
@@ -43,6 +44,7 @@ header {
     align-items: center;
     gap: 1rem;
     z-index: 2;
+    margin-left: auto;
 
     .dropdown {
       position: relative;
@@ -95,7 +97,7 @@ header {
         display: none;
         background-color: $white-400;
         z-index: 1;
-        margin-top: 20px;
+        margin-top: 8px;
         border-radius: 4px;
         padding: 0.5rem;
         border-bottom: 2px solid $primary;
