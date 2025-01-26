@@ -25,7 +25,7 @@ export class CreditComponent {
     private readonly _dialog: MatDialog,
 
   ) {
-    this._headerService.setTitle('Configurações');
+    this._headerService.setTitle('Configurações de Crédito');
     this._headerService.setSubTitle('');
   }
 

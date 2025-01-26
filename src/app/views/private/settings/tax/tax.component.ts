@@ -17,16 +17,13 @@ export class TaxComponent {
   protected form: FormGroup;
   protected loading: boolean = false;
 
-  protected a;
-
   constructor(
     private readonly _headerService: HeaderService,
     private readonly _taxSettingService: TaxSettingService,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
-    private readonly _dialog: MatDialog
   ) {
-    this._headerService.setTitle('Configurações');
+    this._headerService.setTitle('Configurações de Taxa');
     this._headerService.setSubTitle('');
   }
 
@@ -40,7 +37,20 @@ export class TaxComponent {
   }
 
   protected onSubmit() {
-    console.log(this.form.getRawValue())
+    this._initOrStopLoading();
+
+    this._taxSettingService.patch(1, this.form.getRawValue())
+      .pipe(finalize(() => {
+        this._initOrStopLoading();
+      }))
+      .subscribe({
+        next: (res) => {
+          this._toastr.success(res.message);
+        },
+        error: (err) => {
+          this._toastr.error(err.error.error);
+        }
+      });
   }
 
   protected getSettings() {
