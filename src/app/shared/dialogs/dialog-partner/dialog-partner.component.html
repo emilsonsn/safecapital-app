@@ -101,15 +101,15 @@
         @for(img of filesFromBack; track img) {
         <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
 
-          <div class="file" matTooltip="{{img.name}}" (click)="openFileInAnotherTab(img.path)">
+          <div class="file" matTooltip="{{img.fileName}}" (click)="openFileInAnotherTab(img.path)">
             <div class="delete">
               <i class="fa-solid fa-close" (click)="prepareFileToRemoveFromBack(img.id, $index);"></i>
             </div>
-            <img [src]="img.path" alt="{{img.name}}" style="max-width: 100%; max-height: 100%;" />
+            <img [src]="img.path" alt="{{img.fileName}}" style="max-width: 100%; max-height: 100%;" />
           </div>
           <mat-form-field appearance="outline">
             <mat-label>Descrição</mat-label>
-            <input matInput type="text" [(ngModel)]="filesToSend[$index].category" [ngModelOptions]="{standalone: true}"
+            <input matInput type="text" [(ngModel)]="filesToSend[$index].description" [ngModelOptions]="{standalone: true}"
               required>
           </mat-form-field>
         </div>
@@ -131,7 +131,7 @@
           </div>
           <mat-form-field appearance="outline">
             <mat-label>Descrição</mat-label>
-            <input matInput type="text" [(ngModel)]="filesToSend[$index].category" [ngModelOptions]="{standalone: true}"
+            <input matInput type="text" [(ngModel)]="filesToSend[$index].description" [ngModelOptions]="{standalone: true}"
               required>
           </mat-form-field>
         </div>

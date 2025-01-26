@@ -142,6 +142,16 @@ export class DialogClientComponent {
       this.form.patchValue(this._data?.client);
       this.atualizarCidades(this._data?.client?.state);
 
+      this._data?.client?.attachments.forEach((fileFromBack, index) => {
+        this.filesFromBack[index] = {
+          index: index,
+          id: fileFromBack.id,
+          path: fileFromBack.path,
+          fileName: fileFromBack.filename,
+          description: fileFromBack.description
+        };
+      });
+
       if (this.myUser?.role == 'Client') {
         this.form.disable();
       }
@@ -220,22 +230,21 @@ export class DialogClientComponent {
     }
 
     if(this.filesToSend) {
-      for (let file of this.filesToSend) {
-        if (!file.category) {
-          this._toastr.error('Preencha a categoria!');
-          return;
-        }
+      if (this.filesToSend.some((file) => !file.description)) {
+        this._toastr.error('Preencha a descrição!');
+        return;
       }
     }
 
     if (this.isNewClient) {
-      this._postClient();
+      this.post();
     } else {
-      this._patchClient(this._data.client.id);
+      this.removeFiles();
+      this.patch(this._data.client.id);
     }
   }
 
-  _postClient() {
+  protected post() {
     this._initOrStopLoading();
 
     this._clientService
@@ -254,7 +263,7 @@ export class DialogClientComponent {
       });
   }
 
-  _patchClient(id) {
+  protected patch(id : number) {
     this._initOrStopLoading();
 
     this._clientService
@@ -290,6 +299,24 @@ export class DialogClientComponent {
     });
 
     return formData;
+  }
+
+  protected removeFiles() {
+    for(let idFile of this.filesToRemove) {
+      // this._initOrStopLoading();
+
+      this._clientService.deleteAttachment(idFile)
+        .pipe(finalize(() => {
+          // this._initOrStopLoading();
+        }))
+        .subscribe({
+          next: (res) => {},
+          error : (err) => {
+            this._toastr.error(`Erro ao deletar arquivo ID ${idFile}! - ${err}`);
+          }
+        })
+    }
+
   }
 
   // Utils
@@ -413,6 +440,7 @@ export class DialogClientComponent {
     id: number;
     preview: string;
     file: File;
+    fileName: string;
     description: string;
   }[] = [];
 
@@ -420,8 +448,9 @@ export class DialogClientComponent {
   protected filesFromBack: {
     index: number;
     id: number;
-    name: string;
-    path: string; // Wasabi
+    description: string;
+    fileName: string;
+    path: string;
   }[] = [];
 
   public allowedTypes = [
@@ -459,6 +488,7 @@ export class DialogClientComponent {
           id: this.filesToSend.length + 1,
           preview: base64,
           file: file,
+          fileName: file.name,
           description: null,
         });
       } else this._toastr.error(`${file.type} não é permitido`);

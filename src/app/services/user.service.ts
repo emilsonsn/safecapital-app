@@ -18,51 +18,62 @@ export class UserService {
   ) {
   }
 
-  public getUsers(pageControl?: PageControl, filters?): Observable<ApiResponsePageable<User>> {
+  public getList(pageControl?: PageControl, filters?): Observable<ApiResponsePageable<User>> {
     const paginate = Utils.mountPageControl(pageControl);
     const filterParams = Utils.mountPageControl(filters);
 
     return this._http.get<ApiResponsePageable<User>>(`${environment.api}/${this.sessionEndpoint}/search?${paginate}${filterParams}`);
   }
 
-  public getCards(): Observable<ApiResponse<UserCards>> {
-    return this._http.get<ApiResponse<UserCards>>(`${environment.api}/${this.sessionEndpoint}/cards`);
-  }
-
   public getUser(): Observable<ApiResponse<User>> {
     return this._http.get<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/me`);
   }
 
-  public getUserById(id: number): Observable<ApiResponse<User>> {
+  public getById(id: number): Observable<ApiResponse<User>> {
     return this._http.get<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/${id}`);
   }
 
-  public postUser(user: User | FormData): Observable<ApiResponse<User>> {
+  public post(user: User | FormData): Observable<ApiResponse<User>> {
     return this._http.post<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/create`, user);
   }
 
-  public patchUser(id: number, user: User | FormData): Observable<ApiResponse<User>> {
+  public patch(id: number, user: User | FormData): Observable<ApiResponse<User>> {
     return this._http.post<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/${id}?_method=PATCH`, user);
+  }
+
+  public delete(id: number): Observable<DeleteApiResponse> {
+    return this._http.delete<DeleteApiResponse>(`${environment.api}/${this.sessionEndpoint}/${id}`);
+  }
+
+  // Cards / Info
+  public getCards(): Observable<ApiResponse<UserCards>> {
+    return this._http.get<ApiResponse<UserCards>>(`${environment.api}/${this.sessionEndpoint}/cards`);
+  }
+
+  // Termos de Uso
+  public acceptTerms(): Observable<any> {
+    return this._http.post<any>(`${environment.api}/${this.sessionEndpoint}/accept-term`, null);
+  }
+
+  // Parceiros / Register
+  public getUserByEmail(email : string): Observable<ApiResponse<User>> {
+    const params = new HttpParams().set('email', email);
+
+    return this._http.get<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/email`, {params});
   }
 
   public validateUser(id: number, form): Observable<ApiResponse<User>> {
     return this._http.post<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/validation/${id}?_method=PATCH`, form);
   }
 
-  public updateStatus(id: number, newStatus: UserStatus): Observable<ApiResponse<User>> {
-    return this._http.patch<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/status/${id}`, {status: newStatus});
+  // Attachments
+  public deleteAttachment(id: number): Observable<DeleteApiResponse> {
+    return this._http.delete<DeleteApiResponse>(`${environment.api}/${this.sessionEndpoint}/attachment/${id}`);
   }
 
-  public deleteUser(id: number): Observable<DeleteApiResponse> {
-    return this._http.delete<DeleteApiResponse>(`${environment.api}/${this.sessionEndpoint}/${id}`);
-  }
-
-
-  public inviteUser(email: string, cellphone: number): Observable<ApiResponse<string>> {
-    return this._http.post<ApiResponse<string>>(`${environment.api}/${this.sessionEndpoint}/invite`, {
-      email: email,
-      cellphone: cellphone
-    });
+  // Password
+  public updatePassword(data: { code: string, password: string }): Observable<any> {
+    return this._http.post<any>(`${environment.api}/updatePassword`, data);
   }
 
   public recoverPassword(email: string): Observable<any> {
@@ -73,59 +84,4 @@ export class UserService {
     return this._http.post<ApiResponse<string>>(`${environment.api}/open/${this.sessionEndpoint}/reset-password/${token}`, {password: password});
   }
 
-  public validateCode(code: string): Observable<ApiResponse<string>> {
-    return this._http.post<ApiResponse<string>>(`${environment.api}/validate-code?_method=GET`, {code})
-  }
-
-  public validateToken(token: string): Observable<ApiResponse<string>> {
-    return this._http.post<ApiResponse<string>>(`${environment.api}/open/${this.sessionEndpoint}/check-token`, {token: token})
-  }
-
-  // Termos de Uso
-  public acceptTerms(): Observable<any> {
-    return this._http.post<any>(`${environment.api}/${this.sessionEndpoint}/accept-term`, null);
-  }
-
-  // Register User
-  public getUserByEmail(email : string): Observable<ApiResponse<User>> {
-    const params = new HttpParams().set('email', email);
-
-    return this._http.get<ApiResponse<User>>(`${environment.api}/${this.sessionEndpoint}/email`, {params});
-  }
-
-  // Position Service
-  public getPositionsUser(pageControl?: PageControl, filters?: any): Observable<ApiResponsePageable<UserPosition>> {
-
-    return this._http.get<ApiResponsePageable<UserPosition>>(`${environment.api}/${this.sessionEndpoint}/position/search`);
-  }
-
-  public postPositionUser(position: UserPosition): Observable<ApiResponse<UserPosition>> {
-    return this._http.post<ApiResponse<UserPosition>>(`${environment.api}/${this.sessionEndpoint}/position/create`, position);
-  }
-
-  public deletePositionUser(id: number): Observable<DeleteApiResponse> {
-    return this._http.delete<DeleteApiResponse>(`${environment.api}/${this.sessionEndpoint}/position/${id}`);
-  }
-
-  // Sector Service
-  public getSectorsUser(pageControl?: PageControl, filters?: any): Observable<ApiResponsePageable<UserSector>> {
-
-    return this._http.get<ApiResponsePageable<UserSector>>(`${environment.api}/${this.sessionEndpoint}/sector/search`);
-  }
-
-  public postSectorUser(position: UserSector): Observable<ApiResponse<UserSector>> {
-    return this._http.post<ApiResponse<UserSector>>(`${environment.api}/${this.sessionEndpoint}/sector/create`, position);
-  }
-
-  public deleteSectorUser(id: number): Observable<DeleteApiResponse> {
-    return this._http.delete<DeleteApiResponse>(`${environment.api}/${this.sessionEndpoint}/sector/${id}`);
-  }
-
-  public getUsersAll() {
-    return this._http.get<ApiResponse<User[]>>(`${environment.api}/${this.sessionEndpoint}/all`);
-  }
-
-  public updatePassword(data: { code: string, password: string }): Observable<any> {
-    return this._http.post<any>(`${environment.api}/updatePassword`, data);
-  }
 }

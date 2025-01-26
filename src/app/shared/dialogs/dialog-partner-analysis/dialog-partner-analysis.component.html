@@ -43,8 +43,8 @@
       <span class="fw-bolder">Anexos</span>
       <div id="files">
         @for(img of _data.attachments; track img) {
-        <div class="file" matTooltip="{{img.category}}" (click)="openFileInAnotherTab(img.file)">
-          <img [src]="img.file" alt="{{img.category}}" style="max-width: 100%; max-height: 100%;" />
+        <div class="file" matTooltip="{{img.description}}" (click)="openFileInAnotherTab(img.path)">
+          <img [src]="img.path" alt="{{img.description}}" style="max-width: 100%; max-height: 100%;" />
         </div>
         }
       </div>

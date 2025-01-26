@@ -94,9 +94,9 @@ export class DialogPartnerAnalysisComponent {
     });
   }
 
-  public patchRequest(request_id: number, user) {
+  public validate(user_id: number, user) {
     this._userService
-      .validateUser(request_id, user)
+      .validateUser(user_id, user)
       .pipe(
         finalize(() => {
           this._initOrStopLoading();
@@ -118,7 +118,7 @@ export class DialogPartnerAnalysisComponent {
 
     this._initOrStopLoading();
 
-    this.patchRequest(this._data?.id, {
+    this.validate(this._data?.id, {
       ...this.form.getRawValue()
     });
   }

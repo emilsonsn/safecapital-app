@@ -108,7 +108,7 @@ export class TableUserComponent {
     this._initOrStopLoading();
 
     this._userService
-      .getUsers(this.pageControl, {...this.filters, role : 'Admin,Manager'})
+      .getList(this.pageControl, {...this.filters, role : 'Admin,Manager'})
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe((res) => {
         this.users = res.data;

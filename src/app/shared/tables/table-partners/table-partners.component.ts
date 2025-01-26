@@ -151,7 +151,7 @@ export class TablePartnersComponent {
     this._initOrStopLoading();
 
     this._userService
-      .getUsers(this.pageControl, { ...this.filters, role: 'Client' })
+      .getList(this.pageControl, { ...this.filters, role: 'Client' })
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe((res) => {
         this.users = res.data;

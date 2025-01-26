@@ -117,7 +117,7 @@ export class DialogUserComponent {
     const id = +user.get('id');
 
     this._userService
-      .patchUser(id, user)
+      .patch(id, user)
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {
@@ -136,7 +136,7 @@ export class DialogUserComponent {
     this._initOrStopLoading();
 
     this._userService
-      .postUser(user)
+      .post(user)
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {

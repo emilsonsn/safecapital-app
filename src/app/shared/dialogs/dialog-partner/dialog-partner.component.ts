@@ -97,6 +97,17 @@ export class DialogPartnerComponent {
     if (this._data?.user) {
       this.isNewPartner = false;
       this.title = 'Editar ';
+
+      this._data?.user?.attachments.forEach((fileFromBack, index) => {
+        this.filesFromBack[index] = {
+          index: index,
+          id: fileFromBack.id,
+          path: fileFromBack.path,
+          fileName: fileFromBack.filename,
+          description: fileFromBack.description
+        };
+      });
+
       this.form.patchValue(this._data.user);
     }
 
@@ -113,13 +124,24 @@ export class DialogPartnerComponent {
   }
 
   public onSubmit(form: FormGroup): void {
-    if (
-      !form.valid ||
-      this.loading ||
-      this.filesToSend.some((file) => !file.category)
-    ) {
+    if (!form.valid || this.loading) {
       form.markAllAsTouched();
+      this._toastr.error('Preencha todos os campos!');
       return;
+    }
+
+    if (this.isNewPartner) {
+      if (!this.filesToSend || this.filesToSend.length === 0) {
+        this._toastr.error('Nenhum arquivo foi enviado!');
+        return;
+      }
+    }
+
+    if(this.filesToSend) {
+      if (this.filesToSend.some((file) => !file.description)) {
+        this._toastr.error('Preencha a descrição do arquivo!');
+        return;
+      }
     }
 
     const formData = new FormData();
@@ -129,7 +151,7 @@ export class DialogPartnerComponent {
     });
 
     this.filesToSend.map((file, index) => {
-      formData.append(`attachments[${index}][category]`, file.category);
+      formData.append(`attachments[${index}][category]`, file.description);
       formData.append(`attachments[${index}][file]`, file.file);
     });
 
@@ -144,7 +166,7 @@ export class DialogPartnerComponent {
     this._initOrStopLoading();
     const id = +partner.get('id');
     this._userService
-      .patchUser(id, partner)
+      .patch(id, partner)
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {
@@ -163,7 +185,7 @@ export class DialogPartnerComponent {
     this._initOrStopLoading();
 
     this._userService
-      .postUser(partner)
+      .post(partner)
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {
@@ -183,17 +205,18 @@ export class DialogPartnerComponent {
   protected filesToSend: {
     id: number;
     preview: string;
+    filename: string;
     file: File;
-    category: string;
+    description: string;
   }[] = [];
 
   protected filesToRemove: number[] = [];
   protected filesFromBack: {
     index: number;
     id: number;
-    name: string;
-    path: string; // Wasabi
-    category: string;
+    fileName: string;
+    description: string;
+    path: string;
   }[] = [];
 
   public allowedTypes = [
@@ -231,7 +254,8 @@ export class DialogPartnerComponent {
           id: this.filesToSend.length + 1,
           preview: base64,
           file: file,
-          category: null,
+          filename: file.name,
+          description: null,
         });
       } else this._toastr.error(`${file.type} não é permitido`);
     }

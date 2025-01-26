@@ -34,6 +34,10 @@ export class ClientService {
     return this._http.delete<DeleteApiResponse>(`${environment.api}/client/${id}`);
   }
 
+  public deleteAttachment(id: number): Observable<DeleteApiResponse> {
+    return this._http.delete<DeleteApiResponse>(`${environment.api}/client/attachment/${id}`);
+  }
+
   //
 
   public createPolicyDocument(data: ClientPolicyDocument | FormData): Observable<ApiResponse<Client>> {

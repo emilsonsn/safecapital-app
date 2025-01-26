@@ -10,10 +10,10 @@ export interface User {
   password: string;
   is_active: boolean;
   role: UserRole;
-  validation : StatusUser;
-  terms? : boolean;
-  attachments?: Attachment[];
-  justification? : string;
+  validation: StatusUser;
+  terms?: boolean;
+  attachments?: UserAttachment[];
+  justification?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -25,9 +25,15 @@ export enum StatusUser {
   Refused = 'Refused',
 }
 
-interface Attachment {
-  category: string;
-  file: File | string;
+export interface UserAttachment {
+  id: number;
+  user_id: number;
+  description: string;
+  filename: string;
+  path: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
 }
 
 export enum UserRole {

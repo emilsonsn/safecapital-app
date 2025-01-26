@@ -50,10 +50,7 @@ export class RegisterComponent {
     });
 
     if (this.userData) {
-      // this.form.patchValue(this.userData);
-
-      this.searchForUser();
-
+      this.getUserMe();
     }
   }
 
@@ -61,7 +58,7 @@ export class RegisterComponent {
     if (
       !this.form.valid ||
       this.loading ||
-      (!this.filesFromBack && this.filesToSend.some((file) => !file.category))
+      (!this.filesFromBack && this.filesToSend.some((file) => !file.description))
     ) {
       this.form.markAllAsTouched();
       return;
@@ -75,11 +72,9 @@ export class RegisterComponent {
     }
 
     if(this.filesToSend) {
-      for (let file of this.filesToSend) {
-        if (!file.category) {
-          this._toastr.error('Preencha a categoria!');
-          return;
-        }
+      if (this.filesToSend.some((file) => !file.description)) {
+        this._toastr.error('Preencha a descrição!');
+        return;
       }
     }
 
@@ -88,13 +83,14 @@ export class RegisterComponent {
     if (!this.userData) {
       this.post();
     } else {
+      this.removeFiles();
       this.patch();
     }
   }
 
   private post() {
     this._userService
-      .postUser(this.prepareFormData({ ...this.form.getRawValue() }))
+      .post(this.prepareFormData({ ...this.form.getRawValue() }))
       .pipe(
         finalize(() => {
           this._initOrStopLoading();
@@ -113,7 +109,7 @@ export class RegisterComponent {
 
   private patch() {
     this._userService
-      .patchUser(
+      .patch(
         this.userData.id,
         this.prepareFormData({ ...this.form.getRawValue() })
       )
@@ -141,7 +137,7 @@ export class RegisterComponent {
     });
 
     this.filesToSend.map((file, index) => {
-      formData.append(`attachments[${index}][category]`, file.category);
+      formData.append(`attachments[${index}][category]`, file.description);
       formData.append(`attachments[${index}][file]`, file.file);
     });
 
@@ -156,16 +152,17 @@ export class RegisterComponent {
     id: number;
     preview: string;
     file: File;
-    category: string;
+    fileName: string;
+    description: string;
   }[] = [];
 
   protected filesToRemove: number[] = [];
   protected filesFromBack: {
     index: number;
     id: number;
-    name: string;
-    path: string; // Wasabi
-    category: string;
+    description: string;
+    fileName: string;
+    path: string;
   }[] = [];
 
   public allowedTypes = [
@@ -203,7 +200,8 @@ export class RegisterComponent {
           id: this.filesToSend.length + 1,
           preview: base64,
           file: file,
-          category: null,
+          fileName: file.name,
+          description: null,
         });
       } else this._toastr.error(`${file.type} não é permitido`);
     }
@@ -227,8 +225,26 @@ export class RegisterComponent {
     this.filesToRemove.push(fileId);
   }
 
+  protected removeFiles() {
+    for(let idFile of this.filesToRemove) {
+      // this._initOrStopLoading();
+
+      this._userService.deleteAttachment(idFile)
+        .pipe(finalize(() => {
+          // this._initOrStopLoading();
+        }))
+        .subscribe({
+          next: (res) => {},
+          error : (err) => {
+            this._toastr.error(`Erro ao deletar arquivo ID ${idFile}! - ${err}`);
+          }
+        })
+    }
+
+  }
+
   // Getters
-  private searchForUser() {
+  private getUserMe() {
     this._initOrStopLoading();
 
     this._userService.getUser()
@@ -238,6 +254,15 @@ export class RegisterComponent {
       .subscribe({
         next: (res) => {
           this.form.patchValue(res.data);
+          res.data?.attachments.forEach((fileFromBack, index) => {
+            this.filesFromBack[index] = {
+              index: index,
+              id: fileFromBack.id,
+              path: fileFromBack.path,
+              fileName: fileFromBack.filename,
+              description: fileFromBack.description
+            };
+          });
         },
         error : (err) => {
           this._toastr.error(err.error.error);

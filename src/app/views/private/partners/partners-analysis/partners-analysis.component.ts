@@ -168,7 +168,7 @@ export class PartnersAnalysisComponent {
       .subscribe({
         next: (res) => {
           if (res) {
-            this._userService.deleteUser(user.id).subscribe({
+            this._userService.delete(user.id).subscribe({
               next: (res) => {
                 this.loading = true;
                 this._toastrService.success(res.message);

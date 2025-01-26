@@ -297,7 +297,7 @@ export class SolicitationComponent {
   // Getters
 
   public getUsersFromBack() {
-    this._userService.getUsers().subscribe((res) => {
+    this._userService.getList().subscribe((res) => {
       this.userSelect = res.data;
 
       this.filteredPartners.next(

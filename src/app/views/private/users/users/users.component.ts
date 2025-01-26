@@ -101,7 +101,7 @@ export class UsersComponent {
   }
 
   private deleteUser(id: number) {
-    this._userService.deleteUser(id).subscribe({
+    this._userService.delete(id).subscribe({
       next: (res) => {
         this._toastr.success(res.message);
         if (res) {

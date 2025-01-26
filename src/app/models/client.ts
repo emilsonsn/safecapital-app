@@ -9,14 +9,26 @@ export interface Client {
   city: string;
   state: string;
   status: ClientStatus;
-  rental_value : number;
-  property_tax : number;
-  condominium_fee : number;
-  policy_value : number;
-  payment_form : PaymentFormEnum;
+  rental_value: number;
+  property_tax: number;
+  condominium_fee: number;
+  policy_value: number;
+  payment_form: PaymentFormEnum;
+  attachments: ClientAttachment[];
   contracts?: ClientContract[];
   created_at?: Date;
   updated_at?: Date;
+}
+
+export interface ClientAttachment {
+  id: number;
+  client_id: number;
+  description: string;
+  filename: string;
+  path: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
 }
 
 export interface ClientContract {
