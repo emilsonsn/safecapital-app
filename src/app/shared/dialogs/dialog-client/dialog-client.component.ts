@@ -105,33 +105,33 @@ export class DialogClientComponent {
 
   ngOnInit(): void {
     this.form = this._fb.group({
-      id: [null],
+      id: [''],
       status: ['Pending', [Validators.required]],
 
       // Dados Pessoais
-      name: [null, [Validators.required]],
-      surname: [null, [Validators.required]],
-      birthday: [null, [Validators.required]],
-      cpf: [null, [Validators.required]],
-      phone: [null, [Validators.required]],
-      email: [null, [Validators.required]],
-      observations: [null],
+      name: ['', [Validators.required]],
+      surname: ['', [Validators.required]],
+      birthday: ['', [Validators.required]],
+      cpf: ['', [Validators.required]],
+      phone: ['', [Validators.required]],
+      email: ['', [Validators.required]],
+      observations: [''],
 
       // Endereço
-      cep: [null, [Validators.required]],
-      street: [null, [Validators.required]],
-      neighborhood: [null, [Validators.required]],
-      city: [null, [Validators.required]],
-      state: [null, [Validators.required]],
-      number: [null, [Validators.required]],
-      complement: [null],
+      cep: ['', [Validators.required]],
+      street: ['', [Validators.required]],
+      neighborhood: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      state: ['', [Validators.required]],
+      number: ['', [Validators.required]],
+      complement: [''],
 
       // Financeiro
-      payment_form: [null, [Validators.required, Validators.min(0.01)]],
-      policy_value: [null, [Validators.required, Validators.min(0.01)]],
-      rental_value: [null, [Validators.required, Validators.min(0.01)]],
-      property_tax: [null, [Validators.required, Validators.min(0.01)]],
-      condominium_fee: [null, [Validators.min(0.01)]],
+      payment_form: ['', [Validators.required, Validators.min(0.01)]],
+      policy_value: ['', [Validators.required, Validators.min(0.01)]],
+      rental_value: ['', [Validators.required, Validators.min(0.01)]],
+      property_tax: ['', [Validators.required, Validators.min(0.01)]],
+      condominium_fee: ['', [Validators.min(0.01)]],
     });
 
     this.form.get('policy_value').disable();
@@ -285,7 +285,7 @@ export class DialogClientComponent {
     });
 
     this.filesToSend.map((file, index) => {
-      formData.append(`attachments[${index}][category]`, file.category);
+      formData.append(`attachments[${index}][description]`, file.description);
       formData.append(`attachments[${index}][file]`, file.file);
     });
 
@@ -413,7 +413,7 @@ export class DialogClientComponent {
     id: number;
     preview: string;
     file: File;
-    category: string;
+    description: string;
   }[] = [];
 
   protected filesToRemove: number[] = [];
@@ -459,7 +459,7 @@ export class DialogClientComponent {
           id: this.filesToSend.length + 1,
           preview: base64,
           file: file,
-          category: null,
+          description: null,
         });
       } else this._toastr.error(`${file.type} não é permitido`);
     }
