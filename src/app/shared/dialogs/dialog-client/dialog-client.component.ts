@@ -212,9 +212,20 @@ export class DialogClientComponent {
       return;
     }
 
-    if (this.isNewClient && !this.filesToSend) {
-      this._toastr.error('Anexe pelo menos um arquivo!');
-      return;
+    if (this.isNewClient) {
+      if (!this.filesToSend || this.filesToSend.length === 0) {
+        this._toastr.error('Nenhum arquivo foi enviado!');
+        return;
+      }
+    }
+
+    if(this.filesToSend) {
+      for (let file of this.filesToSend) {
+        if (!file.category) {
+          this._toastr.error('Preencha a categoria!');
+          return;
+        }
+      }
     }
 
     if (this.isNewClient) {

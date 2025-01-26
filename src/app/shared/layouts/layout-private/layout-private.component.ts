@@ -106,7 +106,8 @@ export class LayoutPrivateComponent {
 
   protected isMobile: boolean = window.innerWidth >= 1000;
   private resizeSubscription: Subscription;
-  user: User;
+  protected user: User;
+  protected openFirstAcessModal : boolean = false;
 
   constructor(
     private renderer: Renderer2,
@@ -155,10 +156,14 @@ export class LayoutPrivateComponent {
 
         // PRIMEIRO ACESSO
         if (!user.terms && user.role == UserRole.Client) {
-          this.openFirstAccessDialog();
+          this.openFirstAcessModal = true;
         }
       }
     });
+
+    if(this.openFirstAcessModal) {
+      this.openFirstAccessDialog();
+    }
   }
 
   ngOnDestroy(): void {

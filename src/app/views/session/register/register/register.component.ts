@@ -67,9 +67,20 @@ export class RegisterComponent {
       return;
     }
 
-    if (!this.filesToSend) {
-      this._toastr.error('Anexe pelo menos um arquivo!');
-      return;
+    if(!this.userData) {
+      if (!this.filesToSend || this.filesToSend.length === 0) {
+        this._toastr.error('Nenhum arquivo foi enviado!');
+        return;
+      }
+    }
+
+    if(this.filesToSend) {
+      for (let file of this.filesToSend) {
+        if (!file.category) {
+          this._toastr.error('Preencha a categoria!');
+          return;
+        }
+      }
     }
 
     this._initOrStopLoading();
@@ -219,8 +230,6 @@ export class RegisterComponent {
   // Getters
   private searchForUser() {
     this._initOrStopLoading();
-
-
 
     this._userService.getUser()
       .pipe(finalize(() => {

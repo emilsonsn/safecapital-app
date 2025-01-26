@@ -10,7 +10,6 @@ import { SessionQuery } from '@store/session.query';
 import { User } from '@models/user';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { DialogFirstAccessComponent } from '@shared/dialogs/dialog-first-access/dialog-first-access.component';
 
 @Component({
   selector: 'app-home',
