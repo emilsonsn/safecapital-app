@@ -1,4 +1,4 @@
-<app-header-page-component [hasFilter]="false">
+<app-header-page-component [hasFilter]="true">
 
   <div id="searchInput">
     <app-search-input (onSearchInputChanged)="handleSearchTerm($event)">
@@ -13,16 +13,28 @@
     }
   </div>
 
-  <!-- <div id="filters">
+  <div id="filters">
     <form [formGroup]="formFilters">
       <div class="row">
         <div class="col-md-4 mb-md-0 mb-2">
           <mat-form-field>
-            <mat-label>Pesquisar</mat-label>
-            <input matInput formControlName="search_term" placeholder="Buscar">
+            <mat-select formControlName="category" placeholder="Categoria"> <!-- multiple -->
+              <mat-option>
+                <ngx-mat-select-search [formControl]="categoryFilterCtrl" placeholderLabel="Procure pela categoria"
+                  i18n-placeholderLabel noEntriesFoundLabel="Categoria não encontrada" i18n-noEntriesFoundLabel>
+                </ngx-mat-select-search>
+              </mat-option>
+              @if(formFilters?.get('category').value && formFilters?.get('category').value != SolicitationCategoryEnumSelect) {
+              <mat-option [value]="''" (click)="formFilters?.get('category').setValue(SolicitationCategoryEnumSelect); updateFilters()">
+                Limpar Filtro
+              </mat-option>
+              }
+              <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+                {{ category | status }}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
-
       </div>
     </form>
 
@@ -34,7 +46,7 @@
         <i class="fa-solid fa-magnifying-glass"></i> Pesquisar
       </button>
     </div>
-  </div> -->
+  </div>
 
 </app-header-page-component>
 

@@ -91,7 +91,7 @@ export class CardsSolicitationDefaulterComponent {
     this._initOrStopLoading();
 
     this._solicitationService
-      .getList(this.pageControl, {...this.filters, category: 'DEFAULTER'})
+      .getList(this.pageControl, {...this.filters, category: 'Default'})
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe({
         next: (res) => {

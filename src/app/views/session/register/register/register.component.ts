@@ -137,7 +137,7 @@ export class RegisterComponent {
     });
 
     this.filesToSend.map((file, index) => {
-      formData.append(`attachments[${index}][category]`, file.description);
+      formData.append(`attachments[${index}][description]`, file.description);
       formData.append(`attachments[${index}][file]`, file.file);
     });
 

@@ -94,7 +94,7 @@ export class DefaulterClientComponent {
   ngOnInit() {
     this.formFilters = this._fb.group({
       search_term: [''],
-      category: ['DEFAULTER']
+      category: ['Default']
     });
   }
 
@@ -157,7 +157,7 @@ export class DefaulterClientComponent {
   public clearFormFilters() {
     this.formFilters.patchValue({
       search_term: '',
-      category: 'DEFAULTER'
+      category: 'Default'
     });
 
     this.updateFilters();

@@ -14,14 +14,25 @@ import { ToastrService } from 'ngx-toastr';
 import { SessionQuery } from '@store/session.query';
 import { User, UserRole } from '@models/user';
 import { Kanban } from '@models/Kanban';
-import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
+import {
+  Solicitation,
+  SolicitationCategoryEnum,
+  SolicitationStatusEnum,
+} from '@models/solicitation';
 import { KanbanSolicitationStatus } from '@shared/components/kanban/kanban.component';
 import { DialogSolicitationComponent } from '@shared/dialogs/dialog-solicitation/dialog-solicitation.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SolicitationChatComponent } from '../solicitation-chat/solicitation-chat.component';
 import { SolicitationService } from '@services/solicitation.service';
 import { Order, PageControl } from '@models/application';
-import { debounceTime, finalize, map, ReplaySubject, Subject, takeUntil } from 'rxjs';
+import {
+  debounceTime,
+  finalize,
+  map,
+  ReplaySubject,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 import { UserService } from '@services/user.service';
 
 @Component({
@@ -81,11 +92,19 @@ export class SolicitationComponent {
   };
 
   // Filters
-  protected userSelect: User[] = [];
+  protected SolicitationCategoryEnumSelect = Object.values(SolicitationCategoryEnum).filter((value) => value !== SolicitationCategoryEnum.Default);
 
+  protected userSelect: User[] = [];
   protected partnerCtrl: FormControl<any> = new FormControl<any>(null);
   protected partnerFilterCtrl: FormControl<any> = new FormControl<string>('');
   protected filteredPartners: ReplaySubject<any[]> = new ReplaySubject<any[]>(
+    1
+  );
+
+  protected categorySelect = Object.values(this.SolicitationCategoryEnumSelect);
+  protected categoryCtrl: FormControl<any> = new FormControl<any>(null);
+  protected categoryFilterCtrl: FormControl<any> = new FormControl<string>('');
+  protected filteredCategories: ReplaySubject<any[]> = new ReplaySubject<any[]>(
     1
   );
 
@@ -99,7 +118,7 @@ export class SolicitationComponent {
     private readonly _sessionQuery: SessionQuery,
     private cdr: ChangeDetectorRef,
     private readonly _matBottomSheet: MatBottomSheet,
-    private readonly _userService : UserService,
+    private readonly _userService: UserService
   ) {
     this._headerService.setTitle('Chamados');
     this._headerService.setSubTitle('');
@@ -114,6 +133,7 @@ export class SolicitationComponent {
     });
 
     this.getUsersFromBack();
+    this.prepareFilterCategoryCtrl();
   }
 
   ngOnInit() {
@@ -123,10 +143,11 @@ export class SolicitationComponent {
     });
 
     this.formFilters = this._fb.group({
-      user_id : ['']
+      user_id: [''],
+      category: [this.SolicitationCategoryEnumSelect],
     });
 
-    this.getSolicitationData();
+    this.updateFilters();
   }
 
   // Kanban
@@ -165,7 +186,7 @@ export class SolicitationComponent {
     this._solicitationService
       .getList(this.pageControl, {
         ...this.filters,
-        searchTerm : this.searchTerm
+        searchTerm: this.searchTerm,
       })
       .pipe(
         finalize(() => {
@@ -230,10 +251,13 @@ export class SolicitationComponent {
   protected taskMoved(solicitation: Solicitation) {
     this._initOrStopLoading();
 
-    this._solicitationService.patch(solicitation.id, solicitation)
-      .pipe(finalize(() => {
-        this._initOrStopLoading();
-      }))
+    this._solicitationService
+      .patch(solicitation.id, solicitation)
+      .pipe(
+        finalize(() => {
+          this._initOrStopLoading();
+        })
+      )
       .subscribe({
         next: (res) => {
           // O kanban atualiza no front, sem necessidade de fazer search
@@ -241,7 +265,7 @@ export class SolicitationComponent {
         error: (err) => {
           this._toastrService.error(err.error.error);
         },
-      })
+      });
   }
 
   // Filters
@@ -254,6 +278,8 @@ export class SolicitationComponent {
   public clearFormFilters() {
     this.formFilters.patchValue({
       search_term: '',
+      user_id: '',
+      category: this.SolicitationCategoryEnumSelect
     });
     this.updateFilters();
   }
@@ -264,7 +290,7 @@ export class SolicitationComponent {
     this.updateFilters();
   }
 
-  protected prepareFilterClientCtrl() {
+  protected prepareFilterPartnerCtrl() {
     this.partnerFilterCtrl.valueChanges
       .pipe(
         takeUntil(this._onDestroy),
@@ -289,6 +315,29 @@ export class SolicitationComponent {
       });
   }
 
+  protected prepareFilterCategoryCtrl() {
+    this.filteredCategories.next(this.categorySelect.slice());
+
+    this.categoryFilterCtrl.valueChanges
+      .pipe(
+        takeUntil(this._onDestroy),
+        debounceTime(100),
+        map((search: string | null) => {
+          if (!search) {
+            return this.categorySelect.slice();
+          } else {
+            search = search.toLowerCase();
+            return this.categorySelect.filter(
+              (category) => category.toLowerCase().includes(search)
+            );
+          }
+        })
+      )
+      .subscribe((filtered) => {
+        this.filteredCategories.next(filtered);
+      });
+  }
+
   // Utils
   protected _initOrStopLoading() {
     this.loading = !this.loading;
@@ -306,7 +355,7 @@ export class SolicitationComponent {
           .slice()
       );
 
-      this.prepareFilterClientCtrl();
+      this.prepareFilterPartnerCtrl();
     });
   }
 }

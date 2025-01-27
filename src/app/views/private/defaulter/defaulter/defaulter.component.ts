@@ -130,7 +130,7 @@ export class DefaulterComponent {
 
     this.formFilters = this._fb.group({
       user_id: [''],
-      category: ['DEFAULTER']
+      category: ['Default']
     });
 
     this.updateFilters();
@@ -272,7 +272,7 @@ export class DefaulterComponent {
   public clearFormFilters() {
     this.formFilters.patchValue({
       search_term: '',
-      category: 'DEFAULTER'
+      category: 'Default'
     });
     this.updateFilters();
   }

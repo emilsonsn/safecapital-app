@@ -15,9 +15,9 @@
 
   <div id="buttons">
     @if(role == 'Client') {
-      <button matRipple class="button primary" (click)="openSolicitationDialog()">
-        <i class="fa-solid fa-plus"></i> Chamado
-      </button>
+    <button matRipple class="button primary" (click)="openSolicitationDialog()">
+      <i class="fa-solid fa-plus"></i> Chamado
+    </button>
     }
   </div>
 
@@ -33,12 +33,31 @@
                 </ngx-mat-select-search>
               </mat-option>
               @if(formFilters?.get('user_id').value) {
-                <mat-option [value]="''" (click)="formFilters?.get('user_id').setValue(''); updateFilters()">
-                  Limpar Filtro
-                </mat-option>
+              <mat-option [value]="''" (click)="formFilters?.get('user_id').setValue(''); updateFilters()">
+                Limpar Filtro
+              </mat-option>
               }
               <mat-option *ngFor="let user of filteredPartners | async" [value]="user.id">
                 {{ user.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4 mb-md-0 mb-2">
+          <mat-form-field>
+            <mat-select formControlName="category" placeholder="Categoria"> <!-- multiple -->
+              <mat-option>
+                <ngx-mat-select-search [formControl]="categoryFilterCtrl" placeholderLabel="Procure pela categoria"
+                  i18n-placeholderLabel noEntriesFoundLabel="Categoria não encontrada" i18n-noEntriesFoundLabel>
+                </ngx-mat-select-search>
+              </mat-option>
+              @if(formFilters?.get('category').value && formFilters?.get('category').value != SolicitationCategoryEnumSelect) {
+              <mat-option [value]="''" (click)="formFilters?.get('category').setValue(SolicitationCategoryEnumSelect); updateFilters()">
+                Limpar Filtro
+              </mat-option>
+              }
+              <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+                {{ category | status }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -59,21 +78,11 @@
 </app-header-page-component>
 
 <div id="componentTable" class="col-12 mt-4">
-  <app-kanban
-    [status]="status"
-    [data]="kanbanData"
-    (itemMoved)="taskMoved($event)"
+  <app-kanban [status]="status" [data]="kanbanData" (itemMoved)="taskMoved($event)"
     (onOpenChat)="openSolicitationChat($event)"
-    (onOpenSolicitationDetails)="openSolicitationDialog($event)"
-  ></app-kanban>
-  <mat-paginator
-    [length]="pageControl.itemCount"
-    [pageSize]="pageControl.take"
-    [showFirstLastButtons]="true"
-    [pageSizeOptions]="[10, 25, 50, 100]"
-    [hidePageSize]="false"
-    [pageIndex]="pageControl.page - 1"
-    aria-label="Select page"
-  >
+    (onOpenSolicitationDetails)="openSolicitationDialog($event)"></app-kanban>
+  <mat-paginator [length]="pageControl.itemCount" [pageSize]="pageControl.take" [showFirstLastButtons]="true"
+    [pageSizeOptions]="[10, 25, 50, 100]" [hidePageSize]="false" [pageIndex]="pageControl.page - 1"
+    aria-label="Select page">
   </mat-paginator>
 </div>

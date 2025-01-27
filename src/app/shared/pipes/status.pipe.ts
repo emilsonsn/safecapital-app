@@ -44,6 +44,8 @@ export class StatusPipe implements PipeTransform {
         return 'Pagamento provisionado';
       case SolicitationStatusEnum.Completed.toString():
         return 'Finalizado';
+      case ClientStatus.Active.toString():
+        return 'Ativo';
       case ClientStatus.Approved.toString():
         return 'Aprovado';
       case ClientStatus.Disapproved.toString():

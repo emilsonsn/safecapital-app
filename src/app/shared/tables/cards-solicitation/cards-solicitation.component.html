@@ -1,11 +1,11 @@
 <div id="templateCardsSolicitation" class="p-md-0 p-2">
   <div id="contentCards">
     @if (!loading) {
-    <div *ngIf="!solicitations?.length">
-      <div class="text-center w-100">
-        <div>Nenhum resultado encontrado</div>
-      </div>
+    @if(!solicitations?.length) {
+    <div class="d-flex justify-content-center" style="flex: 1;">
+      <div>Nenhum resultado encontrado</div>
     </div>
+    }
     @for (solicitation of solicitations; track solicitation) {
     <div class="cardSolicitation">
       <div class="cardHeader">

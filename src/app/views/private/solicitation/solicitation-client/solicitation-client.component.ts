@@ -5,7 +5,7 @@ import {
   Signal,
   signal,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ISmallInformationCard, requestCards } from '@models/cardInformation';
@@ -15,10 +15,11 @@ import { DialogConfirmComponent } from '@shared/dialogs/dialog-confirm/dialog-co
 import { ToastrService } from 'ngx-toastr';
 import { SessionQuery } from '@store/session.query';
 import { UserRole } from '@models/user';
-import { Solicitation } from '@models/solicitation';
+import { Solicitation, SolicitationCategoryEnum } from '@models/solicitation';
 import { DialogSolicitationComponent } from '@shared/dialogs/dialog-solicitation/dialog-solicitation.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { SolicitationChatComponent } from '../solicitation-chat/solicitation-chat.component';
+import { debounceTime, map, ReplaySubject, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-solicitation-client',
@@ -26,10 +27,14 @@ import { SolicitationChatComponent } from '../solicitation-chat/solicitation-cha
   styleUrl: './solicitation-client.component.scss',
 })
 export class SolicitationClientComponent {
-  public filters;
-  public loading: boolean = false;
-  public formFilters: FormGroup;
+  // Utils
+  protected _onDestroy = new Subject<void>();
   protected role: UserRole;
+  public loading: boolean = false;
+
+  // Form
+  public filters;
+  public formFilters: FormGroup;
   protected searchTerm: string = '';
 
   // Cards
@@ -68,6 +73,18 @@ export class SolicitationClientComponent {
     },
   ]);
 
+  // Filters
+  protected SolicitationCategoryEnumSelect = Object.values(
+    SolicitationCategoryEnum
+  ).filter((value) => value !== SolicitationCategoryEnum.Default);
+
+  protected categorySelect = Object.values(this.SolicitationCategoryEnumSelect);
+  protected categoryCtrl: FormControl<any> = new FormControl<any>(null);
+  protected categoryFilterCtrl: FormControl<any> = new FormControl<string>('');
+  protected filteredCategories: ReplaySubject<any[]> = new ReplaySubject<any[]>(
+    1
+  );
+
   constructor(
     private readonly _headerService: HeaderService,
     private readonly _router: Router,
@@ -77,7 +94,7 @@ export class SolicitationClientComponent {
     private readonly _toastrService: ToastrService,
     private readonly _sessionQuery: SessionQuery,
     private cdr: ChangeDetectorRef,
-    private readonly _matBottomSheet : MatBottomSheet,
+    private readonly _matBottomSheet: MatBottomSheet
   ) {
     this._headerService.setTitle('Chamados');
     this._headerService.setSubTitle('');
@@ -92,9 +109,17 @@ export class SolicitationClientComponent {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.formFilters = this._fb.group({
+      user_id: [''],
+      category: [this.SolicitationCategoryEnumSelect],
+    });
 
-  public openRequestDialog(solicitation? : Solicitation) {
+    this.prepareFilterCategoryCtrl();
+    this.updateFilters();
+  }
+
+  public openRequestDialog(solicitation?: Solicitation) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '725px',
@@ -121,15 +146,15 @@ export class SolicitationClientComponent {
       });
   }
 
-  public openRequestChat(solicitation : Solicitation): void {
+  public openRequestChat(solicitation: Solicitation): void {
     this._matBottomSheet.open(SolicitationChatComponent, {
-      data: {solicitation},
+      data: { solicitation },
       disableClose: true,
-      hasBackdrop: false
+      hasBackdrop: false,
     });
   }
 
-  public deleteDialog(request : Solicitation) {
+  public deleteDialog(request: Solicitation) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '550px',
@@ -146,8 +171,8 @@ export class SolicitationClientComponent {
       .afterClosed()
       .subscribe({
         next: (res) => {
-          if(res) {
-            console.log("Deleta o chamado")
+          if (res) {
+            console.log('Deleta o chamado');
           }
         },
       });
@@ -161,11 +186,35 @@ export class SolicitationClientComponent {
   public clearFormFilters() {
     this.formFilters.patchValue({
       search_term: '',
+      category: this.SolicitationCategoryEnumSelect,
     });
     this.updateFilters();
   }
 
   protected handleSearchTerm(res) {
     this.searchTerm = res;
+  }
+
+  protected prepareFilterCategoryCtrl() {
+    this.filteredCategories.next(this.categorySelect.slice());
+
+    this.categoryFilterCtrl.valueChanges
+      .pipe(
+        takeUntil(this._onDestroy),
+        debounceTime(100),
+        map((search: string | null) => {
+          if (!search) {
+            return this.categorySelect.slice();
+          } else {
+            search = search.toLowerCase();
+            return this.categorySelect.filter((category) =>
+              category.toLowerCase().includes(search)
+            );
+          }
+        })
+      )
+      .subscribe((filtered) => {
+        this.filteredCategories.next(filtered);
+      });
   }
 }
