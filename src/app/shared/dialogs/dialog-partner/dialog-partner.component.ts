@@ -104,7 +104,7 @@ export class DialogPartnerComponent {
           id: fileFromBack.id,
           path: fileFromBack.path,
           fileName: fileFromBack.filename,
-          description: fileFromBack.description
+          category: fileFromBack.category
         };
       });
 
@@ -138,7 +138,7 @@ export class DialogPartnerComponent {
     }
 
     if(this.filesToSend) {
-      if (this.filesToSend.some((file) => !file.description)) {
+      if (this.filesToSend.some((file) => !file.category)) {
         this._toastr.error('Preencha a descrição do arquivo!');
         return;
       }
@@ -151,7 +151,7 @@ export class DialogPartnerComponent {
     });
 
     this.filesToSend.map((file, index) => {
-      formData.append(`attachments[${index}][description]`, file.description);
+      formData.append(`attachments[${index}][category]`, file.category);
       formData.append(`attachments[${index}][file]`, file.file);
     });
 
@@ -207,7 +207,7 @@ export class DialogPartnerComponent {
     preview: string;
     filename: string;
     file: File;
-    description: string;
+    category: string;
   }[] = [];
 
   protected filesToRemove: number[] = [];
@@ -215,7 +215,7 @@ export class DialogPartnerComponent {
     index: number;
     id: number;
     fileName: string;
-    description: string;
+    category: string;
     path: string;
   }[] = [];
 
@@ -255,7 +255,7 @@ export class DialogPartnerComponent {
           preview: base64,
           file: file,
           filename: file.name,
-          description: null,
+          category: null,
         });
       } else this._toastr.error(`${file.type} não é permitido`);
     }

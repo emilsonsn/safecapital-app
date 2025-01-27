@@ -28,7 +28,7 @@ export enum StatusUser {
 export interface UserAttachment {
   id: number;
   user_id: number;
-  description: string;
+  category: string;
   filename: string;
   path: string;
   created_at: string;

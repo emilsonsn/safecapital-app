@@ -58,7 +58,7 @@ export class RegisterComponent {
     if (
       !this.form.valid ||
       this.loading ||
-      (!this.filesFromBack && this.filesToSend.some((file) => !file.description))
+      (!this.filesFromBack && this.filesToSend.some((file) => !file.category))
     ) {
       this.form.markAllAsTouched();
       return;
@@ -72,7 +72,7 @@ export class RegisterComponent {
     }
 
     if(this.filesToSend) {
-      if (this.filesToSend.some((file) => !file.description)) {
+      if (this.filesToSend.some((file) => !file.category)) {
         this._toastr.error('Preencha a descrição!');
         return;
       }
@@ -137,7 +137,7 @@ export class RegisterComponent {
     });
 
     this.filesToSend.map((file, index) => {
-      formData.append(`attachments[${index}][description]`, file.description);
+      formData.append(`attachments[${index}][category]`, file.category);
       formData.append(`attachments[${index}][file]`, file.file);
     });
 
@@ -153,14 +153,14 @@ export class RegisterComponent {
     preview: string;
     file: File;
     fileName: string;
-    description: string;
+    category: string;
   }[] = [];
 
   protected filesToRemove: number[] = [];
   protected filesFromBack: {
     index: number;
     id: number;
-    description: string;
+    category: string;
     fileName: string;
     path: string;
   }[] = [];
@@ -201,7 +201,7 @@ export class RegisterComponent {
           preview: base64,
           file: file,
           fileName: file.name,
-          description: null,
+          category: null,
         });
       } else this._toastr.error(`${file.type} não é permitido`);
     }
@@ -260,7 +260,7 @@ export class RegisterComponent {
               id: fileFromBack.id,
               path: fileFromBack.path,
               fileName: fileFromBack.filename,
-              description: fileFromBack.description
+              category: fileFromBack.category
             };
           });
         },

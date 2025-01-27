@@ -96,7 +96,7 @@
           </div>
           <mat-form-field appearance="outline">
             <mat-label>Descrição</mat-label>
-            <input matInput type="text" [(ngModel)]="filesFromBack[$index].description" [ngModelOptions]="{standalone: true}"
+            <input matInput type="text" [(ngModel)]="filesFromBack[$index].category" [ngModelOptions]="{standalone: true}"
               required>
           </mat-form-field>
         </div>
@@ -118,7 +118,7 @@
           </div>
           <mat-form-field appearance="outline">
             <mat-label>Descrição</mat-label>
-            <input matInput type="text" [(ngModel)]="filesToSend[$index].description" [ngModelOptions]="{standalone: true}"
+            <input matInput type="text" [(ngModel)]="filesToSend[$index].category" [ngModelOptions]="{standalone: true}"
               required>
           </mat-form-field>
         </div>
