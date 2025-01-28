@@ -16,7 +16,7 @@
   }
 
   <mat-divider class="my-3"></mat-divider>
-
+  @if(!isSuccess) {
   <form [formGroup]="form" *ngIf="isSuccess">
     <div class="row">
       <!--
@@ -162,4 +162,20 @@
       </div>
     </div>
   </div>
+  }
+  @else {
+    <div class="d-flex flex-column align-items-center justify-content-center">
+      <h4 style="font-weight: 500;" class="text-center mt-1">Sucesso! Favor verificar seu e-mail!</h4>
+      <div class="d-flex justify-content-center align-items-center">
+        <i class="fa-solid fa-check" style="color: green; font-size: 4rem;"></i>
+      </div>
+    </div>
+    <div id="templateButtons" class="mt-2">
+      <div class="d-flex flex-sm-row flex-column justify-content-end gap-3">
+        <div class="d-flex flex-sm-row flex-column gap-2">
+          <button matRipple id="cancel" class="button primary" (click)="onCancel()">Voltar</button>
+        </div>
+      </div>
+    </div>
+  }
 </div>
