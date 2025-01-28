@@ -71,7 +71,7 @@
                 </div>
               }
 
-              @if(client?.status == clientStatus?.WaitingPayment) {
+              @if(client?.status == clientStatus?.WaitingContract) {
                 <div matTooltip="Contrato" matRipple class="buttonTemplate" (click)="onClientContractsClick.emit(client)">
                   <i class="fa-solid fa-file-contract"></i>
                 </div>
