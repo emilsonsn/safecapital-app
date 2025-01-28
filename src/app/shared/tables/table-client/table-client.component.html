@@ -62,7 +62,10 @@
           <td>
             <div class="d-flex justify-content-center">
 
-              @if(client?.status == clientStatus.Approved) {
+              @if(
+                client?.status == clientStatus.Approved
+                && [UserRoleEnum.Client].includes(myUser.role)
+              ) {
                 <div matTooltip="Aceitar" matRipple class="buttonTemplate" (click)="onClientApproveClick.emit(client)">
                   <i class="fa-solid fa-check"></i>
                 </div>
