@@ -10,18 +10,18 @@ import { MatRippleModule } from '@angular/material/core';
 import { PipesModule } from '@shared/pipes/pipes.module';
 import { TableClientComponent } from './table-client/table-client.component';
 import { TableUserComponent } from './table-users/table-users.component';
-import {SharedModule} from "@shared/shared.module";
 import {AvatarModule} from "@shared/components/avatar/avatar.module";
 import { TablePartnersComponent } from './table-partners/table-partners.component';
 import { CardsSolicitationComponent } from './cards-solicitation/cards-solicitation.component';
-import { TableClientContractsComponent } from './table-client-contracts/table-client-contracts.component';
 import { TableSettingsComponent } from './table-settings/table-settings.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CardsSolicitationDefaulterComponent } from './cards-solicitation-defaulter/cards-solicitation-defaulter.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 const tables = [
   TableClientComponent,
-  TableClientContractsComponent,
   TableUserComponent,
   TablePartnersComponent,
   TableSettingsComponent,

@@ -15,6 +15,14 @@
     background-color: $green;
   }
 
+  &.waitingpayment {
+    background-color: $green1;
+  }
+
+  &.waitingcontract {
+    background-color: $green2;
+  }
+
   &.disapproved {
     background-color: $red;
   }

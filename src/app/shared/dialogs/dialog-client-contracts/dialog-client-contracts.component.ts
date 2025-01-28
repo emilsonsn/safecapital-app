@@ -1,16 +1,16 @@
-import {
-  Component,
-  ElementRef,
-  Inject,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { Client } from '@models/client';
 import { ClientService } from '@services/client.service';
 import { Utils } from '@shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
+import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
 
 @Component({
   selector: 'app-dialog-client-contracts',
@@ -21,6 +21,7 @@ export class DialogClientContractsComponent {
   // Utils
   public utils = Utils;
   public loading: boolean = false;
+  protected shouldUpdate : boolean = false;
 
   // Form
   public form: FormGroup;
@@ -28,6 +29,7 @@ export class DialogClientContractsComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     protected readonly _data: { client: Client },
+    private readonly _dialog: MatDialog,
     private readonly _dialogRef: MatDialogRef<DialogClientContractsComponent>,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
@@ -41,12 +43,22 @@ export class DialogClientContractsComponent {
   }
 
   public onSubmit(): void {
-    if (!this.form.valid || this.loading || this.filesToSend.length == 0) {
-      this._toastr.error('Formulário inválido.');
+    if (!this.form.valid || this.loading) {
+      this._toastr.error('Formulário inválido!');
       return;
     }
 
-    this.post();
+    if(!this.filesToSend && !this._data?.client?.policy) {
+      this._toastr.error('Nenhum contrato ou documento foi enviado!');
+      return;
+    }
+
+    if(!this._data?.client?.policy) {
+      this.post();
+    }
+    else {
+      this.update();
+    }
   }
 
   protected post() {
@@ -70,6 +82,10 @@ export class DialogClientContractsComponent {
       });
   }
 
+  protected update() {
+    this.shouldUpdate = !this.shouldUpdate;
+  }
+
   protected prepareFormData(form: FormGroup) {
     const formData = new FormData();
 
@@ -82,6 +98,45 @@ export class DialogClientContractsComponent {
     });
 
     return formData;
+  }
+
+  protected openContract(client : Client) {
+    window.open(client?.policy?.path, '_blank');
+  }
+
+  protected downloadContract(client: Client) {}
+
+  protected onDeleteConfirm(client: Client) {
+    const text = 'Tem certeza? Essa ação não pode ser revertida!';
+    this._dialog
+      .open(DialogConfirmComponent, { data: { text } })
+      .afterClosed()
+      .subscribe((res: boolean) => {
+        if (res) {
+          this.deleteContract(client);
+        }
+      });
+  }
+
+  protected deleteContract(client: Client) {
+    this._initOrStopLoading();
+
+    this._clientService
+      .deletePolicy(client.policy.id)
+      .pipe(
+        finalize(() => {
+          this._initOrStopLoading();
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this._toastr.success(res.message);
+          this._dialogRef.close(true);
+        },
+        error: (err) => {
+          this._toastr.error(err.error.error);
+        },
+      });
   }
 
   // Utils
@@ -102,9 +157,7 @@ export class DialogClientContractsComponent {
   }[] = [];
 
   public allowedTypes = [
-    'image/png',
-    'image/jpeg',
-    'image/jpg',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/pdf',
   ];
 

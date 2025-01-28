@@ -16,6 +16,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { KanbanDefaulterComponent } from './kanban-defaulter/kanban-defaulter.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ClientContractComponent } from './client/client-contract/client-contract.component';
 
 const components: any[] = [
   AccountManagerComponent,
@@ -24,6 +26,7 @@ const components: any[] = [
   HeaderPageComponent,
   SearchInputComponent,
   KanbanDefaulterComponent,
+  ClientContractComponent
 ]
 
 @NgModule({
@@ -35,6 +38,7 @@ const components: any[] = [
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     MatDivider,
     MatTooltipModule,
     MatRippleModule,

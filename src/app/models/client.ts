@@ -13,6 +13,7 @@ export interface Client {
   property_tax: number;
   condominium_fee: number;
   policy_value: number;
+  policy: ClientPolicy;
   payment_form: PaymentFormEnum;
   attachments: ClientAttachment[];
   contracts?: ClientContract[];
@@ -31,6 +32,17 @@ export interface ClientAttachment {
   deleted_at: string;
 }
 
+export interface ClientPolicy {
+  id: number;
+  client_id: number;
+  contract_number: string;
+  due_date: string;
+  filename: string;
+  path: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ClientContract {
   category: string;
   attachment: File | string;
@@ -47,9 +59,11 @@ export enum PaymentFormEnum {
 }
 
 export enum ClientStatus {
-  Approved = 'Approved',
   Pending = 'Pending',
   Disapproved = 'Disapproved',
-  Accepted = 'Accepted',
+  Approved = 'Approved',
+  WaitingPayment = 'WaitingPayment',
+  WaitingContract = 'WaitingContract',
   Active = 'Active',
+  Inactive = 'Inactive',
 }

@@ -32,7 +32,6 @@ export class StatusPipe implements PipeTransform {
       case Status.Reimbursement.toString():
         return 'Reembolso';
       case StatusUser.Accepted.toString():
-      case ClientStatus.Accepted.toString():
         return 'Aceito';
       case SolicitationStatusEnum.Received.toString():
         return 'Recebido';
@@ -50,6 +49,12 @@ export class StatusPipe implements PipeTransform {
         return 'Aprovado';
       case ClientStatus.Disapproved.toString():
         return 'Reprovado';
+      case ClientStatus.WaitingContract.toString():
+        return 'Aguardando Contrato';
+      case ClientStatus.WaitingPayment.toString():
+        return 'Aguardando Pagamento';
+      case ClientStatus.Inactive.toString():
+        return 'Inativo'
       case SolicitationCategoryEnum.CommissionBonus.toString():
         return 'Comissão e Bônus';
       case SolicitationCategoryEnum.Marketing.toString():

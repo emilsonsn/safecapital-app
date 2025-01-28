@@ -6,8 +6,10 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Order, PageControl } from '@models/application';
-import { Client } from '@models/client';
+import { Client, ClientStatus } from '@models/client';
+import { User, UserRole } from '@models/user';
 import { ClientService } from '@services/client.service';
+import { SessionQuery } from '@store/session.query';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 
@@ -17,6 +19,13 @@ import { finalize } from 'rxjs';
   styleUrl: './table-client.component.scss',
 })
 export class TableClientComponent {
+
+  // Utils
+  protected myUser : User;
+  protected UserRoleEnum = UserRole;
+
+  protected clientStatus = ClientStatus;
+
   @Input()
   searchTerm?: string = '';
 
@@ -36,7 +45,7 @@ export class TableClientComponent {
   onClientContractsClick: EventEmitter<Client> = new EventEmitter<Client>();
 
   @Output()
-  onDeleteClientClick: EventEmitter<number> = new EventEmitter<number>();
+  onDeleteClientClick: EventEmitter<Client> = new EventEmitter<Client>();
 
   public clients = [];
 
@@ -90,8 +99,15 @@ export class TableClientComponent {
 
   constructor(
     private readonly _toastr: ToastrService,
-    private readonly _clientService: ClientService
+    private readonly _clientService: ClientService,
+    private readonly _sessionQuery : SessionQuery
   ) {}
+
+  ngOnInit() {
+    this._sessionQuery.user$.subscribe(user => {
+      this.myUser = user;
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const { filters, searchTerm, loading } = changes;

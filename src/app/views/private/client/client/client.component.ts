@@ -95,7 +95,7 @@ export class ClientComponent {
       .open(DialogClientApproveComponent, {
         data: { client },
         width: '80%',
-        maxWidth: '850px',
+        maxWidth: '725px',
         maxHeight: '90%',
       })
       .afterClosed()
@@ -119,23 +119,23 @@ export class ClientComponent {
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
+        // if (res) {
           this.loading = true;
           setTimeout(() => {
             this.loading = false;
           }, 200);
-        }
+        // }
       });
   }
 
-  protected onDeleteConfirm(id: number) {
+  protected onDeleteConfirm(client: Client) {
     const text = 'Tem certeza? Essa ação não pode ser revertida!';
     this._dialog
       .open(DialogConfirmComponent, { data: { text } })
       .afterClosed()
       .subscribe((res: boolean) => {
         if (res) {
-          this.deleteClient(id);
+          this.deleteClient(client.id);
         }
       });
   }

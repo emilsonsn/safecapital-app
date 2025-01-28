@@ -49,29 +49,7 @@ export class DialogClientComponent {
   public form: FormGroup;
 
   // Selects
-  // Pendente, Aprovado, Reprovado, Aceito, Ativo
-  public statusSelect: { label: string; value: string }[] = [
-    {
-      label: 'Pendente',
-      value: 'Pending',
-    },
-    {
-      label: 'Aprovado',
-      value: 'Approved',
-    },
-    {
-      label: 'Reprovado',
-      value: 'Disapproved',
-    },
-    {
-      label: 'Aceito',
-      value: 'Accepted',
-    },
-    {
-      label: 'Ativo',
-      value: 'Active',
-    },
-  ];
+  public statusSelect = Object.values(this.clientStatuses).slice(); // .filter(s => !s.includes(this.clientStatuses.WaitingPayment))
 
   public paymentFormSelect: { label: string; value: PaymentFormEnum }[] = [
     {

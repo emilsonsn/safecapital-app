@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Client } from '@models/client';
+import { Client, ClientStatus } from '@models/client';
 import { ClientService } from '@services/client.service';
 import { Utils } from '@shared/utils';
 import { ToastrService } from 'ngx-toastr';
@@ -29,25 +29,41 @@ export class DialogClientApproveComponent {
     private readonly _dialogRef: MatDialogRef<DialogClientApproveComponent>,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
+    private readonly _clientService : ClientService,
   ) {}
 
   ngOnInit(): void {
     this.form = this._fb.group({
       client_id: [this._data.client.id],
+      status: [ClientStatus.WaitingPayment]
     });
   }
 
   public onSubmit(): void {
     if (!this.form.valid || this.loading) {
-      this._toastr.error('Formulário inválido.');
+      this._toastr.error('Formulário inválido!');
       return;
     }
 
-    this.post();
+    this.submit();
   }
 
-  protected post() {
-    // this._initOrStopLoading();
+  protected submit() {
+    this._initOrStopLoading();
+
+    this._clientService.acceptClient(this._data.client.id)
+      .pipe(finalize(() => {
+        this._initOrStopLoading();
+      }))
+      .subscribe({
+        next: (res) => {
+          this._toastr.success(res.message);
+          this._dialogRef.close(true);
+        },
+        error : (err) => {
+          this._toastr.error(err.error.error);
+        }
+      })
   }
 
   protected prepareFormData(form: FormGroup) {

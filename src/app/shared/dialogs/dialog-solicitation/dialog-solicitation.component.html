@@ -22,7 +22,7 @@
           <mat-label>Número do Contrato </mat-label>
           <mat-select formControlName="contract_number" placeholder="Selecione o contrato">
             <mat-option>
-              <ngx-mat-select-search [formControl]="clientFilterCtrl" placeholderLabel="Procure pelo número do contrato"
+              <ngx-mat-select-search [formControl]="contractNumberFilterCtrl" placeholderLabel="Procure pelo número do contrato"
                 i18n-placeholderLabel noEntriesFoundLabel="Contrato não encontrado" i18n-noEntriesFoundLabel>
               </ngx-mat-select-search>
             </mat-option>
@@ -31,8 +31,8 @@
               Limpar Filtro
             </mat-option>
             }
-            <mat-option *ngFor="let user of filteredClients | async" [value]="user.id">
-              {{ user.id }}
+            <mat-option *ngFor="let contract of filteredContractNumbers | async" [value]="contract">
+              {{ contract }}
             </mat-option>
           </mat-select>
         </mat-form-field>

@@ -7,7 +7,7 @@
 
   <div id="buttons">
     @if(role == 'Client') {
-    <button matRipple class="button primary" (click)="openRequestDialog()">
+    <button matRipple class="button primary" (click)="openSolicitationDialog()">
       <i class="fa-solid fa-plus"></i> Inadimplência
     </button>
     }
@@ -41,6 +41,6 @@
 <div id="componentTable" class="col-12 mt-4">
   <app-cards-solicitation-defaulter
     [loading]="loading" [filters]="filters" [searchTerm]="searchTerm"
-    (onOpenSolicitationDetails)="openRequestDialog($event)">
+    (onOpenSolicitationDetails)="openSolicitationDialog($event)">
   </app-cards-solicitation-defaulter>
 </div>

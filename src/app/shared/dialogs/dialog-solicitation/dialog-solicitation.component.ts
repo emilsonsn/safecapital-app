@@ -34,19 +34,19 @@ export class DialogSolicitationComponent {
   public loading: boolean = false;
 
   // Filters
-  protected clientSelect: Client[] = [];
+  protected contractNumberSelect: string[] = [];
 
-  protected clientCtrl: FormControl<any> = new FormControl<any>(null);
-  protected clientFilterCtrl: FormControl<any> = new FormControl<string>('');
-  protected filteredClients: ReplaySubject<any[]> = new ReplaySubject<any[]>(
+  protected contractNumberCtrl: FormControl<any> = new FormControl<any>(null);
+  protected contractNumberFilterCtrl: FormControl<any> = new FormControl<string>('');
+  protected filteredContractNumbers: ReplaySubject<any[]> = new ReplaySubject<any[]>(
     1
   );
 
-  protected statuses = Object.values(SolicitationCategoryEnum).filter(status => status != SolicitationCategoryEnum.Default);
+  protected statuses = Object.values(SolicitationCategoryEnum).filter(status => status != SolicitationCategoryEnum.Default)
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    protected readonly _data: { solicitation : Solicitation },
+    protected readonly _data: { solicitation : Solicitation, default : boolean },
     private readonly _dialogRef: MatDialogRef<DialogSolicitationComponent>,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
@@ -55,7 +55,7 @@ export class DialogSolicitationComponent {
     private readonly _userService: UserService,
     private readonly _clientService: ClientService
   ) {
-    this.getUsersFromBack();
+    this.getClientsFromBack();
   }
 
   ngOnInit(): void {
@@ -70,6 +70,14 @@ export class DialogSolicitationComponent {
       this.isNewSolicitation = false;
       this.form.patchValue(this._data?.solicitation);
       this.form.disable();
+    }
+    console.log(this._data);
+
+    if(this._data?.default) {
+      this.statuses = Object.values(SolicitationCategoryEnum).filter(status => status == SolicitationCategoryEnum.Default);
+
+      this.form.get('category').patchValue(SolicitationCategoryEnum.Default.toString());
+      this.form.get('category').disable();
     }
   }
 
@@ -114,38 +122,39 @@ export class DialogSolicitationComponent {
   }
 
   // Filters
-  protected prepareFilterClientCtrl() {
-      this.clientFilterCtrl.valueChanges
+  protected prepareFilterContractNumberCtrl() {
+      this.contractNumberFilterCtrl.valueChanges
         .pipe(
           takeUntil(this._onDestroy),
           debounceTime(100),
           map((search: string | null) => {
             if (!search) {
-              return this.clientSelect.slice();
+              return this.contractNumberSelect.slice();
             } else {
               search = search.toLowerCase();
-              return this.clientSelect.filter(
-                (user) => user.id.toString().toLowerCase().includes(search)
+              return this.contractNumberSelect.filter(
+                (contract) => contract.toString().toLowerCase().includes(search)
               );
             }
           })
         )
         .subscribe((filtered) => {
-          this.filteredClients.next(filtered);
+          this.filteredContractNumbers.next(filtered);
         });
     }
 
     // Getters
-
-    public getUsersFromBack() {
+    public getClientsFromBack() {
       this._clientService.getList().subscribe((res) => {
-        this.clientSelect = res.data;
+        this.contractNumberSelect = res.data
+          .filter((client) => client.policy?.contract_number) // Remove valores nulos ou undefined
+          .map((client) => client.policy.contract_number);
 
-        this.filteredClients.next(
-          this.clientSelect.slice()
+        this.filteredContractNumbers.next(
+          this.contractNumberSelect.slice()
         );
 
-        this.prepareFilterClientCtrl();
+        this.prepareFilterContractNumberCtrl();
       });
     }
 

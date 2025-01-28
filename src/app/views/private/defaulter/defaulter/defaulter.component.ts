@@ -222,7 +222,7 @@ export class DefaulterComponent {
 
     this._dialog
       .open(DialogSolicitationComponent, {
-        data: solicitation ? { solicitation } : null,
+        data: { solicitation : solicitation ?? null, default : true },
         ...dialogConfig,
       })
       .afterClosed()

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { PageControl, ApiResponsePageable, ApiResponse, DeleteApiResponse } from '@models/application';
-import { Client, ClientPolicyDocument } from '@models/client';
+import { Client, ClientPolicy, ClientPolicyDocument } from '@models/client';
 import { Utils } from '@shared/utils';
 import { Observable } from 'rxjs';
 
@@ -10,6 +10,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ClientService {
+
+  private sessionEndpoint: string = 'client';
 
   constructor(
     private readonly _http: HttpClient
@@ -19,29 +21,43 @@ export class ClientService {
     const paginate = Utils.mountPageControl(pageControl);
     const filterParams = Utils.mountPageControl(filters);
 
-    return this._http.get<ApiResponsePageable<Client>>(`${environment.api}/client/search?${paginate}${filterParams}`);
+    return this._http.get<ApiResponsePageable<Client>>(`${environment.api}/${this.sessionEndpoint}/search?${paginate}${filterParams}`);
   }
 
   public post(client: Client | FormData): Observable<ApiResponse<Client>> {
-    return this._http.post<ApiResponse<Client>>(`${environment.api}/client/create`, client);
+    return this._http.post<ApiResponse<Client>>(`${environment.api}/${this.sessionEndpoint}/create`, client);
   }
 
-  public patch(id: number, client: Client | FormData | FormData): Observable<ApiResponse<Client>> {
-    return this._http.post<ApiResponse<Client>>(`${environment.api}/client/${id}?_method=PATCH`, client);
+  public patch(id: number, client: Client | FormData): Observable<ApiResponse<Client>> {
+    return this._http.post<ApiResponse<Client>>(`${environment.api}/${this.sessionEndpoint}/${id}?_method=PATCH`, client);
   }
 
   public delete(id: number): Observable<DeleteApiResponse> {
-    return this._http.delete<DeleteApiResponse>(`${environment.api}/client/${id}`);
+    return this._http.delete<DeleteApiResponse>(`${environment.api}/${this.sessionEndpoint}/${id}`);
   }
 
+  // Attachments
   public deleteAttachment(id: number): Observable<DeleteApiResponse> {
-    return this._http.delete<DeleteApiResponse>(`${environment.api}/client/attachment/${id}`);
+    return this._http.delete<DeleteApiResponse>(`${environment.api}/${this.sessionEndpoint}/attachment/${id}`);
+  }
+
+  // Policy
+  public patchPolicy(id: number, client: ClientPolicy | FormData): Observable<ApiResponse<Client>> {
+    return this._http.post<ApiResponse<Client>>(`${environment.api}/${this.sessionEndpoint}/policy/${id}?_method=PATCH`, client);
+  }
+
+  public deletePolicy(id: number): Observable<DeleteApiResponse> {
+    return this._http.delete<DeleteApiResponse>(`${environment.api}/${this.sessionEndpoint}/policy/${id}`);
+  }
+
+  public acceptClient(client_id : number): Observable<ApiResponse<Client>> {
+    return this._http.patch<ApiResponse<Client>>(`${environment.api}/${this.sessionEndpoint}/accept/${client_id}`, {});
   }
 
   //
 
   public createPolicyDocument(data: ClientPolicyDocument | FormData): Observable<ApiResponse<Client>> {
-    return this._http.post<ApiResponse<Client>>(`${environment.api}/client/policy-document`, data);
+    return this._http.post<ApiResponse<Client>>(`${environment.api}/${this.sessionEndpoint}/policy-document`, data);
   }
 
 }

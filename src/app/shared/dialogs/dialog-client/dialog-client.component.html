@@ -60,7 +60,7 @@
             <mat-label>Status</mat-label>
             <mat-select formControlName="status" placeholder="Status">
               @for (status of statusSelect; track status) {
-              <mat-option [value]="status.value">{{ status.label }}</mat-option>
+              <mat-option [value]="status">{{ status | status }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -242,7 +242,7 @@
 
   </form>
   <!-- </mat-tab>
-    <mat-tab label="Contratos">
+    <mat-tab label="Contrato">
       <div class="p-2">
         <div style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; padding: 0.5rem;">
           <app-table-client-contracts>

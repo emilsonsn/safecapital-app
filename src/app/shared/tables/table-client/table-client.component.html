@@ -62,14 +62,14 @@
           <td>
             <div class="d-flex justify-content-center">
 
-              @if(client?.status == 'Approved') {
+              @if(client?.status == clientStatus.Approved) {
                 <div matTooltip="Aceitar" matRipple class="buttonTemplate" (click)="onClientApproveClick.emit(client)">
                   <i class="fa-solid fa-check"></i>
                 </div>
               }
 
-              @if(client?.status == 'Accepted') {
-                <div matTooltip="Contratos" matRipple class="buttonTemplate" (click)="onClientContractsClick.emit(client)">
+              @if(client?.status == clientStatus.WaitingPayment) {
+                <div matTooltip="Contrato" matRipple class="buttonTemplate" (click)="onClientContractsClick.emit(client)">
                   <i class="fa-solid fa-file-contract"></i>
                 </div>
               }
@@ -77,6 +77,12 @@
               <div matTooltip="Editar" matRipple class="buttonTemplate" (click)="onClientClick.emit(client)">
                 <i class="fa-solid fa-pen-to-square"></i>
               </div>
+
+              @if(myUser?.role == UserRoleEnum?.Admin || client?.status == clientStatus.Pending) {
+                <div matTooltip="Deletar" matRipple class="buttonTemplate cancel" (click)="onDeleteClientClick.emit(client)">
+                  <i class="fa-solid fa-trash"></i>
+                </div>
+              }
 
             </div>
           </td>

@@ -1,0 +1,53 @@
+<div id="template">
+  <div id="content">
+    @if (loading) {
+      <div class="d-flex justify-content-center w-100">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+    @else {
+      <div class="cardContract">
+        <div class="cardHeader">
+          <div class="title">
+            Apólice de {{Client.name}}
+          </div>
+        </div>
+        <div class="cardDescription">
+          <span style="color: #414a4c; font-weight: 600;">Número do Contrato:</span> <br>
+          <form [formGroup]="form">
+            <mat-form-field appearance="outline">
+              <input matInput type="text" formControlName="contract_number">
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="cardFooter">
+          <div class="title">
+            <span style="color: #414a4c; font-weight: 600;">Data de Vencimento:</span><br>{{ (clientPolicy?.due_date | date:"dd/MM/YYYY HH:mm:ss") ?? '-'}}
+          </div>
+          <div class="title">
+            <span style="color: #414a4c; font-weight: 600;">Criado em:</span><br>{{ (clientPolicy?.created_at | date:"dd/MM/YYYY HH:mm:ss") ?? '-'}}
+          </div>
+          <div class="title">
+            <span style="color: #414a4c; font-weight: 600;">Cliente:</span><br>{{ Client.name + " - ID " + Client.id}}
+          </div>
+          <div id="buttons">
+            <div matRipple matTooltip="Visualizar/Download" class="buttonTemplate"
+              (click)="onOpenContract.emit(Client); $event.stopPropagation()">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </div>
+            <!-- <div matRipple matTooltip="Download"  class="buttonTemplate"
+              (click)="OnContractDownloadClick.emit(Client); $event.stopPropagation()">
+              <i class="fa-solid fa-download"></i>
+            </div> -->
+            @if(myUser.role == UserRoleEnum.Admin) {
+              <div matRipple matTooltip="Deletar"  class="buttonTemplate delete"
+                (click)="onContractDeleteClick.emit(Client); $event.stopPropagation()">
+                <i class="fa-solid fa-close"></i>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

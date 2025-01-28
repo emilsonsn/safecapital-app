@@ -98,7 +98,7 @@ export class DefaulterClientComponent {
     });
   }
 
-  public openRequestDialog(solicitation? : Solicitation) {
+  public openSolicitationDialog(solicitation? : Solicitation) {
     const dialogConfig: MatDialogConfig = {
       width: '80%',
       maxWidth: '725px',
@@ -109,7 +109,7 @@ export class DefaulterClientComponent {
 
     this._dialog
       .open(DialogSolicitationComponent, {
-        data: solicitation ? { solicitation } : null,
+        data: { solicitation : solicitation ?? null, default : true },
         ...dialogConfig,
       })
       .afterClosed()
