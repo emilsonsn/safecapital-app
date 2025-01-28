@@ -42,7 +42,7 @@ export class DialogSolicitationComponent {
     1
   );
 
-  protected statuses = Object.values(SolicitationCategoryEnum).filter(status => status != SolicitationCategoryEnum.Default)
+  protected statuses : string[] = Object.values(SolicitationCategoryEnum).filter(status => status != SolicitationCategoryEnum.Default)
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
