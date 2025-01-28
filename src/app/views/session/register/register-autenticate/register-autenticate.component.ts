@@ -18,6 +18,7 @@ import { finalize } from 'rxjs';
 export interface RegisterAutenticateEmitter {
   isNewUser: boolean;
   user?: User;
+  email?: string;
 }
 
 @Component({
@@ -66,12 +67,15 @@ export class RegisterAutenticateComponent {
   }
 
   protected searchForUser() {
+    const email = this.form.get('email').value;
     this._userService
-      .getUserByEmail(this.form.get('email').value)
+      .getUserByEmail(email)
       .pipe(
         finalize(() => {
           if (this._user) {
             this.form.get('password').enable();
+            this.form.get('email').patchValue(email);
+            this.form.get('email').disable();
             this._searchUserState = false;
           } else {
             this.autenticateUser();
@@ -123,6 +127,7 @@ export class RegisterAutenticateComponent {
     this.AutenticateEmitter.emit({
       isNewUser: this._user ? false : true,
       user: this._user ?? null,
+      email: this.form.get('email').value,
     });
 
     this._initOrStopLoading();

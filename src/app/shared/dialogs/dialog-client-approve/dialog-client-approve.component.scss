@@ -1,1 +1,44 @@
 @import "variables";
+
+#files {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    max-width: 100%;
+    max-height: 14rem;
+    overflow: auto;
+  
+    .file {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $white-200;
+      width: 9rem;
+      height: 9rem;
+      object-fit: contain;
+      cursor: pointer;
+  
+      .delete {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: $red;
+        font-size: 1.2rem;
+        cursor: pointer;
+        background-color: $white-100;
+        height: fit-content;
+        border-radius: 50px;
+        width: 1.4rem;
+        height: 1.4rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      .fa-file {
+        font-size: 2rem;
+      }
+    }
+  
+  }

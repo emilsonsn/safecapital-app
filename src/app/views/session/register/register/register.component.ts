@@ -23,10 +23,14 @@ export class RegisterComponent {
   @Input()
   public userData?: User = null;
 
+  @Input()
+  public email?: string = '';
+
   // Utils
   public loading: boolean = false;
   public utils = Utils;
   protected isSuccess: boolean = true;
+  protected getPassword: boolean = true;
 
   // Form
   public form: FormGroup;
@@ -47,10 +51,21 @@ export class RegisterComponent {
       phone: [null, [Validators.required]],
       company_name: [null, [Validators.required]],
       creci: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+      confirm_password: [null, [Validators.required]],
     });
+
+    this.form.get('email').disable();
 
     if (this.userData) {
       this.getUserMe();
+      this.form.get('password').clearValidators();
+      this.form.get('confirm_password').clearValidators();
+      this.getPassword = false;
+    }
+
+    if(this.email){
+      this.form.get('email').setValue(this.email);
     }
   }
 
@@ -58,9 +73,16 @@ export class RegisterComponent {
     if (
       !this.form.valid ||
       this.loading ||
-      (!this.filesFromBack && this.filesToSend.some((file) => !file.category))
+      (!this.filesFromBack && this.filesToSend.some((file) => !file.category))      
     ) {
       this.form.markAllAsTouched();
+      return;
+    }
+
+    if(this.form.get('password').value != this.form.get('confirm_password').value){
+      this._toastr.error('Senhas não coincidem');
+      this.form.get('password').markAllAsTouched();
+      this.form.get('confirm_password').markAllAsTouched();
       return;
     }
 
@@ -79,6 +101,8 @@ export class RegisterComponent {
     }
 
     this._initOrStopLoading();
+
+    console.log('');
 
     if (!this.userData) {
       this.post();
@@ -133,7 +157,7 @@ export class RegisterComponent {
     const formData = new FormData();
 
     Object.entries(form).forEach(([key, value]) => {
-      formData.append(key, value.toString());
+      formData.append(key, value?.toString());
     });
 
     this.filesToSend.map((file, index) => {

@@ -17,7 +17,7 @@
 
   <mat-divider class="my-3"></mat-divider>
 
-  <form [formGroup]="form">
+  <form [formGroup]="form" *ngIf="isSuccess">
     <div class="row">
       <!--
           <div class="col-12 mb-3">
@@ -38,6 +38,17 @@
           </div>
         -->
 
+      <div class="col-md-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail </mat-label>
+          <input matInput
+          type="text"
+          formControlName="email" 
+          [pattern]="utils.patternEmail"          
+          >
+        </mat-form-field>
+      </div>
+
       <div class="col-md-6 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Nome </mat-label>
@@ -50,12 +61,7 @@
           <input matInput type="text" formControlName="surname">
         </mat-form-field>
       </div>
-      <div class="col-md-6 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>E-mail </mat-label>
-          <input matInput type="text" formControlName="email" [pattern]="utils.patternEmail">
-        </mat-form-field>
-      </div>
+
       <div class="col-md-6 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Telefone</mat-label>
@@ -81,6 +87,21 @@
           <input matInput type="text" formControlName="creci" mask="0*">
         </mat-form-field>
       </div>
+      <ng-container *ngIf="getPassword">
+        <div class="col-md-6 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Senha </mat-label>
+            <input matInput type="password" formControlName="password">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Confirme a senha</mat-label>
+            <input matInput type="password" formControlName="confirm_password">
+          </mat-form-field>
+        </div>
+      </ng-container>
+      
     </div>
     <div class="">
       <span class="fw-bolder">Anexos</span>

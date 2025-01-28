@@ -4,7 +4,7 @@
     <app-register-autenticate (AutenticateEmitter)="handleIsNewUser($event)" style="width: 100%;" />
   }
   @else {
-    <app-register [userData]="user" style="width: 100%; max-height: 100%; display: flex; justify-content: center;" />
+    <app-register [email]="email" [userData]="user" style="width: 100%; max-height: 100%; display: flex; justify-content: center;" />
   }
 
 </app-register-layout>

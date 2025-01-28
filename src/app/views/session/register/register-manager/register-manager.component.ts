@@ -12,6 +12,7 @@ export class RegisterManagerComponent {
   protected autenticateState : boolean = true;
   protected loading : boolean = true;
   protected user : User = null;
+  protected email : string = null;
 
   constructor(
 
@@ -23,6 +24,7 @@ export class RegisterManagerComponent {
 
   protected handleIsNewUser(e : RegisterAutenticateEmitter) {
     this.user = e.user;
+    this.email = e.email;
 
     setTimeout(() => {
       this.autenticateState = false;

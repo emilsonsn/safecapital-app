@@ -34,7 +34,7 @@ export class DialogPartnerAnalysisComponent {
     },
     {
       slug: 'surname',
-      title: 'Sobrenom',
+      title: 'Sobrenome',
     },
     {
       slug: 'email',
@@ -88,6 +88,7 @@ export class DialogPartnerAnalysisComponent {
         this.justification = true;
       } else {
         justificationControl?.clearValidators();
+        this.justification = false;
       }
 
       justificationControl?.updateValueAndValidity();
