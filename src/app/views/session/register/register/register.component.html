@@ -16,129 +16,145 @@
   }
 
   <mat-divider class="my-3"></mat-divider>
-
-  <form [formGroup]="form">
-    <div class="row">
-      <!--
-          <div class="col-12 mb-3">
-            <div class="profile-upload">
-              <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" hidden>
-              <div class="upload-container" (click)="triggerFileInput()" [ngClass]="{'drag-over': isDragOver}"
-                (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
-                <div class="upload-placeholder" *ngIf="!profileImage">
-                  <i class="fa-solid fa-upload"></i>
-                  <p>Arraste a imagem aqui ou clique para fazer upload</p>
-                </div>
-                <img *ngIf="profileImage" [src]="profileImage" alt="Foto de Perfil" class="uploaded-image">
-                <div *ngIf="profileImage" class="remove-image" (click)="removeImage($event)">
-                  <i class="fa-solid fa-trash"></i>
+  @if(!isSuccess) {
+    <form [formGroup]="form">
+      <div class="row">
+        <!--
+            <div class="col-12 mb-3">
+              <div class="profile-upload">
+                <input type="file" id="fileInput" (change)="onFileSelected($event)" accept="image/*" hidden>
+                <div class="upload-container" (click)="triggerFileInput()" [ngClass]="{'drag-over': isDragOver}"
+                  (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+                  <div class="upload-placeholder" *ngIf="!profileImage">
+                    <i class="fa-solid fa-upload"></i>
+                    <p>Arraste a imagem aqui ou clique para fazer upload</p>
+                  </div>
+                  <img *ngIf="profileImage" [src]="profileImage" alt="Foto de Perfil" class="uploaded-image">
+                  <div *ngIf="profileImage" class="remove-image" (click)="removeImage($event)">
+                    <i class="fa-solid fa-trash"></i>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        -->
+          -->
 
-      <div class="col-md-6 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>Nome </mat-label>
-          <input matInput type="text" formControlName="name">
-        </mat-form-field>
-      </div>
-      <div class="col-md-6 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>Sobrenome </mat-label>
-          <input matInput type="text" formControlName="surname">
-        </mat-form-field>
-      </div>
-      <div class="col-md-6 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>E-mail </mat-label>
-          <input matInput type="text" formControlName="email" [pattern]="utils.patternEmail">
-        </mat-form-field>
-      </div>
-      <div class="col-md-6 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>Telefone</mat-label>
-          <input type="text" formControlName="phone" matInput mask="(00) 0000-0000||(00) 00000-0000"
-            placeholder="(00) 0000-0000 ou (00) 00000-0000" />
-        </mat-form-field>
-      </div>
-      <div class="col-md-6 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>CNPJ </mat-label>
-          <input matInput type="text" formControlName="cnpj" mask="00.000.000/0000-00">
-        </mat-form-field>
-      </div>
-      <div class="col-md-6 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>Empresa </mat-label>
-          <input matInput type="text" formControlName="company_name">
-        </mat-form-field>
-      </div>
-      <div class="col-md-6 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>CRECI </mat-label>
-          <input matInput type="text" formControlName="creci" mask="0*">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="">
-      <span class="fw-bolder">Anexos</span>
-      <div id="files">
-        @for(img of filesFromBack; track img) {
-        <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
-
-          <div class="file" matTooltip="{{img.fileName}}" (click)="openFileInAnotherTab(img.path)">
-            <div class="delete">
-              <i class="fa-solid fa-close" (click)="prepareFileToRemoveFromBack(img.id, $index);"></i>
-            </div>
-            <img [src]="img.path" alt="{{img.fileName}}" style="max-width: 100%; max-height: 100%;" />
-          </div>
+        <div class="col-md-6 mb-3">
           <mat-form-field appearance="outline">
-            <mat-label>Descrição</mat-label>
-            <input matInput type="text" [(ngModel)]="filesFromBack[$index].category" [ngModelOptions]="{standalone: true}"
-              required>
+            <mat-label>Nome </mat-label>
+            <input matInput type="text" formControlName="name">
           </mat-form-field>
         </div>
-
-        }
-
-        @for(img of filesToSend; track img) {
-        <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
-          <div class="file" matTooltip="{{img.file.name}}">
-            <div class="delete">
-              <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
-            </div>
-            @if(img.preview) {
-            <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
-            }
-            @else {
-            <i class="fa-solid fa-file"></i>
-            }
-          </div>
+        <div class="col-md-6 mb-3">
           <mat-form-field appearance="outline">
-            <mat-label>Descrição</mat-label>
-            <input matInput type="text" [(ngModel)]="filesToSend[$index].category" [ngModelOptions]="{standalone: true}"
-              required>
+            <mat-label>Sobrenome </mat-label>
+            <input matInput type="text" formControlName="surname">
           </mat-form-field>
         </div>
-        }
-      </div>
-      <div matRipple id="inputFileAdd" class="mt-2">
-        <div id="text">
-          <i class="fa-solid fa-plus"></i>
-          <span>Adicionar Arquivo</span>
+        <div class="col-md-6 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>E-mail </mat-label>
+            <input matInput type="text" formControlName="email" [pattern]="utils.patternEmail">
+          </mat-form-field>
         </div>
-        <input #filesInput type="file" (change)="onFileSelected($event)" [multiple]="true" title=" " />
+        <div class="col-md-6 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Telefone</mat-label>
+            <input type="text" formControlName="phone" matInput mask="(00) 0000-0000||(00) 00000-0000"
+              placeholder="(00) 0000-0000 ou (00) 00000-0000" />
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>CNPJ </mat-label>
+            <input matInput type="text" formControlName="cnpj" mask="00.000.000/0000-00">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Empresa </mat-label>
+            <input matInput type="text" formControlName="company_name">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>CRECI </mat-label>
+            <input matInput type="text" formControlName="creci" mask="0*">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="">
+        <span class="fw-bolder">Anexos</span>
+        <div id="files">
+          @for(img of filesFromBack; track img) {
+          <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
+
+            <div class="file" matTooltip="{{img.fileName}}" (click)="openFileInAnotherTab(img.path)">
+              <div class="delete">
+                <i class="fa-solid fa-close" (click)="prepareFileToRemoveFromBack(img.id, $index);"></i>
+              </div>
+              <img [src]="img.path" alt="{{img.fileName}}" style="max-width: 100%; max-height: 100%;" />
+            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>Descrição</mat-label>
+              <input matInput type="text" [(ngModel)]="filesFromBack[$index].category" [ngModelOptions]="{standalone: true}"
+                required>
+            </mat-form-field>
+          </div>
+
+          }
+
+          @for(img of filesToSend; track img) {
+          <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
+            <div class="file" matTooltip="{{img.file.name}}">
+              <div class="delete">
+                <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
+              </div>
+              @if(img.preview) {
+              <img [src]="img.preview" alt="{{img.file.name}}" style="max-width: 100%; max-height: 100%;" />
+              }
+              @else {
+              <i class="fa-solid fa-file"></i>
+              }
+            </div>
+            <mat-form-field appearance="outline">
+              <mat-label>Descrição</mat-label>
+              <input matInput type="text" [(ngModel)]="filesToSend[$index].category" [ngModelOptions]="{standalone: true}"
+                required>
+            </mat-form-field>
+          </div>
+          }
+        </div>
+        <div matRipple id="inputFileAdd" class="mt-2">
+          <div id="text">
+            <i class="fa-solid fa-plus"></i>
+            <span>Adicionar Arquivo</span>
+          </div>
+          <input #filesInput type="file" (change)="onFileSelected($event)" [multiple]="true" title=" " />
+        </div>
+      </div>
+    </form>
+    <div id="templateButtons" class="mt-2">
+      <div class="d-flex flex-sm-row flex-column justify-content-end gap-3">
+        <div class="d-flex flex-sm-row flex-column gap-2">
+          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
+          <button matRipple id="submit" class="button primary" (click)="onSubmit()">Cadastrar</button>
+        </div>
       </div>
     </div>
-  </form>
-  <div id="templateButtons" class="mt-2">
-    <div class="d-flex flex-sm-row flex-column justify-content-end gap-3">
-      <div class="d-flex flex-sm-row flex-column gap-2">
-        <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
-        <button matRipple id="submit" class="button primary" (click)="onSubmit()">Cadastrar</button>
+  }
+  @else {
+    <div class="d-flex flex-column align-items-center justify-content-center">
+      <h4 style="font-weight: 500;" class="text-center mt-1">Sucesso! Favor verificar seu e-mail!</h4>
+      <div class="d-flex justify-content-center align-items-center">
+        <i class="fa-solid fa-check" style="color: green; font-size: 4rem;"></i>
       </div>
     </div>
-  </div>
+    <div id="templateButtons" class="mt-2">
+      <div class="d-flex flex-sm-row flex-column justify-content-end gap-3">
+        <div class="d-flex flex-sm-row flex-column gap-2">
+          <button matRipple id="cancel" class="button primary" (click)="onCancel()">Voltar</button>
+        </div>
+      </div>
+    </div>
+  }
 </div>

@@ -26,7 +26,7 @@ export class RegisterComponent {
   // Utils
   public loading: boolean = false;
   public utils = Utils;
-  protected isSuccess: boolean = true;
+  protected isSuccess: boolean = false;
 
   // Form
   public form: FormGroup;
