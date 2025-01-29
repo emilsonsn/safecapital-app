@@ -13,14 +13,19 @@
         @for(message of _data?.solicitation?.messages; track message) {
         <!-- Se for o meu usuário OU for do suporte(Admin ou Manager), a exibição da mensagens é na direita(Como se fossem minhas mensagens) -->
         <div class="sideManager"
-          [ngStyle]="{'flex-direction' : ((message?.user_id == user?.id) || ((message?.user?.role == 'Admin' || message?.user?.role == 'Manager') && user?.role != 'Client')) ? 'row-reverse' : 'row'  }">
+          [ngStyle]="
+            {
+              'flex-direction' : ((message?.user_id == user?.id) || ((message?.user?.role == 'Admin' || message?.user?.role == 'Manager') && user?.role != 'Client')) ? 'row-reverse' : 'row',
+            }">
           <div class="messageTemplate">
             @if(message?.attachment) {
               <div class="img" (click)="openImgInAnotherTab(message?.attachment)" [ngStyle]="{'margin-left' : ((message?.user_id == user?.id) || (message?.user?.role == 'Admin' || message?.user?.role == 'Manager')) ? 'auto' : '0'  }">
                 <img [src]="message?.attachment" style="max-width: 100%; max-height: 100%;" />
               </div>
             }
-            <div class="message">
+            <div class="message"
+            [ngStyle]="{'background-color' : ((message?.user_id == user?.id) || ((message?.user?.role == 'Admin' || message?.user?.role == 'Manager') && user?.role != 'Client')) ? '#1c4163' : '#343a40' }"
+            >
               {{ message?.message }}
             </div>
             <div class="hour" [ngStyle]="{'text-align' : ((message?.user_id == user?.id) || (message?.user?.role == 'Admin' || message?.user?.role == 'Manager'))? 'end' : 'start'  }">
