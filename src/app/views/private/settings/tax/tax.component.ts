@@ -21,7 +21,7 @@ export class TaxComponent {
     private readonly _headerService: HeaderService,
     private readonly _taxSettingService: TaxSettingService,
     private readonly _fb: FormBuilder,
-    private readonly _toastr: ToastrService,
+    private readonly _toastr: ToastrService
   ) {
     this._headerService.setTitle('Configurações de Taxa');
     this._headerService.setSubTitle('');
@@ -29,7 +29,7 @@ export class TaxComponent {
 
   ngOnInit() {
     this.form = this._fb.group({
-      percentage: [null, [Validators.required, Validators.min(0.01), Validators.max(100)]],
+      percentage: [null, [Validators.required, Validators.min(0.01)]],
       tax: [null, [Validators.required]],
     });
 
@@ -39,17 +39,20 @@ export class TaxComponent {
   protected onSubmit() {
     this._initOrStopLoading();
 
-    this._taxSettingService.patch(1, this.form.getRawValue())
-      .pipe(finalize(() => {
-        this._initOrStopLoading();
-      }))
+    this._taxSettingService
+      .patch(1, this.form.getRawValue())
+      .pipe(
+        finalize(() => {
+          this._initOrStopLoading();
+        })
+      )
       .subscribe({
         next: (res) => {
           this._toastr.success(res.message);
         },
         error: (err) => {
           this._toastr.error(err.error.error);
-        }
+        },
       });
   }
 
@@ -77,5 +80,4 @@ export class TaxComponent {
   private _initOrStopLoading(): void {
     this.loading = !this.loading;
   }
-
 }

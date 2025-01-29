@@ -9,7 +9,8 @@
     <div class="col-md-6 mb-3">
       <mat-form-field appearance="outline" class="bgWhite">
         <mat-label>Porcentagem </mat-label>
-        <input matInput type="text" formControlName="percentage" mask="percent.2">
+        <!-- <input matInput type="text" formControlName="percentage" mask="0*.2"> -->
+        <input matInput type='text' formControlName="percentage" mask="separator.2" decimalMarker="."/>
         <i matSuffix class="fa-solid fa-percent me-3"></i>
       </mat-form-field>
     </div>
