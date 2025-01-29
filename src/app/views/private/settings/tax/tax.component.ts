@@ -29,7 +29,7 @@ export class TaxComponent {
 
   ngOnInit() {
     this.form = this._fb.group({
-      percentage: [null, [Validators.required]],
+      percentage: [null, [Validators.required, Validators.min(0.01), Validators.max(100)]],
       tax: [null, [Validators.required]],
     });
 

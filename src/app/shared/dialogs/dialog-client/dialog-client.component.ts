@@ -20,6 +20,7 @@ import { Client, ClientStatus, PaymentFormEnum } from '@models/client';
 import { User } from '@models/user';
 import { Estados } from '@models/utils';
 import { ClientService } from '@services/client.service';
+import { TaxSettingService } from '@services/tax-setting.service';
 import { UtilsService } from '@services/utils.service';
 import { Utils } from '@shared/utils';
 import { SessionQuery } from '@store/session.query';
@@ -34,6 +35,10 @@ import { distinctUntilChanged, finalize, map, ReplaySubject } from 'rxjs';
   providers: [CurrencyPipe],
 })
 export class DialogClientComponent {
+
+  protected taxPercentage : number = 0;
+  protected taxValue : number = 0;
+
   // Utils
   public utils = Utils;
   public isNewClient: boolean = true;
@@ -77,9 +82,22 @@ export class DialogClientComponent {
     private readonly _toastr: ToastrService,
     private readonly _utilsService: UtilsService,
     private readonly _clientService: ClientService,
+    private readonly _taxService : TaxSettingService,
     private readonly _currencyPipe: CurrencyPipe,
     protected readonly _sessionQuery: SessionQuery
-  ) {}
+  ) {
+    this._taxService.getList().subscribe({
+      next: (res) => {
+        this.taxPercentage = +res.percentage;
+        this.taxValue = +res.tax;
+
+        this.updatePolicyValue();
+      },
+      error: (err) => {
+        this._toastr.error("Ocorreu um erro ao carregar o dado das taxas! Verificar o suporte, o valor da apólice pode não condizer!" + err.error.error);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.form = this._fb.group({
@@ -174,16 +192,29 @@ export class DialogClientComponent {
 
     // Regras
     this.form.valueChanges.pipe(distinctUntilChanged()).subscribe((res) => {
-      const rentalValue = res?.rental_value ? +res.rental_value : 0;
-      const condominiumFee = res?.condominium_fee ? +res.condominium_fee : 0;
-      const propertyTax = res?.property_tax ? +res.property_tax : 0;
-
-      const total = rentalValue + condominiumFee + propertyTax;
-      const newPolicyValue = parseFloat((total * 12 * 0.1).toFixed(2));
-
-      if (this.form.get('policy_value')?.value !== newPolicyValue) {
-        this.form.get('policy_value')?.patchValue(newPolicyValue, { emitEvent: false });
+      if(res?.rental_value) {
+        this.updatePolicyValue();
       }
+      else if(res?.condominium_fee) {
+        this.updatePolicyValue();
+      }
+      else if(res?.payment_form) {
+        this.updatePolicyValue();
+      }
+      else if(res?.property_tax) {
+        this.updatePolicyValue();
+      }
+
+      // const rentalValue = res?.rental_value ? +res.rental_value : 0;
+      // const condominiumFee = res?.condominium_fee ? +res.condominium_fee : 0;
+      // const propertyTax = res?.property_tax ? +res.property_tax : 0;
+
+      // const total = rentalValue + condominiumFee + propertyTax;
+      // const newPolicyValue = parseFloat((total / 12 + total * this.taxPercentage + this.taxValue).toFixed(2));
+
+      // if (this.form.get('policy_value')?.value !== newPolicyValue) {
+      //   this.form.get('policy_value')?.patchValue(newPolicyValue, { emitEvent: false });
+      // }
     });
 
     if (this.habilitateCondominumFee) {
@@ -277,6 +308,15 @@ export class DialogClientComponent {
     });
 
     return formData;
+  }
+
+  protected updatePolicyValue() {
+    const total = (+this.rentalValue) + (+this.condominiumFee) + (+this.propertyTax);
+    const newPolicyValue = parseFloat((total / 12 + total * (this.taxPercentage / 100) + this.taxValue).toFixed(2));
+
+    if (this.form.get('policy_value')?.value != newPolicyValue) {
+      this.form.get('policy_value')?.patchValue(newPolicyValue, { emitEvent: false });
+    }
   }
 
   protected removeFiles() {

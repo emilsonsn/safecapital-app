@@ -1,4 +1,4 @@
-import { ClientStatus } from "./client";
+import { ClientStatus } from './client';
 
 export interface Settings {
   id?: number;
@@ -7,4 +7,12 @@ export interface Settings {
   end_score: number;
   has_pending_issues: boolean;
   status: ClientStatus;
+}
+
+export interface TaxResponse {
+  id: number;
+  percentage: string;
+  tax: string;
+  updated_at: string;
+  created_at: string;
 }
