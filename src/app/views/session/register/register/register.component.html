@@ -17,7 +17,7 @@
 
   <mat-divider class="my-3"></mat-divider>
   @if(!isSuccess) {
-  <form [formGroup]="form" *ngIf="isSuccess">
+  <form [formGroup]="form">
     <div class="row">
       <!--
           <div class="col-12 mb-3">
@@ -165,7 +165,7 @@
   }
   @else {
     <div class="d-flex flex-column align-items-center justify-content-center">
-      <h4 style="font-weight: 500;" class="text-center mt-1">Sucesso! Favor verificar seu e-mail!</h4>
+      <h4 style="font-weight: 500;" class="text-center mt-1">Ação realizada com sucesso</h4>
       <div class="d-flex justify-content-center align-items-center">
         <i class="fa-solid fa-check" style="color: green; font-size: 4rem;"></i>
       </div>

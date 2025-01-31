@@ -178,7 +178,7 @@ export class LayoutPrivateComponent {
       maxWidth: '725px',
       maxHeight: '90%',
       hasBackdrop: true,
-      closeOnNavigation: true,
+      disableClose: true
     };
 
     this._dialog
@@ -190,8 +190,6 @@ export class LayoutPrivateComponent {
         next: (res) => {
           if (res) {
             this._toastr.success('Seja bem vindo!');
-          } else {
-            this.openFirstAccessDialog();
           }
         },
       });

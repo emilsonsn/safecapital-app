@@ -123,6 +123,7 @@ export class RegisterComponent {
       .subscribe({
         next: (res) => {
           this._toastr.success(res.message);
+          this._toastr.success("Verifique seu email");
           this.isSuccess = true;
         },
         error: (err) => {

@@ -60,7 +60,7 @@
             placeholder="Telefone ou Celular" required />
         </mat-form-field>
       </div>
-      <div class="col-12"></div>
+      <!-- <div class="col-12"></div> -->
       @if(_data?.user?.validation == 'Accepted' || _data?.user?.validation == 'Refused') {
       <div class="col-md-6 col-12 mb-3">
         <mat-form-field>
@@ -109,7 +109,7 @@
           </div>
           <mat-form-field appearance="outline">
             <mat-label>Descrição</mat-label>
-            <input matInput type="text" [(ngModel)]="filesToSend[$index].category" [ngModelOptions]="{standalone: true}"
+            <input matInput type="text" [(ngModel)]="filesFromBack[$index].category" [ngModelOptions]="{standalone: true}"
               required>
           </mat-form-field>
         </div>

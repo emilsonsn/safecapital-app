@@ -8,9 +8,6 @@
 
   <div class="d-flex align-items-center justify-content-between">
     <span class="fw-bold fs-5">Seja bem vindo {{user?.name}} !</span>
-    <div matRipple class="close" (click)="onCancel()">
-      <i class="fa-solid fa-close"></i>
-    </div>
   </div>
 
   <mat-divider class="my-3"></mat-divider>
@@ -38,9 +35,6 @@
   <div class="container">
     <div id="actionsDialog" class="flex-sm-row flex-column">
       <div id="buttonsDialog" class="flex-sm-row flex-column">
-        <div class="col-auto">
-          <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
-        </div>
         <div class="col-auto">
           <button matRipple id="submit" class="button primary" (click)="onSubmit()">Confirmar</button>
         </div>

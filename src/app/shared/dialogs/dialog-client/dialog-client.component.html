@@ -137,12 +137,31 @@
         <span class="fw-bold fs-6">Financeiro</span>
       </div>
 
-      <div class="col-md-4 mb-3">
+      <div class="col-md-6 mb-3">
+        <mat-form-field>
+          <mat-label>Forma de Pagamento</mat-label>
+          <mat-select formControlName="payment_form" placeholder="Forma de Pagamento">
+            @for (paymentForm of paymentFormSelect; track paymentForm) {
+            <mat-option [value]="paymentForm.value">{{ paymentForm.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Valor do Aluguel </mat-label>
           <input matInput type="text" formControlName="rental_value" currencyMask>
         </mat-form-field>
       </div>
+
+      <div class="col-md-4 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>IPTU </mat-label>
+          <input matInput type="text" formControlName="property_tax" currencyMask>
+        </mat-form-field>
+      </div>
+
       <div class="col-md-4 mb-3">
         <div class="d-flex align-items-center gap-md-2 gap-1">
           <mat-form-field appearance="outline">
@@ -155,23 +174,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>IPTU </mat-label>
-          <input matInput type="text" formControlName="property_tax" currencyMask>
-        </mat-form-field>
-      </div>
-      <div class="col-md-4 mb-3">
-        <mat-form-field>
-          <mat-label>Forma de Pagamento</mat-label>
-          <mat-select formControlName="payment_form" placeholder="Forma de Pagamento">
-            @for (paymentForm of paymentFormSelect; track paymentForm) {
-            <mat-option [value]="paymentForm.value">{{ paymentForm.label }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="col-md-4"></div>
+
       <div class="col-md-4">
         <p class="mb-0">Valor da apólice</p>
         <div>
@@ -180,6 +183,7 @@
           </p>
         </div>
       </div>
+
       <div class="col-12">
         @if (!paymentForm && (!policyValue || !rentalValue || !condominiumFee || !propertyTax)) {
         <p style="font-size: 0.9em;">Obs.: Necessário preencher a forma de pagamento e ao menos um valor *</p>

@@ -311,8 +311,8 @@ export class DialogClientComponent {
   }
 
   protected updatePolicyValue() {
-    const total = (+this.rentalValue) + (+this.condominiumFee) + (+this.propertyTax);
-    const newPolicyValue = parseFloat((total / 12 + total * (this.taxPercentage / 100) + this.taxValue).toFixed(2));
+    const total = (Math.abs(this.rentalValue)) + Math.abs(this.condominiumFee) + Math.abs(this.propertyTax);
+    const newPolicyValue = parseFloat((total * 1.2).toFixed(2));
 
     if (this.form.get('policy_value')?.value != newPolicyValue) {
       this.form.get('policy_value')?.patchValue(newPolicyValue, { emitEvent: false });

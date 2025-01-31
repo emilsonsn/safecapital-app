@@ -69,7 +69,7 @@ export class SessionService {
   }
 
   public handleLoginError(err: any): void {
-    this._toastr.warning(err.error.error);
+    this._toastr.warning(err?.error?.error);
   }
 
   public getUser(): Observable<User> {

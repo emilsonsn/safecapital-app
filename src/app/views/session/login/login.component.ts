@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { SessionService } from '@store/session.service';
 import { SessionQuery } from '@store/session.query';
 import { lastValueFrom } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent {
     private fb: FormBuilder,
     private readonly _router: Router,
     private readonly _sessionService : SessionService,
-    private readonly _sessionQuery : SessionQuery
+    private readonly _sessionQuery : SessionQuery,
+    private readonly _toastrService: ToastrService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -58,10 +60,13 @@ export class LoginComponent {
         this.user = user;
       });
 
-      if(this.user?.company_position?.position === 'Requester')
-        this._router.navigate(['/painel/orders']);
-      else
-        this._router.navigate(['/painel/home']);
+      if(this.user.role != 'Admin' && this.user.validation !== 'Accepted'){
+        localStorage.removeItem('access_token');
+        this._toastrService.error('Você não tem autorização para entrar nesse ambiente')
+        return;      
+      }
+
+      this._router.navigate(['/painel/home']);
     }
   }
 
