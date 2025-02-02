@@ -5,7 +5,7 @@ import {LottieComponent} from "ngx-lottie";
 import {
   SmallInformationCardComponent
 } from "@shared/components/small-information-card/small-information-card.component";
-import {MatDivider} from "@angular/material/divider";
+import {MatDivider, MatDividerModule} from "@angular/material/divider";
 import {KanbanComponent} from "@shared/components/kanban/kanban.component";
 import {CdkDrag, CdkDragPlaceholder, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
 import { HeaderPageComponent } from './header-page/header-page.component';
@@ -18,6 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { KanbanDefaulterComponent } from './kanban-defaulter/kanban-defaulter.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ClientContractComponent } from './client/client-contract/client-contract.component';
+import { FileUniqueUploadComponent } from './file-unique-upload/file-unique-upload.component';
 
 const components: any[] = [
   AccountManagerComponent,
@@ -26,7 +27,8 @@ const components: any[] = [
   HeaderPageComponent,
   SearchInputComponent,
   KanbanDefaulterComponent,
-  ClientContractComponent
+  ClientContractComponent,
+  FileUniqueUploadComponent
 ]
 
 @NgModule({
@@ -39,7 +41,7 @@ const components: any[] = [
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    MatDivider,
+    MatDividerModule,
     MatTooltipModule,
     MatRippleModule,
     CdkDropListGroup,

@@ -43,8 +43,8 @@
           <mat-label>E-mail </mat-label>
           <input matInput
           type="text"
-          formControlName="email" 
-          [pattern]="utils.patternEmail"          
+          formControlName="email"
+          [pattern]="utils.patternEmail"
           >
         </mat-form-field>
       </div>
@@ -101,13 +101,18 @@
           </mat-form-field>
         </div>
       </ng-container>
-      
+
     </div>
     <div class="">
       <span class="fw-bolder">Anexos</span>
+      <div id="required-files">
+        <app-file-unique-upload [category]="'RG'"  [fileFromBack]="requiredFiles[0]" [containsImage]="false"
+          (onFileChange)="addRequiredFile($event)" (onFileDelete)="deleteRequiredFile($event)"
+        />
+      </div>
       <div id="files">
         @for(img of filesFromBack; track img) {
-        <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
+        <div class="d-flex flex-column align-items-center gap-2" style="max-width: 100%;">
 
           <div class="file" matTooltip="{{img.fileName}}" (click)="openFileInAnotherTab(img.path)">
             <div class="delete">
@@ -125,7 +130,7 @@
         }
 
         @for(img of filesToSend; track img) {
-        <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
+        <div class="d-flex flex-column align-items-center gap-2" style="max-width: 100%;">
           <div class="file" matTooltip="{{img.file.name}}">
             <div class="delete">
               <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>

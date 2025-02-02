@@ -1,0 +1,31 @@
+<input type="file" id="fileInput" (change)="onFileSelect($event)" accept=".pdf, .docx" hidden>
+<div class="upload-container" [ngClass]="{'drag-over': isDragOver}" (click)="triggerFileInput()"
+  (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+  @if(!fileUnique?.preview) {
+    <div class="upload-placeholder">
+      <i class="fa-solid fa-upload"></i>
+      <p>Arraste a imagem aqui ou clique para fazer upload</p>
+    </div>
+  }
+  @else {
+    @if(containsImage) {
+      <img matTooltip="{{fileUnique?.file_name}}" [src]="fileUnique?.preview" alt="Arquivo" class="uploaded-image">
+    }
+    @else {
+      <div matTooltip="{{fileUnique?.file_name}}" class="uploaded-image">
+       <i class="fa-solid fa-file"></i>
+      </div>
+    }
+    <div matTooltip="Remover" class="remove" (click)="remove($event)">
+      <i class="fa-solid fa-trash"></i>
+    </div>
+    <div matTooltip="Abrir arquivo" class="open" (click)="open($event)">
+      <i class="fa-solid fa-paper-plane"></i>
+    </div>
+  }
+</div>
+@if(fileUnique?.category) {
+  <div class="file-category">
+    {{ fileUnique?.category }}
+  </div>
+}

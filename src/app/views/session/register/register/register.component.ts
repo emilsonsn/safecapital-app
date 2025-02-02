@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { AnimationOptions } from 'ngx-lottie';
 import { User } from '@models/user';
+import { FileUniqueProps } from '@shared/components/file-unique-upload/file-unique-upload.component';
 
 @Component({
   selector: 'app-register',
@@ -64,36 +65,50 @@ export class RegisterComponent {
       this.getPassword = false;
     }
 
-    if(this.email){
+    if (this.email) {
       this.form.get('email').setValue(this.email);
     }
   }
 
   public onSubmit(): void {
-    if (
-      !this.form.valid ||
-      this.loading ||
-      (!this.filesFromBack && this.filesToSend.some((file) => !file.category))      
-    ) {
+    if (!this.form.valid || this.loading) {
       this.form.markAllAsTouched();
       return;
     }
 
-    if(this.form.get('password').value != this.form.get('confirm_password').value){
+    if(
+      this.filesToSend && this.filesToSend.some((file) => !file.category)
+      || this.filesFromBack && this.filesFromBack.some((file) => !file.category)
+    ) {
+      this._toastr.error('Preencha a categoria!');
+      return;
+    }
+
+    if(
+      this.filesToSend.some((file) => file.category == "RG")
+      || this.filesFromBack.some((file) => file.category == "RG")
+    ) {
+      this._toastr.error('Categoria não permitida!');
+      return;
+    }
+
+    if (
+      this.form.get('password').value != this.form.get('confirm_password').value
+    ) {
       this._toastr.error('Senhas não coincidem');
       this.form.get('password').markAllAsTouched();
       this.form.get('confirm_password').markAllAsTouched();
       return;
     }
 
-    if(!this.userData) {
+    if (!this.userData) {
       if (!this.filesToSend || this.filesToSend.length === 0) {
         this._toastr.error('Nenhum arquivo foi enviado!');
         return;
       }
     }
 
-    if(this.filesToSend) {
+    if (this.filesToSend) {
       if (this.filesToSend.some((file) => !file.category)) {
         this._toastr.error('Preencha a descrição!');
         return;
@@ -123,7 +138,7 @@ export class RegisterComponent {
       .subscribe({
         next: (res) => {
           this._toastr.success(res.message);
-          this._toastr.success("Verifique seu email");
+          this._toastr.success('Verifique seu email');
           this.isSuccess = true;
         },
         error: (err) => {
@@ -172,7 +187,6 @@ export class RegisterComponent {
   }
 
   // Files
-  protected selectedFiles: File[] = [];
   protected filesToSend: {
     id: number;
     preview: string;
@@ -181,7 +195,8 @@ export class RegisterComponent {
     category: string;
   }[] = [];
 
-  protected filesToRemove: number[] = [];
+  protected requiredFiles: FileUniqueProps[] = [];
+
   protected filesFromBack: {
     index: number;
     id: number;
@@ -190,12 +205,16 @@ export class RegisterComponent {
     path: string;
   }[] = [];
 
+  protected filesToRemove: number[] = [];
+
   public allowedTypes = [
     'image/png',
     'image/jpeg',
     'image/jpg',
     'application/pdf',
   ];
+
+  protected requiredFilesTypes = ["RG", "CPF", "CNPJ", "CONTRATO SOCIAL", "CRECI PJ"]
 
   @ViewChild('filesInput') fileInput!: ElementRef;
 
@@ -251,48 +270,81 @@ export class RegisterComponent {
   }
 
   protected removeFiles() {
-    for(let idFile of this.filesToRemove) {
+    for (let idFile of this.filesToRemove) {
       // this._initOrStopLoading();
 
-      this._userService.deleteAttachment(idFile)
-        .pipe(finalize(() => {
-          // this._initOrStopLoading();
-        }))
+      this._userService
+        .deleteAttachment(idFile)
+        .pipe(
+          finalize(() => {
+            // this._initOrStopLoading();
+          })
+        )
         .subscribe({
           next: (res) => {},
-          error : (err) => {
-            this._toastr.error(`Erro ao deletar arquivo ID ${idFile}! - ${err}`);
-          }
-        })
+          error: (err) => {
+            this._toastr.error(
+              `Erro ao deletar arquivo ID ${idFile}! - ${err}`
+            );
+          },
+        });
     }
+  }
 
+  protected addRequiredFile(file: FileUniqueProps) {
+    console.log(file);
+  }
+
+  protected deleteRequiredFile(file: FileUniqueProps) {
+    console.log('remover', file);
   }
 
   // Getters
   private getUserMe() {
     this._initOrStopLoading();
 
-    this._userService.getUser()
-      .pipe(finalize(() => {
-        this._initOrStopLoading();
-      }))
+    this._userService
+      .getUser()
+      .pipe(
+        finalize(() => {
+          this._initOrStopLoading();
+        })
+      )
       .subscribe({
         next: (res) => {
           this.form.patchValue(res.data);
           res.data?.attachments.forEach((fileFromBack, index) => {
-            this.filesFromBack[index] = {
-              index: index,
-              id: fileFromBack.id,
-              path: fileFromBack.path,
-              fileName: fileFromBack.filename,
-              category: fileFromBack.category
-            };
+            // let requiredFilesIndex = 0;
+            // let filesFromBackIndex = 0;
+
+            if(this.requiredFilesTypes.includes(fileFromBack.category)) {
+              this.requiredFiles.push( {
+                id: fileFromBack.id,
+                preview: fileFromBack.path,
+                file : null,
+                file_name: fileFromBack.filename,
+                category: fileFromBack.category,
+              });
+
+              // requiredFilesIndex++;
+            }
+            else {
+              this.filesFromBack.push( {
+                index: this.filesFromBack.length,
+                id: fileFromBack.id,
+                path: fileFromBack.path,
+                fileName: fileFromBack.filename,
+                category: fileFromBack.category,
+              });
+
+              // filesFromBackIndex++;
+            }
           });
         },
-        error : (err) => {
+        error: (err) => {
           this._toastr.error(err.error.error);
-        }
-      })
+        },
+      });
   }
 
   // Utils

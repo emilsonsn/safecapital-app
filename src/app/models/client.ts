@@ -64,6 +64,7 @@ export enum ClientStatus {
   Approved = 'Approved',
   WaitingPayment = 'WaitingPayment',
   WaitingContract = 'WaitingContract',
+  WaitingAnalysis = 'WaitingAnalysis',
   Active = 'Active',
   Inactive = 'Inactive',
 }

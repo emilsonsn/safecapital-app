@@ -53,6 +53,8 @@ export class StatusPipe implements PipeTransform {
         return 'Aguardando Contrato';
       case ClientStatus.WaitingPayment.toString():
         return 'Aguardando Pagamento';
+      case ClientStatus.WaitingAnalysis.toString():
+        return 'Aguardando Análise do Contrato';
       case ClientStatus.Inactive.toString():
         return 'Inativo'
       case SolicitationCategoryEnum.CommissionBonus.toString():
