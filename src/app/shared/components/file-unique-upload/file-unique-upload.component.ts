@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { RequiredFilesEnum } from '@app/views/session/register/register/register.component';
 
 export interface FileUniqueProps {
   id: number;
   file: File | null;
   file_name: string | null;
   preview: string | ArrayBuffer | null;
-  category: string;
+  category: RequiredFilesEnum | string;
 }
 
 @Component({
@@ -19,11 +20,9 @@ export class FileUniqueUploadComponent {
   @Input() public containsImage : boolean = true;
 
   // Info
-  @Input() public category: string;
+  @Input() public category: RequiredFilesEnum;
 
-  @Input() public fileFromBack : FileUniqueProps;
-
-  protected fileUnique: FileUniqueProps = {
+  @Input() public fileUnique: FileUniqueProps = {
     id: 0,
     category: null,
     file: null,
@@ -37,35 +36,21 @@ export class FileUniqueUploadComponent {
   @Output() onFileChange: EventEmitter<FileUniqueProps> = new EventEmitter<FileUniqueProps>();
   @Output() onFileDelete: EventEmitter<FileUniqueProps> = new EventEmitter<FileUniqueProps>();
 
-  constructor() {}
-  ngOnInit() {
-    if (this.fileFromBack) {
-      this.fileUnique.id = this.fileFromBack.id;
-      this.defaultValues.id = this.fileFromBack.id;
-    }
-
-    if (this.category) {
-      this.fileUnique.category = this.category;
-      this.defaultValues.category = this.category;
-    }
-
-    if(this.fileFromBack) {
-      this.fileUnique = {...this.fileFromBack};
-    }
-
+  // Utils
+  private defaultValues : FileUniqueProps = {
+    id: 0,
+    category: null,
+    file: null,
+    file_name: '',
+    preview: null,
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-      const { fileFromBack } = changes;
-
-      if (
-        fileFromBack?.previousValue &&
-        fileFromBack?.currentValue !== fileFromBack?.previousValue
-      ) {
-        console.log(fileFromBack);
-        this.fileUnique = {...this.fileFromBack};
-      }
+  constructor() {}
+  ngOnInit() {
+    if (this.category) {
+      this.defaultValues.category = this.category;
     }
+  }
 
   protected onFileSelect(e: Event): void {
     const file = (e.target as HTMLInputElement).files?.[0];
@@ -87,12 +72,15 @@ export class FileUniqueUploadComponent {
     this.isDragOver = false;
 
     const file = e.dataTransfer?.files[0];
+
+    this.clearFileUnique();
+
     if (file) this.insertFile(file);
   }
 
   // Utils
   protected triggerFileInput(): void {
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    const fileInput = document.getElementById(this.category + '-input') as HTMLInputElement;
     fileInput.click();
   }
 
@@ -112,26 +100,26 @@ export class FileUniqueUploadComponent {
   protected open(e : Event) {
     e.stopPropagation();
 
-    const fileUrl = URL.createObjectURL(this.fileUnique.file);
+    let fileUrl;
+
+    if(!this.fileUnique.preview.toString().startsWith('data:')) fileUrl = this.fileUnique.preview;
+    else fileUrl = URL.createObjectURL(this.fileUnique.file);
 
     window.open(fileUrl, '_blank');
   }
 
-  protected remove(e: Event): void {
-    e.stopPropagation();
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  protected remove(e?: Event): void {
+    e?.stopPropagation();
 
     this.onFileDelete.emit(this.fileUnique);
 
-    fileInput.value = '';
-    this.fileUnique = { ...this.defaultValues };
+    this.clearFileUnique();
   }
 
-  private defaultValues : FileUniqueProps = {
-    id: 0,
-    category: null,
-    file: null,
-    file_name: '',
-    preview: '',
+  protected clearFileUnique() {
+    const fileInput = document.getElementById(this.category + '-input') as HTMLInputElement;
+
+    fileInput.value = '';
+    this.fileUnique = { ...this.defaultValues };
   }
 }

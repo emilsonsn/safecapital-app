@@ -41,11 +41,7 @@
       <div class="col-md-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>E-mail </mat-label>
-          <input matInput
-          type="text"
-          formControlName="email"
-          [pattern]="utils.patternEmail"
-          >
+          <input matInput type="text" formControlName="email" [pattern]="utils.patternEmail">
         </mat-form-field>
       </div>
 
@@ -106,9 +102,10 @@
     <div class="">
       <span class="fw-bolder">Anexos</span>
       <div id="required-files">
-        <app-file-unique-upload [category]="'RG'"  [fileFromBack]="requiredFiles[0]" [containsImage]="false"
-          (onFileChange)="addRequiredFile($event)" (onFileDelete)="deleteRequiredFile($event)"
-        />
+        @for(requiredFile of requiredFiles; track requiredFile) {
+          <app-file-unique-upload [category]="requiredFilesEnum[requiredFile?.category]" [fileUnique]="requiredFile" [containsImage]="false"
+            (onFileChange)="addRequiredFile($index, $event)" (onFileDelete)="deleteRequiredFile($index, $event)" />
+        }
       </div>
       <div id="files">
         @for(img of filesFromBack; track img) {
@@ -122,8 +119,8 @@
           </div>
           <mat-form-field appearance="outline">
             <mat-label>Descrição</mat-label>
-            <input matInput type="text" [(ngModel)]="filesFromBack[$index].category" [ngModelOptions]="{standalone: true}"
-              required>
+            <input matInput type="text" [(ngModel)]="filesFromBack[$index].category"
+              [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
         </div>
 
@@ -163,24 +160,24 @@
     <div class="d-flex flex-sm-row flex-column justify-content-end gap-3">
       <div class="d-flex flex-sm-row flex-column gap-2">
         <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
-        <button matRipple id="submit" class="button primary" (click)="onSubmit()">Cadastrar</button>
+        <button matRipple id="submit" class="button primary" (click)="onSubmit()">{{userData ? "Salvar" : "Cadastrar"}}</button>
       </div>
     </div>
   </div>
   }
   @else {
-    <div class="d-flex flex-column align-items-center justify-content-center">
-      <h4 style="font-weight: 500;" class="text-center mt-1">Ação realizada com sucesso</h4>
-      <div class="d-flex justify-content-center align-items-center">
-        <i class="fa-solid fa-check" style="color: green; font-size: 4rem;"></i>
+  <div class="d-flex flex-column align-items-center justify-content-center">
+    <h4 style="font-weight: 500;" class="text-center mt-1">Ação realizada com sucesso</h4>
+    <div class="d-flex justify-content-center align-items-center">
+      <i class="fa-solid fa-check" style="color: green; font-size: 4rem;"></i>
+    </div>
+  </div>
+  <div id="templateButtons" class="mt-2">
+    <div class="d-flex flex-sm-row flex-column justify-content-end gap-3">
+      <div class="d-flex flex-sm-row flex-column gap-2">
+        <button matRipple id="cancel" class="button primary" (click)="onCancel()">Voltar</button>
       </div>
     </div>
-    <div id="templateButtons" class="mt-2">
-      <div class="d-flex flex-sm-row flex-column justify-content-end gap-3">
-        <div class="d-flex flex-sm-row flex-column gap-2">
-          <button matRipple id="cancel" class="button primary" (click)="onCancel()">Voltar</button>
-        </div>
-      </div>
-    </div>
+  </div>
   }
 </div>

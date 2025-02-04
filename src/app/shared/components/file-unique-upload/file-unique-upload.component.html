@@ -1,4 +1,4 @@
-<input type="file" id="fileInput" (change)="onFileSelect($event)" accept=".pdf, .docx" hidden>
+<input type="file" [id]="category + '-input'" (change)="onFileSelect($event)" accept=".pdf, .docx" hidden>
 <div class="upload-container" [ngClass]="{'drag-over': isDragOver}" (click)="triggerFileInput()"
   (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
   @if(!fileUnique?.preview) {

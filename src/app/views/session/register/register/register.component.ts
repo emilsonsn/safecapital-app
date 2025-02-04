@@ -15,6 +15,13 @@ import { AnimationOptions } from 'ngx-lottie';
 import { User } from '@models/user';
 import { FileUniqueProps } from '@shared/components/file-unique-upload/file-unique-upload.component';
 
+export enum RequiredFilesEnum {
+  RG = 'RG',
+  CPF = 'CPF',
+  CNPJ = 'CNPJ',
+  CONTRATOSOCIAL = 'CONTRATOSOCIAL',
+  CRECIPJ = 'CRECIPJ',
+}
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -32,6 +39,7 @@ export class RegisterComponent {
   public utils = Utils;
   protected isSuccess: boolean = false;
   protected getPassword: boolean = true;
+  protected requiredFilesEnum = RequiredFilesEnum;
 
   // Form
   public form: FormGroup;
@@ -68,6 +76,14 @@ export class RegisterComponent {
     if (this.email) {
       this.form.get('email').setValue(this.email);
     }
+
+    this.requiredFiles = Object.values(RequiredFilesEnum).map((category) => ({
+      id: 0,
+      preview: '',
+      file: null,
+      file_name: '',
+      category,
+    }));
   }
 
   public onSubmit(): void {
@@ -76,17 +92,17 @@ export class RegisterComponent {
       return;
     }
 
-    if(
-      this.filesToSend && this.filesToSend.some((file) => !file.category)
-      || this.filesFromBack && this.filesFromBack.some((file) => !file.category)
+    if (
+      (this.filesToSend && this.filesToSend.some((file) => !file.category)) ||
+      (this.filesFromBack && this.filesFromBack.some((file) => !file.category))
     ) {
       this._toastr.error('Preencha a categoria!');
       return;
     }
 
-    if(
-      this.filesToSend.some((file) => file.category == "RG")
-      || this.filesFromBack.some((file) => file.category == "RG")
+    if (
+      this.filesToSend.some((file) => file.category == 'RG') ||
+      this.filesFromBack.some((file) => file.category == 'RG')
     ) {
       this._toastr.error('Categoria não permitida!');
       return;
@@ -116,8 +132,6 @@ export class RegisterComponent {
     }
 
     this._initOrStopLoading();
-
-    console.log('');
 
     if (!this.userData) {
       this.post();
@@ -181,6 +195,11 @@ export class RegisterComponent {
       formData.append(`attachments[${index}][file]`, file.file);
     });
 
+    this.requiredFilesToUpdate.map((file, index) => {
+      formData.append(`attachments[${index + this.filesToSend?.length}][category]`, file.category);
+      formData.append(`attachments[${index + this.filesToSend?.length}][file]`, file.file);
+    });
+
     formData.append('role', 'Client');
 
     return formData;
@@ -196,6 +215,7 @@ export class RegisterComponent {
   }[] = [];
 
   protected requiredFiles: FileUniqueProps[] = [];
+  protected requiredFilesToUpdate: FileUniqueProps[] = [];
 
   protected filesFromBack: {
     index: number;
@@ -213,8 +233,6 @@ export class RegisterComponent {
     'image/jpg',
     'application/pdf',
   ];
-
-  protected requiredFilesTypes = ["RG", "CPF", "CNPJ", "CONTRATO SOCIAL", "CRECI PJ"]
 
   @ViewChild('filesInput') fileInput!: ElementRef;
 
@@ -291,12 +309,13 @@ export class RegisterComponent {
     }
   }
 
-  protected addRequiredFile(file: FileUniqueProps) {
-    console.log(file);
+  protected addRequiredFile(index: number, file: FileUniqueProps) {
+    if (index >= 0 && index < this.requiredFiles.length) this.requiredFilesToUpdate.push(file);
+    else console.error(`Índice inválido: ${index}. O índice deve estar entre 0 e ${this.requiredFiles.length - 1}.`);
   }
 
-  protected deleteRequiredFile(file: FileUniqueProps) {
-    console.log('remover', file);
+  protected deleteRequiredFile(index: number, file: FileUniqueProps) {
+    this.filesToRemove.push(file.id);
   }
 
   // Getters
@@ -314,30 +333,26 @@ export class RegisterComponent {
         next: (res) => {
           this.form.patchValue(res.data);
           res.data?.attachments.forEach((fileFromBack, index) => {
-            // let requiredFilesIndex = 0;
-            // let filesFromBackIndex = 0;
+            if (Object.values(RequiredFilesEnum).includes(this.requiredFilesEnum[fileFromBack?.category])) {
+              const index = this.requiredFiles.findIndex((file) => file.category == fileFromBack.category);
 
-            if(this.requiredFilesTypes.includes(fileFromBack.category)) {
-              this.requiredFiles.push( {
-                id: fileFromBack.id,
-                preview: fileFromBack.path,
-                file : null,
-                file_name: fileFromBack.filename,
-                category: fileFromBack.category,
-              });
-
-              // requiredFilesIndex++;
-            }
-            else {
-              this.filesFromBack.push( {
+              if (index != -1) {
+                this.requiredFiles[index] = {
+                  id: fileFromBack.id,
+                  preview: fileFromBack.path,
+                  file: null,
+                  file_name: fileFromBack.filename,
+                  category: fileFromBack.category,
+                };
+              }
+            } else {
+              this.filesFromBack.push({
                 index: this.filesFromBack.length,
                 id: fileFromBack.id,
                 path: fileFromBack.path,
                 fileName: fileFromBack.filename,
                 category: fileFromBack.category,
               });
-
-              // filesFromBackIndex++;
             }
           });
         },
