@@ -97,11 +97,17 @@
     </div>
     <div class="">
       <span class="fw-bolder">Anexos</span>
+      <div id="required-files">
+        @for(requiredFile of requiredFiles; track requiredFile) {
+          <app-file-unique-upload [category]="requiredFilesEnum[requiredFile?.category]" [fileUnique]="requiredFile" [containsImage]="false"
+            (onFileChange)="addRequiredFile($index, $event)" (onFileDelete)="deleteRequiredFile($index, $event)" />
+        }
+      </div>
       <div id="files">
         @for(img of filesFromBack; track img) {
         <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
 
-          <div class="file" matTooltip="{{img.fileName}}" (click)="openFileInAnotherTab(img.path)">
+          <div class="file" matTooltip="{{img.fileName}}" (click)="openFileInAnotherTab(img.path, false)">
             <div class="delete">
               <i class="fa-solid fa-close" (click)="prepareFileToRemoveFromBack(img.id, $index);"></i>
             </div>
@@ -118,7 +124,7 @@
 
         @for(img of filesToSend; track img) {
         <div class="d-flex flex-column align-items-center gap-1" style="max-width: 100%;">
-          <div class="file" matTooltip="{{img.file.name}}">
+          <div class="file" matTooltip="{{img.file.name}}" (click)="openFileInAnotherTab(img.file, true)">
             <div class="delete">
               <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
             </div>

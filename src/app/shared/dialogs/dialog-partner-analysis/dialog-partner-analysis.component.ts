@@ -125,8 +125,10 @@ export class DialogPartnerAnalysisComponent {
   }
 
   // Files
-  public openFileInAnotherTab(e) {
-    const fileUrl = URL.createObjectURL(e.file);
+  public openFileInAnotherTab(e, isToCreateObjectUrl : boolean) {
+    let fileUrl : string;
+    if(isToCreateObjectUrl) fileUrl = URL.createObjectURL(e);
+    else fileUrl = e;
 
     window.open(fileUrl, '_blank');
   }

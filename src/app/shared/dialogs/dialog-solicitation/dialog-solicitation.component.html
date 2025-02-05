@@ -22,8 +22,9 @@
           <mat-label>Número do Contrato </mat-label>
           <mat-select formControlName="contract_number" placeholder="Selecione o contrato">
             <mat-option>
-              <ngx-mat-select-search [formControl]="contractNumberFilterCtrl" placeholderLabel="Procure pelo número do contrato"
-                i18n-placeholderLabel noEntriesFoundLabel="Contrato não encontrado" i18n-noEntriesFoundLabel>
+              <ngx-mat-select-search [formControl]="contractNumberFilterCtrl"
+                placeholderLabel="Procure pelo número do contrato" i18n-placeholderLabel
+                noEntriesFoundLabel="Contrato não encontrado" i18n-noEntriesFoundLabel>
               </ngx-mat-select-search>
             </mat-option>
             @if(form?.get('contract_number')?.value) {
@@ -56,6 +57,10 @@
           </mat-select>
 
         </mat-form-field>
+      </div>
+      <div class="col-12 mb-3">
+        <app-file-unique-upload [category]="file?.category" [fileUnique]="file" [containsImage]="false"
+          (onFileChange)="addRequiredFile($event)" (onFileDelete)="deleteRequiredFile($event)" />
       </div>
     </div>
   </form>

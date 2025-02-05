@@ -1,17 +1,14 @@
-import { Component, ElementRef, Inject, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
-  RequiredValidator,
   Validators,
 } from '@angular/forms';
 import { UserService } from '@services/user.service';
-import dayjs from 'dayjs';
 import { Utils } from '@shared/utils';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
-import { AnimationOptions } from 'ngx-lottie';
 import { User } from '@models/user';
 import { FileUniqueProps } from '@shared/components/file-unique-upload/file-unique-upload.component';
 
@@ -276,8 +273,10 @@ export class RegisterComponent {
     }
   }
 
-  public openFileInAnotherTab(e) {
-    const fileUrl = URL.createObjectURL(e.file);
+  public openFileInAnotherTab(e, isToCreateObjectUrl : boolean) {
+    let fileUrl : string;
+    if(isToCreateObjectUrl) fileUrl = URL.createObjectURL(e);
+    else fileUrl = e;
 
     window.open(fileUrl, '_blank');
   }
@@ -315,7 +314,7 @@ export class RegisterComponent {
   }
 
   protected deleteRequiredFile(index: number, file: FileUniqueProps) {
-    this.filesToRemove.push(file.id);
+    if(file?.id) this.filesToRemove.push(file.id);
   }
 
   // Getters

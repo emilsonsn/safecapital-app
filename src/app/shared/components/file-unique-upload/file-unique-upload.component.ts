@@ -20,7 +20,7 @@ export class FileUniqueUploadComponent {
   @Input() public containsImage : boolean = true;
 
   // Info
-  @Input() public category: RequiredFilesEnum;
+  @Input() public category: RequiredFilesEnum | string;
 
   @Input() public fileUnique: FileUniqueProps = {
     id: 0,

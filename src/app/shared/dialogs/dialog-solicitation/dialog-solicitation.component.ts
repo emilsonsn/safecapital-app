@@ -1,5 +1,12 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { afterNextRender, Component, inject, Inject, Injector, ViewChild } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  inject,
+  Inject,
+  Injector,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -13,9 +20,17 @@ import { ClientService } from '@services/client.service';
 import { SolicitationService } from '@services/solicitation.service';
 import { UserService } from '@services/user.service';
 import { UtilsService } from '@services/utils.service';
+import { FileUniqueProps } from '@shared/components/file-unique-upload/file-unique-upload.component';
 import { Utils } from '@shared/utils';
 import { ToastrService } from 'ngx-toastr';
-import { debounceTime, finalize, map, ReplaySubject, Subject, takeUntil } from 'rxjs';
+import {
+  debounceTime,
+  finalize,
+  map,
+  ReplaySubject,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 
 @Component({
   selector: 'app-dialog-solicitation',
@@ -37,21 +52,24 @@ export class DialogSolicitationComponent {
   protected contractNumberSelect: string[] = [];
 
   protected contractNumberCtrl: FormControl<any> = new FormControl<any>(null);
-  protected contractNumberFilterCtrl: FormControl<any> = new FormControl<string>('');
-  protected filteredContractNumbers: ReplaySubject<any[]> = new ReplaySubject<any[]>(
-    1
-  );
+  protected contractNumberFilterCtrl: FormControl<any> =
+    new FormControl<string>('');
+  protected filteredContractNumbers: ReplaySubject<any[]> = new ReplaySubject<
+    any[]
+  >(1);
 
-  protected statuses : string[] = Object.values(SolicitationCategoryEnum).filter(status => status != SolicitationCategoryEnum.Default)
+  protected statuses: string[] = Object.values(SolicitationCategoryEnum).filter(
+    (status) => status != SolicitationCategoryEnum.Default
+  );
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    protected readonly _data: { solicitation : Solicitation, default : boolean },
+    protected readonly _data: { solicitation: Solicitation; default: boolean },
     private readonly _dialogRef: MatDialogRef<DialogSolicitationComponent>,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
     private readonly _utilsService: UtilsService,
-    private readonly _solicitationService : SolicitationService,
+    private readonly _solicitationService: SolicitationService,
     private readonly _userService: UserService,
     private readonly _clientService: ClientService
   ) {
@@ -60,10 +78,10 @@ export class DialogSolicitationComponent {
 
   ngOnInit(): void {
     this.form = this._fb.group({
-      contract_number : [null, [Validators.required]],
-      subject : [null, [Validators.required]],
-      category : [null, [Validators.required]],
-      status : [this._data?.solicitation?.status ?? 'Received'],
+      contract_number: [null, [Validators.required]],
+      subject: [null, [Validators.required]],
+      category: [null, [Validators.required]],
+      status: [this._data?.solicitation?.status ?? 'Received'],
     });
 
     if (this._data?.solicitation) {
@@ -71,12 +89,15 @@ export class DialogSolicitationComponent {
       this.form.patchValue(this._data?.solicitation);
       this.form.disable();
     }
-    console.log(this._data);
 
-    if(this._data?.default) {
-      this.statuses = Object.values(SolicitationCategoryEnum).filter(status => status == SolicitationCategoryEnum.Default);
+    if (this._data?.default) {
+      this.statuses = Object.values(SolicitationCategoryEnum).filter(
+        (status) => status == SolicitationCategoryEnum.Default
+      );
 
-      this.form.get('category').patchValue(SolicitationCategoryEnum.Default.toString());
+      this.form
+        .get('category')
+        .patchValue(SolicitationCategoryEnum.Default.toString());
       this.form.get('category').disable();
     }
   }
@@ -96,10 +117,16 @@ export class DialogSolicitationComponent {
   protected post() {
     this._initOrStopLoading();
 
-    this._solicitationService.post({...this.form.getRawValue(), contract_number: (this.form.get('contract_number').value).toString()})
-      .pipe(finalize(() => {
-        this._initOrStopLoading();
-      }))
+    this._solicitationService
+      .post({
+        ...this.form.getRawValue(),
+        contract_number: this.form.get('contract_number').value.toString(),
+      })
+      .pipe(
+        finalize(() => {
+          this._initOrStopLoading();
+        })
+      )
       .subscribe({
         next: (res) => {
           this._toastr.success(res.message);
@@ -108,7 +135,7 @@ export class DialogSolicitationComponent {
         error: (err) => {
           this._toastr.error(err.error.error);
         },
-      })
+      });
   }
 
   protected prepareFormData(form: FormGroup) {
@@ -121,42 +148,56 @@ export class DialogSolicitationComponent {
     return formData;
   }
 
+  // Files
+  protected file : FileUniqueProps = {
+    id: 0,
+    category: null,
+    file: null,
+    file_name: '',
+    preview: '',
+  };
+
+  protected addRequiredFile(file: FileUniqueProps) {
+
+  }
+
+  protected deleteRequiredFile(file: FileUniqueProps) {
+  }
+
   // Filters
   protected prepareFilterContractNumberCtrl() {
-      this.contractNumberFilterCtrl.valueChanges
-        .pipe(
-          takeUntil(this._onDestroy),
-          debounceTime(100),
-          map((search: string | null) => {
-            if (!search) {
-              return this.contractNumberSelect.slice();
-            } else {
-              search = search.toLowerCase();
-              return this.contractNumberSelect.filter(
-                (contract) => contract.toString().toLowerCase().includes(search)
-              );
-            }
-          })
-        )
-        .subscribe((filtered) => {
-          this.filteredContractNumbers.next(filtered);
-        });
-    }
-
-    // Getters
-    public getClientsFromBack() {
-      this._clientService.getList().subscribe((res) => {
-        this.contractNumberSelect = res.data
-          .filter((client) => client.policy?.contract_number) // Remove valores nulos ou undefined
-          .map((client) => client.policy.contract_number);
-
-        this.filteredContractNumbers.next(
-          this.contractNumberSelect.slice()
-        );
-
-        this.prepareFilterContractNumberCtrl();
+    this.contractNumberFilterCtrl.valueChanges
+      .pipe(
+        takeUntil(this._onDestroy),
+        debounceTime(100),
+        map((search: string | null) => {
+          if (!search) {
+            return this.contractNumberSelect.slice();
+          } else {
+            search = search.toLowerCase();
+            return this.contractNumberSelect.filter((contract) =>
+              contract.toString().toLowerCase().includes(search)
+            );
+          }
+        })
+      )
+      .subscribe((filtered) => {
+        this.filteredContractNumbers.next(filtered);
       });
-    }
+  }
+
+  // Getters
+  public getClientsFromBack() {
+    this._clientService.getList().subscribe((res) => {
+      this.contractNumberSelect = res.data
+        .filter((client) => client.policy?.contract_number) // Remove valores nulos ou undefined
+        .map((client) => client.policy.contract_number);
+
+      this.filteredContractNumbers.next(this.contractNumberSelect.slice());
+
+      this.prepareFilterContractNumberCtrl();
+    });
+  }
 
   // Utils
   private _initOrStopLoading(): void {

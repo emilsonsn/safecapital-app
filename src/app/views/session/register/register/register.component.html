@@ -111,7 +111,7 @@
         @for(img of filesFromBack; track img) {
         <div class="d-flex flex-column align-items-center gap-2" style="max-width: 100%;">
 
-          <div class="file" matTooltip="{{img.fileName}}" (click)="openFileInAnotherTab(img.path)">
+          <div class="file" matTooltip="{{img.fileName}}" (click)="openFileInAnotherTab(img.path, false)">
             <div class="delete">
               <i class="fa-solid fa-close" (click)="prepareFileToRemoveFromBack(img.id, $index);"></i>
             </div>
@@ -128,7 +128,7 @@
 
         @for(img of filesToSend; track img) {
         <div class="d-flex flex-column align-items-center gap-2" style="max-width: 100%;">
-          <div class="file" matTooltip="{{img.file.name}}">
+          <div class="file" matTooltip="{{img.file.name}}" (click)="openFileInAnotherTab(img.file, true)">
             <div class="delete">
               <i class="fa-solid fa-close" (click)="removeFileFromSendToFiles($index);"></i>
             </div>

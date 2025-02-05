@@ -14,6 +14,8 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { SessionQuery } from '@store/session.query';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { RequiredFilesEnum } from '@app/views/session/register/register/register.component';
+import { FileUniqueProps } from '@shared/components/file-unique-upload/file-unique-upload.component';
 
 @Component({
   selector: 'app-dialog-partner',
@@ -28,6 +30,7 @@ export class DialogPartnerComponent {
   public title: string = 'Novo ';
   public loading: boolean = false;
   public utils = Utils;
+  protected requiredFilesEnum = RequiredFilesEnum;
 
   // Form
   public form: FormGroup;
@@ -94,18 +97,40 @@ export class DialogPartnerComponent {
       validation: ['Pending'],
     });
 
+    this.requiredFiles = Object.values(RequiredFilesEnum).map((category) => ({
+      id: 0,
+      preview: '',
+      file: null,
+      file_name: '',
+      category,
+    }));
+
     if (this._data?.user) {
       this.isNewPartner = false;
       this.title = 'Editar ';
 
       this._data?.user?.attachments.forEach((fileFromBack, index) => {
-        this.filesFromBack[index] = {
-          index: index,
-          id: fileFromBack.id,
-          path: fileFromBack.path,
-          fileName: fileFromBack.filename,
-          category: fileFromBack.category
-        };
+        if (Object.values(RequiredFilesEnum).includes(this.requiredFilesEnum[fileFromBack?.category])) {
+          const index = this.requiredFiles.findIndex((file) => file.category == fileFromBack.category);
+
+          if (index != -1) {
+            this.requiredFiles[index] = {
+              id: fileFromBack.id,
+              preview: fileFromBack.path,
+              file: null,
+              file_name: fileFromBack.filename,
+              category: fileFromBack.category,
+            };
+          }
+        } else {
+          this.filesFromBack.push({
+            index: this.filesFromBack.length,
+            id: fileFromBack.id,
+            path: fileFromBack.path,
+            fileName: fileFromBack.filename,
+            category: fileFromBack.category,
+          });
+        }
       });
 
       this.form.patchValue(this._data.user);
@@ -120,7 +145,7 @@ export class DialogPartnerComponent {
         this.form.get('is_active').enable();
         this.form.get('is_active').patchValue(this._data?.user.is_active ?? 1);
       }
-    })
+    });
   }
 
   public onSubmit(form: FormGroup): void {
@@ -153,6 +178,11 @@ export class DialogPartnerComponent {
     this.filesToSend.map((file, index) => {
       formData.append(`attachments[${index}][category]`, file.category);
       formData.append(`attachments[${index}][file]`, file.file);
+    });
+
+    this.requiredFilesToUpdate.map((file, index) => {
+      formData.append(`attachments[${index + this.filesToSend?.length}][category]`, file.category);
+      formData.append(`attachments[${index + this.filesToSend?.length}][file]`, file.file);
     });
 
     if (this.isNewPartner) {
@@ -209,6 +239,9 @@ export class DialogPartnerComponent {
     file: File;
     category: string;
   }[] = [];
+
+  protected requiredFiles: FileUniqueProps[] = [];
+  protected requiredFilesToUpdate: FileUniqueProps[] = [];
 
   protected filesToRemove: number[] = [];
   protected filesFromBack: {
@@ -268,8 +301,10 @@ export class DialogPartnerComponent {
     }
   }
 
-  public openFileInAnotherTab(e) {
-    const fileUrl = URL.createObjectURL(e.file);
+  public openFileInAnotherTab(e, isToCreateObjectUrl : boolean) {
+    let fileUrl : string;
+    if(isToCreateObjectUrl) fileUrl = URL.createObjectURL(e);
+    else fileUrl = e;
 
     window.open(fileUrl, '_blank');
   }
@@ -277,6 +312,15 @@ export class DialogPartnerComponent {
   public prepareFileToRemoveFromBack(fileId, index) {
     this.filesFromBack.splice(index, 1);
     this.filesToRemove.push(fileId);
+  }
+
+  protected addRequiredFile(index: number, file: FileUniqueProps) {
+    if (index >= 0 && index < this.requiredFiles.length) this.requiredFilesToUpdate.push(file);
+    else console.error(`Índice inválido: ${index}. O índice deve estar entre 0 e ${this.requiredFiles.length - 1}.`);
+  }
+
+  protected deleteRequiredFile(index: number, file: FileUniqueProps) {
+    if(file?.id) this.filesToRemove.push(file.id);
   }
 
   // Utils

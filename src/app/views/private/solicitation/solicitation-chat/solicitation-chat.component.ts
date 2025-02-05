@@ -172,12 +172,6 @@ export class SolicitationChatComponent {
     this.fileToSend = undefined;
   }
 
-  public openFileInAnotherTab(e) {
-    const fileUrl = URL.createObjectURL(e.file);
-
-    window.open(fileUrl, '_blank');
-  }
-
   public openImgInAnotherTab(e) {
     window.open(e, '_blank');
   }
