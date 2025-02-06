@@ -42,8 +42,8 @@ export class CreditComponent {
     this.getSettings();
   }
 
-  handleSearchTerm(string){
-
+  protected handleSearchTerm(res : string) {
+    this.searchTerm = res;
   }
 
   openSettingDialog(setting?){

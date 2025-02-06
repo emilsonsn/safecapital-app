@@ -21,7 +21,7 @@ export class SettingService {
     const paginate = Utils.mountPageControl(pageControl);
     const filterParams = Utils.mountPageControl(filters);
 
-    return this._http.get<ApiResponsePageable<Settings>>(`${environment.api}/${this.endpoint}/search`);
+    return this._http.get<ApiResponsePageable<Settings>>(`${environment.api}/${this.endpoint}/search?${filterParams}`);
   }
 
   public create(setting: Settings): Observable<ApiResponse<Settings>> {

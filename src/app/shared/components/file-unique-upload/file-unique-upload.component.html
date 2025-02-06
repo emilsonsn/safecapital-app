@@ -26,6 +26,6 @@
 </div>
 @if(fileUnique?.category) {
   <div class="file-category">
-    {{ fileUnique?.category }}
+    {{ fileUnique?.category | FilesType}}
   </div>
 }

@@ -30,11 +30,11 @@ export class TableSettingsComponent {
   filters: any;
 
   @Output()
-  onSettingClick: EventEmitter<any> = new EventEmitter<any>();  
+  onSettingClick: EventEmitter<any> = new EventEmitter<any>();
 
   @Output()
   onDeleteSettingClick: EventEmitter<number> = new EventEmitter<number>();
-  
+
   public settings: Settings[] = [];
 
   public columns = [
@@ -123,7 +123,7 @@ export class TableSettingsComponent {
     this._initOrStopLoading();
 
     this._settingService
-      .getList(this.pageControl, { ...this.filters, role: 'Client' })
+      .getList(this.pageControl, { search_term: this.searchTerm, ...this.filters}) // , role: 'Client'
       .pipe(finalize(() => this._initOrStopLoading()))
       .subscribe((res) => {
         this.settings = res.data;

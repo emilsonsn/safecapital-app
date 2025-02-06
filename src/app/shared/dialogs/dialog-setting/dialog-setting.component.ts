@@ -1,4 +1,11 @@
-import { afterNextRender, Component, inject, Inject, Injector, ViewChild } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  inject,
+  Inject,
+  Injector,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
@@ -24,13 +31,13 @@ import { SettingService } from '@services/settings.service';
   styleUrl: './dialog-setting.component.scss',
 })
 export class DialogSettingComponent {
-
   // Utils
   protected myUser: User;
   public isNewSetting: boolean = true;
   public title: string = 'Novo ';
   public loading: boolean = false;
   public utils = Utils;
+  protected pendingLimit = false;
 
   // Form
   public form: FormGroup;
@@ -58,21 +65,24 @@ export class DialogSettingComponent {
       start_score: [null, [Validators.required]],
       end_score: [null, [Validators.required]],
       has_pending_issues: [null, [Validators.required]],
+      pending_limit: [null, [Validators.required]],
       status: [null],
     });
 
     if (this._data?.id) {
       this.isNewSetting = false;
       this.title = 'Editar ';
+      this.managePendingLimit(this._data?.has_pending_issues);
       this.form.patchValue(this._data);
     }
+
+    this.form.get('has_pending_issues')?.valueChanges.subscribe((status: boolean) => {
+      this.managePendingLimit(status);
+    });
   }
 
   public onSubmit(form: FormGroup): void {
-    if (
-      !form.valid ||
-      this.loading
-    ) {
+    if (!form.valid || this.loading) {
       form.markAllAsTouched();
       return;
     }
@@ -122,6 +132,21 @@ export class DialogSettingComponent {
           this._toastr.error(err.error.error);
         },
       });
+  }
+
+  // Utils
+  protected managePendingLimit(status: boolean) {
+    const pendingLimitControl = this.form.get('pending_limit');
+
+    if (status) {
+      pendingLimitControl?.setValidators([Validators.required]);
+      this.pendingLimit = true;
+    } else {
+      pendingLimitControl?.clearValidators();
+      this.pendingLimit = false;
+    }
+
+    pendingLimitControl?.updateValueAndValidity();
   }
 
   public onCancel(): void {

@@ -35,7 +35,7 @@
           <input matInput type="text" [mask]="'separator.0'" formControlName="end_score">
         </mat-form-field>
       </div>
-      <div class="col-md-6 col-12 mb-3">
+      <div class="col-md-{{pendingLimit ? '4' : '6'}} col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Possui pendências</mat-label>
           <mat-select formControlName="has_pending_issues">
@@ -44,6 +44,14 @@
           </mat-select>
         </mat-form-field>
       </div>
+      @if(pendingLimit) {
+        <div class="col-md-2 col-12 mb-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Limite</mat-label>
+            <input matInput type="text" [mask]="'separator.0'" formControlName="pending_limit">
+          </mat-form-field>
+        </div>
+        }
       <div class="col-md-6 col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Status</mat-label>
@@ -56,7 +64,7 @@
       </div>
     </div>
   </form>
-    
+
 </mat-dialog-content>
 <mat-dialog-actions>
   <div class="container">

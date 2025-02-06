@@ -16,12 +16,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { RequiredFilesEnum } from '@app/views/session/register/register/register.component';
 import { Client, ClientStatus, PaymentFormEnum } from '@models/client';
 import { User } from '@models/user';
 import { Estados } from '@models/utils';
 import { ClientService } from '@services/client.service';
 import { TaxSettingService } from '@services/tax-setting.service';
 import { UtilsService } from '@services/utils.service';
+import { FileUniqueProps } from '@shared/components/file-unique-upload/file-unique-upload.component';
 import { Utils } from '@shared/utils';
 import { SessionQuery } from '@store/session.query';
 import dayjs from 'dayjs';
@@ -35,9 +37,8 @@ import { distinctUntilChanged, finalize, map, ReplaySubject } from 'rxjs';
   providers: [CurrencyPipe],
 })
 export class DialogClientComponent {
-
-  protected taxPercentage : number = 0;
-  protected taxValue : number = 0;
+  protected taxPercentage: number = 0;
+  protected taxValue: number = 0;
 
   // Utils
   public utils = Utils;
@@ -49,6 +50,7 @@ export class DialogClientComponent {
   protected tabIndex: number = 0;
   protected habilitateCondominumFee = false;
   protected clientStatuses = ClientStatus;
+  protected requiredFilesEnum = RequiredFilesEnum;
 
   // Form
   public form: FormGroup;
@@ -82,7 +84,7 @@ export class DialogClientComponent {
     private readonly _toastr: ToastrService,
     private readonly _utilsService: UtilsService,
     private readonly _clientService: ClientService,
-    private readonly _taxService : TaxSettingService,
+    private readonly _taxService: TaxSettingService,
     private readonly _currencyPipe: CurrencyPipe,
     protected readonly _sessionQuery: SessionQuery
   ) {
@@ -94,8 +96,11 @@ export class DialogClientComponent {
         this.updatePolicyValue();
       },
       error: (err) => {
-        this._toastr.error("Ocorreu um erro ao carregar o dado das taxas! Verificar o suporte, o valor da apólice pode não condizer!" + err.error.error);
-      }
+        this._toastr.error(
+          'Ocorreu um erro ao carregar o dado das taxas! Verificar o suporte, o valor da apólice pode não condizer!' +
+            err.error.error
+        );
+      },
     });
   }
 
@@ -132,6 +137,14 @@ export class DialogClientComponent {
 
     this.form.get('policy_value').disable();
 
+    this.requiredFiles = Object.values(RequiredFilesEnum).map((category) => ({
+      id: 0,
+      preview: '',
+      file: null,
+      file_name: '',
+      category,
+    }));
+
     if (this._data?.client) {
       this.isNewClient = false;
       this.title = 'Editar cliente';
@@ -139,13 +152,27 @@ export class DialogClientComponent {
       this.atualizarCidades(this._data?.client?.state);
 
       this._data?.client?.attachments.forEach((fileFromBack, index) => {
-        this.filesFromBack[index] = {
-          index: index,
-          id: fileFromBack.id,
-          path: fileFromBack.path,
-          fileName: fileFromBack.filename,
-          description: fileFromBack.description
-        };
+        if (Object.values(RequiredFilesEnum).includes(this.requiredFilesEnum[fileFromBack?.description])) {
+          const index = this.requiredFiles.findIndex((file) => file.category == fileFromBack.description);
+
+          if (index != -1) {
+            this.requiredFiles[index] = {
+              id: fileFromBack.id,
+              preview: fileFromBack.path,
+              file: null,
+              file_name: fileFromBack.filename,
+              category: fileFromBack.description,
+            };
+          }
+        } else {
+          this.filesFromBack.push({
+            index: this.filesFromBack.length,
+            id: fileFromBack.id,
+            path: fileFromBack.path,
+            fileName: fileFromBack.filename,
+            description: fileFromBack.description,
+          });
+        }
       });
 
       if (this.myUser?.role == 'Client') {
@@ -184,24 +211,20 @@ export class DialogClientComponent {
         ) {
           this.desabilatateForm();
         }
-      }
-      else if (this.myUser?.role == 'Client' && !this.isNewClient) {
+      } else if (this.myUser?.role == 'Client' && !this.isNewClient) {
         this.desabilatateForm();
       }
     });
 
     // Regras
     this.form.valueChanges.pipe(distinctUntilChanged()).subscribe((res) => {
-      if(res?.rental_value) {
+      if (res?.rental_value) {
         this.updatePolicyValue();
-      }
-      else if(res?.condominium_fee) {
+      } else if (res?.condominium_fee) {
         this.updatePolicyValue();
-      }
-      else if(res?.payment_form) {
+      } else if (res?.payment_form) {
         this.updatePolicyValue();
-      }
-      else if(res?.property_tax) {
+      } else if (res?.property_tax) {
         this.updatePolicyValue();
       }
 
@@ -238,7 +261,7 @@ export class DialogClientComponent {
       }
     }
 
-    if(this.filesToSend) {
+    if (this.filesToSend) {
       if (this.filesToSend.some((file) => !file.description)) {
         this._toastr.error('Preencha a descrição!');
         return;
@@ -272,7 +295,7 @@ export class DialogClientComponent {
       });
   }
 
-  protected patch(id : number) {
+  protected patch(id: number) {
     this._initOrStopLoading();
 
     this._clientService
@@ -307,34 +330,48 @@ export class DialogClientComponent {
       formData.append(`attachments[${index}][file]`, file.file);
     });
 
+    this.requiredFilesToUpdate.map((file, index) => {
+      formData.append(`attachments[${index + this.filesToSend?.length}][description]`, file.category);
+      formData.append(`attachments[${index + this.filesToSend?.length}][file]`, file.file);
+    });
+
     return formData;
   }
 
   protected updatePolicyValue() {
-    const total = (Math.abs(this.rentalValue)) + Math.abs(this.condominiumFee) + Math.abs(this.propertyTax);
+    const total =
+      Math.abs(this.rentalValue) +
+      Math.abs(this.condominiumFee) +
+      Math.abs(this.propertyTax);
     const newPolicyValue = parseFloat((total * 1.2).toFixed(2));
 
     if (this.form.get('policy_value')?.value != newPolicyValue) {
-      this.form.get('policy_value')?.patchValue(newPolicyValue, { emitEvent: false });
+      this.form
+        .get('policy_value')
+        ?.patchValue(newPolicyValue, { emitEvent: false });
     }
   }
 
   protected removeFiles() {
-    for(let idFile of this.filesToRemove) {
+    for (let idFile of this.filesToRemove) {
       // this._initOrStopLoading();
 
-      this._clientService.deleteAttachment(idFile)
-        .pipe(finalize(() => {
-          // this._initOrStopLoading();
-        }))
+      this._clientService
+        .deleteAttachment(idFile)
+        .pipe(
+          finalize(() => {
+            // this._initOrStopLoading();
+          })
+        )
         .subscribe({
           next: (res) => {},
-          error : (err) => {
-            this._toastr.error(`Erro ao deletar arquivo ID ${idFile}! - ${err}`);
-          }
-        })
+          error: (err) => {
+            this._toastr.error(
+              `Erro ao deletar arquivo ID ${idFile}! - ${err}`
+            );
+          },
+        });
     }
-
   }
 
   // Utils
@@ -462,6 +499,9 @@ export class DialogClientComponent {
     description: string;
   }[] = [];
 
+  protected requiredFiles: FileUniqueProps[] = [];
+  protected requiredFilesToUpdate: FileUniqueProps[] = [];
+
   protected filesToRemove: number[] = [];
   protected filesFromBack: {
     index: number;
@@ -520,9 +560,9 @@ export class DialogClientComponent {
     }
   }
 
-  public openFileInAnotherTab(e, isToCreateObjectUrl : boolean) {
-    let fileUrl : string;
-    if(isToCreateObjectUrl) fileUrl = URL.createObjectURL(e);
+  public openFileInAnotherTab(e, isToCreateObjectUrl: boolean) {
+    let fileUrl: string;
+    if (isToCreateObjectUrl) fileUrl = URL.createObjectURL(e);
     else fileUrl = e;
 
     window.open(fileUrl, '_blank');
@@ -531,6 +571,21 @@ export class DialogClientComponent {
   public prepareFileToRemoveFromBack(fileId, index) {
     this.filesFromBack.splice(index, 1);
     this.filesToRemove.push(fileId);
+  }
+
+  protected addRequiredFile(index: number, file: FileUniqueProps) {
+    if (index >= 0 && index < this.requiredFiles.length)
+      this.requiredFilesToUpdate.push(file);
+    else
+      console.error(
+        `Índice inválido: ${index}. O índice deve estar entre 0 e ${
+          this.requiredFiles.length - 1
+        }.`
+      );
+  }
+
+  protected deleteRequiredFile(index: number, file: FileUniqueProps) {
+    if (file?.id) this.filesToRemove.push(file.id);
   }
 
   // Getters

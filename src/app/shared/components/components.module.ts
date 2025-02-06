@@ -19,6 +19,7 @@ import { KanbanDefaulterComponent } from './kanban-defaulter/kanban-defaulter.co
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ClientContractComponent } from './client/client-contract/client-contract.component';
 import { FileUniqueUploadComponent } from './file-unique-upload/file-unique-upload.component';
+import { PipesModule } from '@shared/pipes/pipes.module';
 
 const components: any[] = [
   AccountManagerComponent,
@@ -44,6 +45,7 @@ const components: any[] = [
     MatDividerModule,
     MatTooltipModule,
     MatRippleModule,
+    PipesModule,
     CdkDropListGroup,
     CdkDropList,
     CdkDrag,
