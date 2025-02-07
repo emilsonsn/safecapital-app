@@ -321,6 +321,9 @@ export class DialogPartnerComponent {
 
   protected deleteRequiredFile(index: number, file: FileUniqueProps) {
     if(file?.id) this.filesToRemove.push(file.id);
+    this.requiredFilesToUpdate = this.requiredFilesToUpdate.filter(
+      (f) => f.file_name !== file.file_name
+    );
   }
 
   // Utils

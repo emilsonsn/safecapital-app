@@ -132,7 +132,7 @@ export class DialogClientComponent {
       policy_value: ['', [Validators.required, Validators.min(0.01)]],
       rental_value: ['', [Validators.required, Validators.min(0.01)]],
       property_tax: ['', [Validators.required, Validators.min(0.01)]],
-      condominium_fee: ['', [Validators.min(0.01)]],
+      condominium_fee: [0, [Validators.min(0.01)]],
     });
 
     this.form.get('policy_value').disable();
@@ -610,6 +610,9 @@ export class DialogClientComponent {
 
   protected deleteRequiredFile(index: number, file: FileUniqueProps) {
     if (file?.id) this.filesToRemove.push(file.id);
+    this.requiredFilesToUpdate = this.requiredFilesToUpdate.filter(
+      (f) => f.file_name !== file.file_name
+    );
   }
 
   // Getters
