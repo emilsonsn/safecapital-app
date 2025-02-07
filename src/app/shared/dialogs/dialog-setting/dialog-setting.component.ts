@@ -66,7 +66,7 @@ export class DialogSettingComponent {
       end_score: [null, [Validators.required]],
       has_pending_issues: [null, [Validators.required]],
       has_law_processes: [null, [Validators.required]],
-      min_pending_value: [null, [Validators.required]],
+      max_pending_value: [null, [Validators.required]],
       status: [null],
     });
 
@@ -137,7 +137,7 @@ export class DialogSettingComponent {
 
   // Utils
   protected managePendingLimit(status: boolean) {
-    const pendingLimitControl = this.form.get('min_pending_value');
+    const pendingLimitControl = this.form.get('max_pending_value');
 
     if (status) {
       pendingLimitControl?.setValidators([Validators.required]);
