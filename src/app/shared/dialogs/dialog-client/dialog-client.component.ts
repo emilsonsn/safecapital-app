@@ -139,7 +139,7 @@ export class DialogClientComponent {
 
     this.requiredFiles = Object.values(RequiredFilesEnum).map((category) => ({
       id: 0,
-      preview: '',
+      preview: null,
       file: null,
       file_name: '',
       category,
@@ -263,21 +263,21 @@ export class DialogClientComponent {
   }
 
   public onSubmit(form: FormGroup): void {
-    if (this.isNewClient) {
-      if (
-        (!this.requiredFiles.some((file) => file.file)) &&
-        (!this.filesToSend || this.filesToSend.length === 0)
-      ){
-        this._toastr.error('Nenhum arquivo foi enviado!');
-        return;
-      }
-    }
     if (!form.valid || this.loading) {
       form.markAllAsTouched();
       this._toastr.error('Preencha todos os campos!');
       return;
     }
 
+    if (this.isNewClient) {
+      if (
+        (!this.requiredFiles.some((file) => file.file || file.preview)) &&
+        (!this.filesToSend || this.filesToSend.length === 0)
+      ){
+        this._toastr.error('Nenhum arquivo foi enviado!');
+        return;
+      }
+    }
 
     if (this.filesToSend) {
       if (this.filesToSend.some((file) => !file.description)) {

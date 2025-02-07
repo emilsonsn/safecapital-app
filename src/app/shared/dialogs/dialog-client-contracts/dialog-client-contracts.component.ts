@@ -48,7 +48,7 @@ export class DialogClientContractsComponent {
       return;
     }
 
-    if(!this.filesToSend && !this._data?.client?.policy) {
+    if((!this.filesToSend || this.filesToSend.length == 0) && !this._data?.client?.policy) {
       this._toastr.error('Nenhum contrato ou documento foi enviado!');
       return;
     }

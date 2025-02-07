@@ -156,7 +156,10 @@ export class DialogPartnerComponent {
     }
 
     if (this.isNewPartner) {
-      if (!this.requiredFiles || !this.filesToSend) {
+      if (
+        (!this.requiredFiles.some((file) => file.file || file.preview)) &&
+        (!this.filesToSend || this.filesToSend.length === 0)
+      ) {
         this._toastr.error('Nenhum arquivo foi enviado!');
         return;
       }
