@@ -152,8 +152,14 @@ export class DialogClientComponent {
       this.atualizarCidades(this._data?.client?.state);
 
       this._data?.client?.attachments.forEach((fileFromBack, index) => {
-        if (Object.values(RequiredFilesEnum).includes(this.requiredFilesEnum[fileFromBack?.description])) {
-          const index = this.requiredFiles.findIndex((file) => file.category == fileFromBack.description);
+        if (
+          Object.values(RequiredFilesEnum).includes(
+            this.requiredFilesEnum[fileFromBack?.description]
+          )
+        ) {
+          const index = this.requiredFiles.findIndex(
+            (file) => file.category == fileFromBack.description
+          );
 
           if (index != -1) {
             this.requiredFiles[index] = {
@@ -204,7 +210,8 @@ export class DialogClientComponent {
       // Regras de Negócio para Manager <-> Clientes
       if (this.myUser?.role == 'Manager') {
         if (
-          [
+          ![
+            this.clientStatuses.Pending,
             this.clientStatuses.Approved,
             this.clientStatuses.Disapproved,
           ].includes(this._data?.client?.status)
@@ -212,7 +219,15 @@ export class DialogClientComponent {
           this.desabilatateForm();
         }
       } else if (this.myUser?.role == 'Client' && !this.isNewClient) {
-        this.desabilatateForm();
+        if (
+          ![
+            this.clientStatuses.Pending,
+            this.clientStatuses.Approved,
+            this.clientStatuses.Disapproved,
+          ].includes(this._data?.client?.status)
+        ) {
+          this.desabilatateForm();
+        }
       }
     });
 
@@ -331,8 +346,14 @@ export class DialogClientComponent {
     });
 
     this.requiredFilesToUpdate.map((file, index) => {
-      formData.append(`attachments[${index + this.filesToSend?.length}][description]`, file.category);
-      formData.append(`attachments[${index + this.filesToSend?.length}][file]`, file.file);
+      formData.append(
+        `attachments[${index + this.filesToSend?.length}][description]`,
+        file.category
+      );
+      formData.append(
+        `attachments[${index + this.filesToSend?.length}][file]`,
+        file.file
+      );
     });
 
     return formData;

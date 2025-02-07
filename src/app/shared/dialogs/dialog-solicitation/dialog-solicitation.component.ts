@@ -14,8 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Client } from '@models/client';
-import { Solicitation, SolicitationCategoryEnum } from '@models/solicitation';
+import { FilesSolicitationEnum, Solicitation, SolicitationCategoryEnum } from '@models/solicitation';
 import { ClientService } from '@services/client.service';
 import { SolicitationService } from '@services/solicitation.service';
 import { UserService } from '@services/user.service';
@@ -41,6 +40,8 @@ export class DialogSolicitationComponent {
   // Utils
   public utils = Utils;
   protected _onDestroy = new Subject<void>();
+  protected requiredFilesEnum = FilesSolicitationEnum;
+
 
   public isNewSolicitation: boolean = true;
 
@@ -68,9 +69,7 @@ export class DialogSolicitationComponent {
     private readonly _dialogRef: MatDialogRef<DialogSolicitationComponent>,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
-    private readonly _utilsService: UtilsService,
     private readonly _solicitationService: SolicitationService,
-    private readonly _userService: UserService,
     private readonly _clientService: ClientService
   ) {
     this.getClientsFromBack();
@@ -83,6 +82,14 @@ export class DialogSolicitationComponent {
       category: [null, [Validators.required]],
       status: [this._data?.solicitation?.status ?? 'Received'],
     });
+
+    this.requiredFiles = Object.values(FilesSolicitationEnum).map((category) => ({
+      id: 0,
+      preview: '',
+      file: null,
+      file_name: '',
+      category,
+    }));
 
     if (this._data?.solicitation) {
       this.isNewSolicitation = false;
@@ -118,10 +125,7 @@ export class DialogSolicitationComponent {
     this._initOrStopLoading();
 
     this._solicitationService
-      .post({
-        ...this.form.getRawValue(),
-        contract_number: this.form.get('contract_number').value.toString(),
-      })
+      .post(this.prepareFormData(this.form))
       .pipe(
         finalize(() => {
           this._initOrStopLoading();
@@ -145,24 +149,42 @@ export class DialogSolicitationComponent {
       formData.append(key, control.value);
     });
 
+    this.requiredFilesToUpdate.map((file, index) => {
+      formData.append(
+        `attachments[${index}][description]`,
+        file.category
+      );
+      formData.append(
+        `attachments[${index}][file]`,
+        file.file
+      );
+    });
+
     return formData;
   }
 
   // Files
-  protected file : FileUniqueProps = {
-    id: 0,
-    category: null,
-    file: null,
-    file_name: '',
-    preview: '',
-  };
+  protected requiredFiles: FileUniqueProps[] = [];
+  protected requiredFilesToUpdate: FileUniqueProps[] = [];
 
-  protected addRequiredFile(file: FileUniqueProps) {
+  protected filesToRemove: number[] = [];
 
+
+  protected addRequiredFile(index: number, file: FileUniqueProps) {
+    if (index >= 0 && index < this.requiredFiles.length)
+      this.requiredFilesToUpdate.push(file);
+    else
+      console.error(
+        `Índice inválido: ${index}. O índice deve estar entre 0 e ${
+          this.requiredFiles.length - 1
+        }.`
+      );
   }
 
-  protected deleteRequiredFile(file: FileUniqueProps) {
+  protected deleteRequiredFile(index: number, file: FileUniqueProps) {
+    if (file?.id) this.filesToRemove.push(file.id);
   }
+
 
   // Filters
   protected prepareFilterContractNumberCtrl() {

@@ -45,13 +45,22 @@
         </mat-form-field>
       </div>
       @if(pendingLimit) {
-        <div class="col-md-2 col-12 mb-3">
-          <mat-form-field appearance="outline">
-            <mat-label>Limite</mat-label>
-            <input matInput type="text" [mask]="'separator.0'" formControlName="pending_limit">
-          </mat-form-field>
-        </div>
-        }
+      <div class="col-md-2 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Limite</mat-label>
+          <input matInput type="text" [mask]="'separator.0'" formControlName="min_pending_value">
+        </mat-form-field>
+      </div>
+      }
+      <div class="col-md-6 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Possui processos</mat-label>
+          <mat-select formControlName="has_law_processes">
+            <mat-option [value]="1">Sim</mat-option>
+            <mat-option [value]="0">Não</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
       <div class="col-md-6 col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Status</mat-label>

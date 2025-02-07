@@ -19,6 +19,8 @@ export class FileUniqueUploadComponent {
   // Utils
   @Input() public containsImage : boolean = true;
 
+  @Input() public disabled : boolean = false;
+
   // Info
   @Input() public category: RequiredFilesEnum | string;
 
@@ -53,21 +55,29 @@ export class FileUniqueUploadComponent {
   }
 
   protected onFileSelect(e: Event): void {
+    if(this.disabled) return;
+
     const file = (e.target as HTMLInputElement).files?.[0];
     if (file) this.insertFile(file);
   }
 
   // Drag
   protected onDragOver(e: DragEvent): void {
+    if(this.disabled) return;
+
     e.preventDefault();
     this.isDragOver = true;
   }
 
   protected onDragLeave(e: DragEvent): void {
+    if(this.disabled) return;
+
     this.isDragOver = false;
   }
 
   protected onDrop(e: DragEvent): void {
+    if(this.disabled) return;
+
     e.preventDefault();
     this.isDragOver = false;
 
@@ -80,11 +90,15 @@ export class FileUniqueUploadComponent {
 
   // Utils
   protected triggerFileInput(): void {
+    if(this.disabled) return;
+
     const fileInput = document.getElementById(this.category + '-input') as HTMLInputElement;
     fileInput.click();
   }
 
   protected insertFile(file: File) {
+    if(this.disabled) return;
+
     this.fileUnique.file = file;
     this.fileUnique.file_name = file.name;
 
@@ -98,6 +112,8 @@ export class FileUniqueUploadComponent {
   }
 
   protected open(e : Event) {
+    if(this.disabled) return;
+
     e.stopPropagation();
 
     let fileUrl;
@@ -109,6 +125,8 @@ export class FileUniqueUploadComponent {
   }
 
   protected remove(e?: Event): void {
+    if(this.disabled) return;
+
     e?.stopPropagation();
 
     this.onFileDelete.emit(this.fileUnique);
@@ -117,6 +135,8 @@ export class FileUniqueUploadComponent {
   }
 
   protected clearFileUnique() {
+    if(this.disabled) return;
+
     const fileInput = document.getElementById(this.category + '-input') as HTMLInputElement;
 
     fileInput.value = '';
