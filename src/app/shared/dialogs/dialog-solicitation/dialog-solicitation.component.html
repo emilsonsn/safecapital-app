@@ -58,14 +58,18 @@
 
         </mat-form-field>
       </div>
+      @if(_data?.hasFiles) {
       <div class="col-12 mb-3">
         <div id="required-files">
           @for(requiredFile of requiredFiles; track requiredFile) {
-            <app-file-unique-upload [category]="requiredFilesEnum[requiredFile?.category]" [fileUnique]="requiredFile" [containsImage]="false"
-              (onFileChange)="addRequiredFile($index, $event)" (onFileDelete)="deleteRequiredFile($index, $event)" [disabled]="isNewSolicitation ? false : true" />
+          <app-file-unique-upload [category]="requiredFilesEnum[requiredFile?.category]" [fileUnique]="requiredFile"
+            [containsImage]="false" (onFileChange)="addRequiredFile($index, $event)"
+            (onFileDelete)="deleteRequiredFile($index, $event)" [disabled]="isNewSolicitation ? false : true"
+            style="max-width: 150px!important; height: 185px!important;" />
           }
         </div>
       </div>
+      }
     </div>
   </form>
 </mat-dialog-content>

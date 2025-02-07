@@ -45,6 +45,9 @@
           color: $white-300;
           background-color: rgb(54, 129, 194);
           padding: 0.2rem 0.5rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
 

@@ -9,14 +9,14 @@
     @for (solicitation of solicitations; track solicitation) {
     <div class="cardSolicitation">
       <div class="cardHeader">
-        <div class="title">
+        <div class="title" matTooltip={{solicitation?.contract_number}} [matTooltipPosition]="'after'">
           {{solicitation?.contract_number}}
         </div>
-        <div class="status" [ngStyle]="{ 'background-color': statusMapping[solicitation?.status] }">
+        <div class="status" matTooltip="{{solicitation?.status | status}}" [ngStyle]="{ 'background-color': statusMapping[solicitation?.status] }">
           {{ solicitation?.status | status }}
         </div>
       </div>
-      <div class="cardDescription">
+      <div class="cardDescription" matTooltip="{{solicitation?.subject}}">
         {{solicitation?.subject}}
       </div>
       <div class="cardFooter">

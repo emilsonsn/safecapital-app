@@ -130,7 +130,7 @@ export class SolicitationClientComponent {
 
     this._dialog
       .open(DialogSolicitationComponent, {
-        data: solicitation ? { solicitation } : null,
+        data: solicitation ? { solicitation, hasFiles: false } : null,
         ...dialogConfig,
       })
       .afterClosed()

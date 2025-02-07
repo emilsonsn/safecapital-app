@@ -14,7 +14,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FilesSolicitationEnum, Solicitation, SolicitationCategoryEnum } from '@models/solicitation';
+import {
+  FilesSolicitationEnum,
+  Solicitation,
+  SolicitationCategoryEnum,
+} from '@models/solicitation';
 import { ClientService } from '@services/client.service';
 import { SolicitationService } from '@services/solicitation.service';
 import { UserService } from '@services/user.service';
@@ -42,7 +46,6 @@ export class DialogSolicitationComponent {
   protected _onDestroy = new Subject<void>();
   protected requiredFilesEnum = FilesSolicitationEnum;
 
-
   public isNewSolicitation: boolean = true;
 
   // Form
@@ -65,7 +68,11 @@ export class DialogSolicitationComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    protected readonly _data: { solicitation: Solicitation; default: boolean },
+    protected readonly _data: {
+      solicitation: Solicitation;
+      default: boolean;
+      hasFiles: boolean;
+    },
     private readonly _dialogRef: MatDialogRef<DialogSolicitationComponent>,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
@@ -83,17 +90,42 @@ export class DialogSolicitationComponent {
       status: [this._data?.solicitation?.status ?? 'Received'],
     });
 
-    this.requiredFiles = Object.values(FilesSolicitationEnum).map((category) => ({
-      id: 0,
-      preview: '',
-      file: null,
-      file_name: '',
-      category,
-    }));
+    this.requiredFiles = Object.values(FilesSolicitationEnum).map(
+      (category) => ({
+        id: 0,
+        preview: '',
+        file: null,
+        file_name: '',
+        category,
+      })
+    );
 
     if (this._data?.solicitation) {
       this.isNewSolicitation = false;
       this.form.patchValue(this._data?.solicitation);
+
+      this._data?.solicitation?.attachments.forEach((fileFromBack, index) => {
+        if (
+          Object.values(FilesSolicitationEnum).includes(
+            this.requiredFilesEnum[fileFromBack?.description]
+          )
+        ) {
+          const index = this.requiredFiles.findIndex(
+            (file) => file.category == fileFromBack.description
+          );
+
+          if (index != -1) {
+            this.requiredFiles[index] = {
+              id: fileFromBack.id,
+              preview: fileFromBack.path,
+              file: null,
+              file_name: fileFromBack.filename,
+              category: fileFromBack.description,
+            };
+          }
+        }
+      });
+
       this.form.disable();
     }
 
@@ -150,14 +182,8 @@ export class DialogSolicitationComponent {
     });
 
     this.requiredFilesToUpdate.map((file, index) => {
-      formData.append(
-        `attachments[${index}][description]`,
-        file.category
-      );
-      formData.append(
-        `attachments[${index}][file]`,
-        file.file
-      );
+      formData.append(`attachments[${index}][description]`, file.category);
+      formData.append(`attachments[${index}][file]`, file.file);
     });
 
     return formData;
@@ -168,7 +194,6 @@ export class DialogSolicitationComponent {
   protected requiredFilesToUpdate: FileUniqueProps[] = [];
 
   protected filesToRemove: number[] = [];
-
 
   protected addRequiredFile(index: number, file: FileUniqueProps) {
     if (index >= 0 && index < this.requiredFiles.length)
@@ -184,7 +209,6 @@ export class DialogSolicitationComponent {
   protected deleteRequiredFile(index: number, file: FileUniqueProps) {
     if (file?.id) this.filesToRemove.push(file.id);
   }
-
 
   // Filters
   protected prepareFilterContractNumberCtrl() {

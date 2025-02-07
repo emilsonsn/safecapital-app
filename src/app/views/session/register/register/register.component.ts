@@ -115,7 +115,7 @@ export class RegisterComponent {
     }
 
     if (!this.userData) {
-      if (!this.filesToSend || this.filesToSend.length === 0) {
+      if (!this.requiredFiles || !this.filesToSend) {
         this._toastr.error('Nenhum arquivo foi enviado!');
         return;
       }
