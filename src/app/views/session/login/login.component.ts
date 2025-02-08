@@ -60,8 +60,8 @@ export class LoginComponent {
         this.user = user;
       });
 
-      if(this.user.role != 'Admin' && this.user.validation !== 'Accepted'){
-        localStorage.removeItem('access_token');
+      if(this.user.role == 'Client'  && this.user.validation !== 'Accepted'){
+        localStorage.removeItem('access_token');        
         this._toastrService.error('Você não tem autorização para entrar nesse ambiente')
         return;      
       }
