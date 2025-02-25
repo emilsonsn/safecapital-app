@@ -16,6 +16,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RegisterManagerComponent } from './register-manager/register-manager.component';
 import { RegisterLayoutComponent } from './register-layout/register-layout.component';
 import { RegisterAutenticateComponent } from './register-autenticate/register-autenticate.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRippleModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -34,6 +36,8 @@ import { RegisterAutenticateComponent } from './register-autenticate/register-au
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatIconModule,
+    MatRippleModule,
     MatProgressSpinnerModule,
     MatDividerModule,
     MatTooltipModule,

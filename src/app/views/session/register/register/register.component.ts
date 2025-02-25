@@ -1,9 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '@services/user.service';
 import { Utils } from '@shared/utils';
 import { Router } from '@angular/router';
@@ -116,7 +112,7 @@ export class RegisterComponent {
 
     if (!this.userData) {
       if (
-        (!this.requiredFiles.some((file) => file.file || file.preview)) &&
+        !this.requiredFiles.some((file) => file.file || file.preview) &&
         (!this.filesToSend || this.filesToSend.length === 0)
       ) {
         this._toastr.error('Nenhum arquivo foi enviado!');
@@ -196,8 +192,14 @@ export class RegisterComponent {
     });
 
     this.requiredFilesToUpdate.map((file, index) => {
-      formData.append(`attachments[${index + this.filesToSend?.length}][category]`, file.category);
-      formData.append(`attachments[${index + this.filesToSend?.length}][file]`, file.file);
+      formData.append(
+        `attachments[${index + this.filesToSend?.length}][category]`,
+        file.category
+      );
+      formData.append(
+        `attachments[${index + this.filesToSend?.length}][file]`,
+        file.file
+      );
     });
 
     formData.append('role', 'Client');
@@ -276,9 +278,9 @@ export class RegisterComponent {
     }
   }
 
-  public openFileInAnotherTab(e, isToCreateObjectUrl : boolean) {
-    let fileUrl : string;
-    if(isToCreateObjectUrl) fileUrl = URL.createObjectURL(e);
+  public openFileInAnotherTab(e, isToCreateObjectUrl: boolean) {
+    let fileUrl: string;
+    if (isToCreateObjectUrl) fileUrl = URL.createObjectURL(e);
     else fileUrl = e;
 
     window.open(fileUrl, '_blank');
@@ -312,12 +314,18 @@ export class RegisterComponent {
   }
 
   protected addRequiredFile(index: number, file: FileUniqueProps) {
-    if (index >= 0 && index < this.requiredFiles.length) this.requiredFilesToUpdate.push(file);
-    else console.error(`Índice inválido: ${index}. O índice deve estar entre 0 e ${this.requiredFiles.length - 1}.`);
+    if (index >= 0 && index < this.requiredFiles.length)
+      this.requiredFilesToUpdate.push(file);
+    else
+      console.error(
+        `Índice inválido: ${index}. O índice deve estar entre 0 e ${
+          this.requiredFiles.length - 1
+        }.`
+      );
   }
 
   protected deleteRequiredFile(index: number, file: FileUniqueProps) {
-    if(file?.id) this.filesToRemove.push(file.id);
+    if (file?.id) this.filesToRemove.push(file.id);
     this.requiredFilesToUpdate = this.requiredFilesToUpdate.filter(
       (f) => f.file_name !== file.file_name
     );
@@ -338,8 +346,14 @@ export class RegisterComponent {
         next: (res) => {
           this.form.patchValue(res.data);
           res.data?.attachments.forEach((fileFromBack, index) => {
-            if (Object.values(RequiredFilesEnum).includes(this.requiredFilesEnum[fileFromBack?.category])) {
-              const index = this.requiredFiles.findIndex((file) => file.category == fileFromBack.category);
+            if (
+              Object.values(RequiredFilesEnum).includes(
+                this.requiredFilesEnum[fileFromBack?.category]
+              )
+            ) {
+              const index = this.requiredFiles.findIndex(
+                (file) => file.category == fileFromBack.category
+              );
 
               if (index != -1) {
                 this.requiredFiles[index] = {
@@ -368,12 +382,23 @@ export class RegisterComponent {
   }
 
   // Utils
+  protected hidePassword: boolean = true;
+  protected hideConfirmPassword: boolean = true;
+
   private _initOrStopLoading(): void {
     this.loading = !this.loading;
   }
 
   public onCancel(): void {
     this._router.navigate(['/login']);
+  }
+
+  protected togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
+  }
+
+  protected toggleConfirmPasswordVisibility() {
+    this.hideConfirmPassword = !this.hideConfirmPassword;
   }
 
   protected isValidDateFormat(value: string): boolean {

@@ -18,6 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { LottieComponent } from 'ngx-lottie';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRippleModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatFormFieldModule,
     MatDatepickerModule,
     MatDividerModule,
+    MatRippleModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatCheckboxModule,

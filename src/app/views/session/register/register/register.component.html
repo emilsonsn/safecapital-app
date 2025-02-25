@@ -87,13 +87,22 @@
         <div class="col-md-6 mb-3">
           <mat-form-field appearance="outline">
             <mat-label>Senha </mat-label>
-            <input matInput type="password" formControlName="password">
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+            <div matRipple class="hideIcon" matSuffix (click)="togglePasswordVisibility()"
+              [attr.aria-label]="hidePassword ? 'Mostrar senha' : 'Ocultar senha'">
+              <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+            </div>
+
           </mat-form-field>
         </div>
         <div class="col-md-6 mb-3">
           <mat-form-field appearance="outline">
             <mat-label>Confirme a senha</mat-label>
-            <input matInput type="password" formControlName="confirm_password">
+            <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirm_password">
+            <div matRipple class="hideIcon" matSuffix (click)="toggleConfirmPasswordVisibility()"
+              [attr.aria-label]="hideConfirmPassword ? 'Mostrar senha' : 'Ocultar senha'">
+              <mat-icon>{{ hideConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+            </div>
           </mat-form-field>
         </div>
       </ng-container>
@@ -103,8 +112,9 @@
       <span class="fw-bolder">Anexos</span>
       <div id="required-files">
         @for(requiredFile of requiredFiles; track requiredFile) {
-          <app-file-unique-upload [category]="requiredFilesEnum[requiredFile?.category]" [fileUnique]="requiredFile" [containsImage]="false"
-            (onFileChange)="addRequiredFile($index, $event)" (onFileDelete)="deleteRequiredFile($index, $event)" />
+        <app-file-unique-upload [category]="requiredFilesEnum[requiredFile?.category]" [fileUnique]="requiredFile"
+          [containsImage]="false" (onFileChange)="addRequiredFile($index, $event)"
+          (onFileDelete)="deleteRequiredFile($index, $event)" />
         }
       </div>
       <div id="files">
@@ -160,7 +170,8 @@
     <div class="d-flex flex-sm-row flex-column justify-content-end gap-3">
       <div class="d-flex flex-sm-row flex-column gap-2">
         <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
-        <button matRipple id="submit" class="button primary" (click)="onSubmit()">{{userData ? "Salvar" : "Cadastrar"}}</button>
+        <button matRipple id="submit" class="button primary" (click)="onSubmit()">{{userData ? "Salvar" :
+          "Cadastrar"}}</button>
       </div>
     </div>
   </div>
