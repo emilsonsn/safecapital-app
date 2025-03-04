@@ -1,7 +1,7 @@
 export interface Client {
   id?: number;
   name: string;
-  cpf_cnpj: string;
+  cpf: string;
   phone: number;
   whatsapp: number;
   email: string;
