@@ -108,7 +108,7 @@
       </ng-container>
 
     </div>
-    <div class="">
+    <div class="" *ngIf="userData">
       <span class="fw-bolder">Anexos</span>
       <div id="required-files">
         @for(requiredFile of requiredFiles; track requiredFile) {

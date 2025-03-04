@@ -86,18 +86,11 @@ export class RegisterComponent {
     }
 
     if (
+      this.userData &&
       (this.filesToSend && this.filesToSend.some((file) => !file.category)) ||
       (this.filesFromBack && this.filesFromBack.some((file) => !file.category))
     ) {
       this._toastr.error('Preencha a categoria!');
-      return;
-    }
-
-    if (
-      this.filesToSend.some((file) => file.category == 'RG') ||
-      this.filesFromBack.some((file) => file.category == 'RG')
-    ) {
-      this._toastr.error('Categoria não permitida!');
       return;
     }
 
@@ -110,7 +103,7 @@ export class RegisterComponent {
       return;
     }
 
-    if (!this.userData) {
+    if (this.userData) {
       if (
         !this.requiredFiles.some((file) => file.file || file.preview) &&
         (!this.filesToSend || this.filesToSend.length === 0)
