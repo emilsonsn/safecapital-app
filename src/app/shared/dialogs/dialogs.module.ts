@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { CommonModule, DATE_PIPE_DEFAULT_OPTIONS, registerLocaleData } from '@angular/common';
 import { ComponentsModule } from '@shared/components/components.module';
 import { DirectivesModule } from '@shared/directives/directives.module';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -19,7 +19,7 @@ import { PipesModule } from '@shared/pipes/pipes.module';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { DialogPartnerComponent } from './dialog-partner/dialog-partner.component';
 import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
-import { MatRippleModule } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatRippleModule } from '@angular/material/core';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { DialogClientComponent } from './dialog-client/dialog-client.component';
@@ -35,6 +35,23 @@ import { DialogSettingComponent } from './dialog-setting/dialog-setting.componen
 import { MatTabsModule } from '@angular/material/tabs';
 import { DialogOccurrenceComponent } from './dialog-occurrence/dialog-occurrence.component';
 import { DialogClientApproveComponent } from './dialog-client-approve/dialog-client-approve.component';
+import localePt from '@angular/common/locales/pt';
+import {CustomDateAdapter} from "@app/app.module";
+
+
+registerLocaleData(localePt, 'pt-BR');
+
+const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @NgModule({
   declarations: [
@@ -54,12 +71,12 @@ import { DialogClientApproveComponent } from './dialog-client-approve/dialog-cli
     CommonModule,
     TablesModule,
     ComponentsModule,
-    DirectivesModule,
     ClipboardModule,
     PipesModule,
     ReactiveFormsModule,
     FormsModule,
     MatDialogModule,
+    DirectivesModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
@@ -80,5 +97,21 @@ import { DialogClientApproveComponent } from './dialog-client-approve/dialog-cli
     NgxMatSelectSearchModule,
     MatIcon,
   ],
+  providers: [
+    {
+      provide: LOCALE_ID,
+      useValue: 'pt-BR'
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'pt-BR'
+    },
+    {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS},
+    {provide: DateAdapter, useClass: CustomDateAdapter},
+     {
+      provide: DATE_PIPE_DEFAULT_OPTIONS,
+      useValue: {timezone: '-0300'}
+    },
+  ]
 })
 export class DialogsModule {}

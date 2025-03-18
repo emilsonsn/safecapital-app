@@ -46,7 +46,7 @@
       <div class="col-md-6 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Data de Nascimento </mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="birthday" placeholder="DD/MM/YYYY" readonly>
+          <input matInput [matDatepicker]="picker" formControlName="birthday" placeholder="DD/MM/YYYY" appMaskDate >
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
@@ -251,17 +251,6 @@
     </div>
 
   </form>
-  <!-- </mat-tab>
-    <mat-tab label="Contrato">
-      <div class="p-2">
-        <div style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; padding: 0.5rem;">
-          <app-table-client-contracts>
-
-          </app-table-client-contracts>
-        </div>
-      </div>
-    </mat-tab>
-  </mat-tab-group> -->
   @if(loading) {
   <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
     <mat-spinner></mat-spinner>

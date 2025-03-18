@@ -269,15 +269,15 @@ export class DialogClientComponent {
       return;
     }
 
-    if (this.isNewClient) {
-      if (
-        (!this.requiredFiles.some((file) => file.file || file.preview)) &&
-        (!this.filesToSend || this.filesToSend.length === 0)
-      ){
-        this._toastr.error('Nenhum arquivo foi enviado!');
-        return;
-      }
-    }
+    // if (this.isNewClient) {
+    //   if (
+    //     (!this.requiredFiles.some((file) => file.file || file.preview)) &&
+    //     (!this.filesToSend || this.filesToSend.length === 0)
+    //   ){
+    //     this._toastr.error('Nenhum arquivo foi enviado!');
+    //     return;
+    //   }
+    // }
 
     if (this.filesToSend) {
       if (this.filesToSend.some((file) => !file.description)) {
