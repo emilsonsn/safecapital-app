@@ -44,4 +44,9 @@ export class SolicitationService {
     return this._http.post<ApiResponse<SolicitationMessage>>(`${environment.api}/${this.sessionEndpoint}/create-message`, message);
   }
 
+  // Itens
+  public deleteItem(id: number): Observable<DeleteApiResponse> {
+    return this._http.delete<DeleteApiResponse>(`${environment.api}/${this.sessionEndpoint}/item/${id}`);
+  }
+
 }

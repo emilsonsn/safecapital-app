@@ -39,14 +39,16 @@
         </mat-form-field>
       </div>
       <div class="col-12"></div>
+      @if(!_data?.default) {
       <div class="col-12 mb-3">
         <mat-form-field>
           <mat-label>Assunto </mat-label>
           <textarea matInput formControlName="subject" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
             cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [placeholder]="'Descrição'">
-          </textarea>
+            </textarea>
         </mat-form-field>
       </div>
+      }
       <div class="col-12 mb-3">
         <mat-form-field>
           <mat-label>Categoria</mat-label>
@@ -58,6 +60,50 @@
 
         </mat-form-field>
       </div>
+      @if(_data?.default) {
+      <div formArrayName="items">
+        <span class="fw-bolder">Itens</span>
+        @for(item of items?.controls; track item) {
+        <div class="row" [formGroupName]="$index">
+          <div class=" col-md-4 col-12 mb-2">
+            <mat-form-field appearance="outline">
+              <input matInput type="text" formControlName="description" placeholder="Descrição">
+            </mat-form-field>
+          </div>
+          <div class=" col-md-4 col-12 mb-2">
+            <mat-form-field appearance="outline">
+              <input type="text" formControlName="value" matInput placeholder="R$ 0,00" currencyMask />
+            </mat-form-field>
+          </div>
+          <div class=" col-md-4 col-12 mb-2">
+            <mat-form-field appearance="outline">
+              <mat-label>Data de Vencimento </mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="due_date" placeholder="DD/MM/YYYY" appMaskDate>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <!-- <div class="d-flex align-items-center">
+                  <button class="mt-1" color="warn" *ngIf="true " mat-icon-button (click)="onDeleteItem($index)">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div> -->
+        </div>
+        @if($index != items?.controls?.length - 1) {
+        <mat-divider class="my-3"></mat-divider>
+        }
+        }
+        @if(isNewSolicitation) {
+        <div class="d-flex justify-content-end my-2">
+          <button mat-flat-button type="button" color="primary" matRipple (click)="pushItem()">
+            <i class="fa-solid fa-plus"></i> Item
+          </button>
+        </div>
+        }
+      </div>
+      }
+
+      <span class="fw-bolder my-2">Anexos</span>
       @if(_data?.hasFiles) {
       <div class="col-12 mb-3">
         <div id="required-files">

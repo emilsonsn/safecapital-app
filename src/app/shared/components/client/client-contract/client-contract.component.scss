@@ -5,7 +5,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   // background: $white-100;
   // border-radius: 4px;
   // box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.11), 0 7px 10px -5px rgba(0, 0, 0, 0.06);\
@@ -17,7 +17,7 @@
     gap: 1rem;
 
     .cardContract {
-      width: 24rem;
+      width: 20rem;
       height: 20.2rem;
       padding: 0.8rem;
       border-radius: 5px;

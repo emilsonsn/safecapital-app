@@ -6,7 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Client, ClientPolicy } from '@models/client';
+import { Client, ClientPolicy, ClientStatus } from '@models/client';
 import { User, UserRole } from '@models/user';
 import { ClientService } from '@services/client.service';
 import { SessionQuery } from '@store/session.query';
@@ -19,19 +19,21 @@ import { finalize } from 'rxjs';
   styleUrl: './client-contract.component.scss',
 })
 export class ClientContractComponent {
-
   protected form: FormGroup;
+  protected statuses = ['Accepted', 'Return', 'Refused'];
+  protected clientStatus = ClientStatus;
 
   // Utils
-  protected myUser : User;
+  protected myUser: User;
   protected UserRoleEnum = UserRole;
-  protected clientPolicy : ClientPolicy = null;
+  protected clientPolicy: ClientPolicy[] = null;
+  protected justification: boolean = false;
 
   @Input()
-  shouldUpdate : boolean = false;
+  shouldUpdate: boolean = false;
 
   @Input()
-  Client : Client;
+  Client: Client;
 
   @Input()
   loading: boolean = false;
@@ -40,10 +42,13 @@ export class ClientContractComponent {
   onClientClick: EventEmitter<Client> = new EventEmitter<Client>();
 
   @Output()
-  onOpenContract: EventEmitter<Client> = new EventEmitter<Client>();
+  onOpenContract: EventEmitter<string> = new EventEmitter<string>();
 
   @Output()
-  onContractDeleteClick: EventEmitter<Client> = new EventEmitter<Client>();
+  onContractDeleteClick: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output()
+  onCloseDialog: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   // Não utilizado
   @Output()
@@ -52,70 +57,65 @@ export class ClientContractComponent {
   constructor(
     private readonly _toastr: ToastrService,
     private readonly _clientService: ClientService,
-    private readonly _sessionQuery : SessionQuery,
-    private readonly _fb : FormBuilder,
+    private readonly _sessionQuery: SessionQuery,
+    private readonly _fb: FormBuilder
   ) {}
 
   ngOnInit() {
-    this._sessionQuery.user$.subscribe(user => {
+    this._sessionQuery.user$.subscribe((user) => {
       this.myUser = user;
     });
 
-    if(this.Client) {
-      this.clientPolicy = this.Client?.policy;
-    }
-
     this.form = this._fb.group({
-      contract_number: [this.clientPolicy.contract_number, [Validators.required]],
+      validation: [null, Validators.required],
+      justification: [null],
     });
 
-    if(![UserRole.Admin, UserRole.Manager].includes(this.myUser.role)) {
-      this.form?.disable();
+    this.form.get('validation')?.valueChanges.subscribe((status: string) => {
+      const justificationControl = this.form.get('justification');
+
+      if (status == 'Refused' || status == 'Return') {
+        justificationControl?.setValidators([Validators.required]);
+        this.justification = true;
+      } else {
+        justificationControl?.clearValidators();
+        this.justification = false;
+      }
+
+      justificationControl?.updateValueAndValidity();
+    });
+
+    if (this.Client) {
+      this.clientPolicy = this.Client?.policys;
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const { shouldUpdate, loading } = changes;
-
-    if (shouldUpdate?.currentValue || !shouldUpdate?.currentValue) {
-      this.update();
-    }
-  }
-
-  protected update(): void {
-    if(this.loading || !this.form || this.form?.disabled) return;
-
-    if(!this.form.valid) {
+  protected onSubmit() {
+    if (this.loading || !this.form.valid) {
       this._toastr.error('Formulário inválido!');
       return;
     }
 
-    this._initOrStopLoading();
-
+    this.initOrStopLoading();
     this._clientService
-      .patchPolicy(this.clientPolicy?.id, this.prepareFormData(this.form))
-      .pipe(finalize(() => this._initOrStopLoading()))
+      .analysisContract(this.Client.id, this.form.getRawValue())
+      .pipe(
+        finalize(() => {
+          this.initOrStopLoading();
+        })
+      )
       .subscribe({
         next: (res) => {
           this._toastr.success(res.message);
+          this.onCloseDialog.emit(true);
         },
         error: (err) => {
-          this._toastr.error(err.error.error);
+          this._toastr.error(err.error.message);
         },
       });
   }
 
-  protected prepareFormData(form: FormGroup) {
-    const formData = new FormData();
-
-    Object.entries(form.controls).forEach(([key, control]) => {
-      formData.append(key, control.value);
-    });
-
-    return formData;
-  }
-
-  private _initOrStopLoading(): void {
+  protected initOrStopLoading() {
     this.loading = !this.loading;
   }
 }

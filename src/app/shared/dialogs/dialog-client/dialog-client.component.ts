@@ -133,6 +133,15 @@ export class DialogClientComponent {
       rental_value: ['', [Validators.required, Validators.min(0.01)]],
       property_tax: ['', [Validators.required, Validators.min(0.01)]],
       condominium_fee: [0, [Validators.min(0.01)]],
+
+      // Responsável
+      corresponding_cpf: ['', []],
+      corresponding_name: ['', []],
+      corresponding_birthday: ['', []],
+      corresponding_declared_income: ['', []],
+      corresponding_occupation: ['', []],
+      corresponding_email: ['', []],
+      corresponding_phone: ['', []],
     });
 
     this.form.get('policy_value').disable();
@@ -187,6 +196,30 @@ export class DialogClientComponent {
 
       if (this._data.client.condominium_fee > 0) {
         this.habilitateCondominumFee = true;
+      }
+
+      if (this._data.client.corresponding) {
+        this.form
+          .get('corresponding_cpf')
+          .patchValue(this._data.client.corresponding.cpf);
+        this.form
+          .get('corresponding_name')
+          .patchValue(this._data.client.corresponding.fullname);
+        this.form
+          .get('corresponding_birthday')
+          .patchValue(this._data.client.corresponding.birthday);
+        this.form
+          .get('corresponding_declared_income')
+          .patchValue(this._data.client.corresponding.declared_income);
+        this.form
+          .get('corresponding_occupation')
+          .patchValue(this._data.client.corresponding.occupation);
+        this.form
+          .get('corresponding_email')
+          .patchValue(this._data.client.corresponding.email);
+        this.form
+          .get('corresponding_phone')
+          .patchValue(this._data.client.corresponding.phone);
       }
     }
 
@@ -335,13 +368,39 @@ export class DialogClientComponent {
   protected prepareFormData(form: FormGroup) {
     const formData = new FormData();
 
+    const notKeys = [
+      'corresponding_name',
+      'corresponding_cpf',
+      'corresponding_occupation',
+      'corresponding_declared_income',
+      'corresponding_email',
+      'corresponding_phone',
+      'corresponding_birthday',
+      'birthday',
+    ];
+
     Object.entries(form.controls).forEach(([key, control]) => {
-      if (key == 'birthday') {
-        formData.append(key, dayjs(control.value).format('YYYY-MM-DD'));
-      } else {
-        formData.append(key, control.value);
-      }
+      if (notKeys.includes(key)) return;
+      formData.append(key, control.value);
     });
+
+    formData.append('birthday', dayjs(form.get('birthday').value).format('YYYY-MM-DD'));
+
+    console.log(dayjs(form.get('corresponding_birthday').value).format('YYYY-MM-DD'));
+    console.log(form.get('corresponding_birthday').value);
+
+    // corresponding
+    formData.append('corresponding[birthday]', dayjs(form.get('corresponding_birthday').value).format('YYYY-MM-DD'));
+    formData.append('corresponding[fullname]', form.get('corresponding_name').value);
+    formData.append('corresponding[cpf]', form.get('corresponding_cpf').value);
+    formData.append('corresponding[occupation]', form.get('corresponding_occupation').value);
+    formData.append('corresponding[declared_income]', form.get('corresponding_declared_income').value);
+    formData.append('corresponding[email]', form.get('corresponding_email').value);
+    formData.append('corresponding[phone]', form.get('corresponding_phone').value);
+
+    if(this._data?.client?.corresponding?.id) {
+      formData.append('corresponding[id]', this._data?.client?.corresponding?.id.toString());
+    }
 
     this.filesToSend.map((file, index) => {
       formData.append(`attachments[${index}][description]`, file.description);

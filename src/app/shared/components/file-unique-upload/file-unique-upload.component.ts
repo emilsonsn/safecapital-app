@@ -55,6 +55,7 @@ export class FileUniqueUploadComponent {
     preview: null,
   };
 
+  @Input()
   public allowedTypes = [
     'image/png',
     'image/jpeg',

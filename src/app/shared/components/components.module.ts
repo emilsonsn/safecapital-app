@@ -20,6 +20,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ClientContractComponent } from './client/client-contract/client-contract.component';
 import { FileUniqueUploadComponent } from './file-unique-upload/file-unique-upload.component';
 import { PipesModule } from '@shared/pipes/pipes.module';
+import { MatSelectModule } from '@angular/material/select';
 
 const components: any[] = [
   AccountManagerComponent,
@@ -42,6 +43,7 @@ const components: any[] = [
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     MatDividerModule,
     MatTooltipModule,
     MatRippleModule,

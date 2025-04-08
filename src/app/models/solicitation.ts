@@ -7,6 +7,7 @@ export interface Solicitation {
   status: SolicitationStatusEnum;
   messages: SolicitationMessage[];
   attachments: SolicitationAttachment[];
+  items? : SolicitationItem[];
   user?: User;
   user_id?: number;
   created_at?: string;
@@ -37,11 +38,18 @@ export interface SolicitationAttachment {
   deleted_at: string;
 }
 
+export interface SolicitationItem {
+  id: number;
+  description: string;
+  value: number;
+  due_date: Date;
+}
+
 export enum FilesSolicitationEnum {
   OverdueBill = 'OverdueBill',
   Charge = 'Charge',
   CondominiumBill = 'CondominiumBill',
-  IPTU = 'IPTU'
+  IPTU = 'IPTU',
 }
 
 export enum SolicitationStatusEnum {

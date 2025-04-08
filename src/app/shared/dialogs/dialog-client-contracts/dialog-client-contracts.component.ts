@@ -11,6 +11,7 @@ import { Utils } from '@shared/utils';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
+import { FileUniqueProps } from '@shared/components/file-unique-upload/file-unique-upload.component';
 
 @Component({
   selector: 'app-dialog-client-contracts',
@@ -21,7 +22,7 @@ export class DialogClientContractsComponent {
   // Utils
   public utils = Utils;
   public loading: boolean = false;
-  protected shouldUpdate : boolean = false;
+  protected shouldUpdate: boolean = false;
 
   // Form
   public form: FormGroup;
@@ -40,6 +41,16 @@ export class DialogClientContractsComponent {
     this.form = this._fb.group({
       client_id: [this._data.client.id],
     });
+
+    this.requiredFiles = Object.values(['Contrato', 'Laudo']).map(
+      (category) => ({
+        id: 0,
+        preview: '',
+        file: null,
+        file_name: '',
+        category,
+      })
+    );
   }
 
   public onSubmit(): void {
@@ -48,15 +59,17 @@ export class DialogClientContractsComponent {
       return;
     }
 
-    if((!this.filesToSend || this.filesToSend.length == 0) && !this._data?.client?.policy) {
+    if (
+      !this.requiredFiles.some((file) => file.file || file.preview)
+      || (this.requiredFiles.length != 2)
+    ) {
       this._toastr.error('Nenhum contrato ou documento foi enviado!');
       return;
     }
 
-    if(!this._data?.client?.policy) {
+    if (this._data?.client?.policys?.length == 0 || this._data?.client?.policys == null) {
       this.post();
-    }
-    else {
+    } else {
       this.update();
     }
   }
@@ -97,32 +110,44 @@ export class DialogClientContractsComponent {
       formData.append(`file`, file.file);
     });
 
+    this.requiredFilesToUpdate.map((file, index) => {
+      // formData.append(
+      //   `attachments[${index + this.filesToSend?.length}][category]`,
+      //   file.category
+      // );
+      formData.append(
+        `attachments[${file.category == 'Contrato' ? 0 : 1}][file]`,
+        file.file
+      );
+    });
+
     return formData;
   }
 
-  protected openContract(client : Client) {
-    window.open(client?.policy?.path, '_blank');
+
+  protected openContract(path : string) {
+    window.open(path, '_blank');
   }
 
   protected downloadContract(client: Client) {}
 
-  protected onDeleteConfirm(client: Client) {
+  protected onDeleteConfirm(id: number) {
     const text = 'Tem certeza? Essa ação não pode ser revertida!';
     this._dialog
       .open(DialogConfirmComponent, { data: { text } })
       .afterClosed()
       .subscribe((res: boolean) => {
         if (res) {
-          this.deleteContract(client);
+          this.deleteContract(id);
         }
       });
   }
 
-  protected deleteContract(client: Client) {
+  protected deleteContract(id : number) {
     this._initOrStopLoading();
 
     this._clientService
-      .deletePolicy(client.policy.id)
+      .deletePolicy(id)
       .pipe(
         finalize(() => {
           this._initOrStopLoading();
@@ -144,8 +169,8 @@ export class DialogClientContractsComponent {
     this.loading = !this.loading;
   }
 
-  public onCancel(): void {
-    this._dialogRef.close();
+  public onCancel(value?: boolean): void {
+    this._dialogRef.close(value);
   }
 
   // Files
@@ -207,5 +232,25 @@ export class DialogClientContractsComponent {
     const fileUrl = URL.createObjectURL(e.file);
 
     window.open(fileUrl, '_blank');
+  }
+
+  protected requiredFiles: FileUniqueProps[] = [];
+  protected requiredFilesToUpdate: FileUniqueProps[] = [];
+
+  protected addRequiredFile(index: number, file: FileUniqueProps) {
+    if (index >= 0 && index < this.requiredFiles.length)
+      this.requiredFilesToUpdate.push(file);
+    else
+      console.error(
+        `Índice inválido: ${index}. O índice deve estar entre 0 e ${
+          this.requiredFiles.length - 1
+        }.`
+      );
+  }
+
+  protected deleteRequiredFile(index: number, file: FileUniqueProps) {
+    this.requiredFilesToUpdate = this.requiredFilesToUpdate.filter(
+      (f) => f.file_name !== file.file_name
+    );
   }
 }

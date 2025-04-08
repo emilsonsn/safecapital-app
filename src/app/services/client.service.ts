@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { PageControl, ApiResponsePageable, ApiResponse, DeleteApiResponse } from '@models/application';
-import { Client, ClientPolicy, ClientPolicyDocument } from '@models/client';
+import { Client, ClientAnalysisContract, ClientPolicy, ClientPolicyDocument } from '@models/client';
 import { Utils } from '@shared/utils';
 import { Observable } from 'rxjs';
 
@@ -58,6 +58,10 @@ export class ClientService {
 
   public createPolicyDocument(data: ClientPolicyDocument | FormData): Observable<ApiResponse<Client>> {
     return this._http.post<ApiResponse<Client>>(`${environment.api}/${this.sessionEndpoint}/policy-document`, data);
+  }
+
+  public analysisContract(id: number,data: ClientAnalysisContract): Observable<ApiResponse<Client>> {
+    return this._http.post<ApiResponse<Client>>(`${environment.api}/${this.sessionEndpoint}/${id}/contract/analisys`, data);
   }
 
 }

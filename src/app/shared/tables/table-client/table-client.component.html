@@ -64,14 +64,19 @@
 
               @if(
                 client?.status == clientStatus?.Approved
-                && [UserRoleEnum?.Client].includes(myUser?.role)
+                && [UserRoleEnum?.Admin, UserRoleEnum?.Client].includes(myUser?.role)
               ) {
                 <div matTooltip="Aceitar" matRipple class="buttonTemplate" (click)="onClientApproveClick.emit(client)">
                   <i class="fa-solid fa-check"></i>
                 </div>
               }
 
-              @if(client?.status == clientStatus?.WaitingContract) {
+              @if([
+                clientStatus?.WaitingContract,
+                clientStatus?.WaitingAnalysis,
+                clientStatus?.Active,
+                clientStatus?.WaitingPolicy
+                ].includes(client?.status)) {
                 <div matTooltip="Contrato" matRipple class="buttonTemplate" (click)="onClientContractsClick.emit(client)">
                   <i class="fa-solid fa-file-contract"></i>
                 </div>

@@ -13,9 +13,10 @@ export interface Client {
   property_tax: number;
   condominium_fee: number;
   policy_value: number;
-  policy: ClientPolicy;
+  policys: ClientPolicy[];
   payment_form: PaymentFormEnum;
   attachments: ClientAttachment[];
+  corresponding? : ClientResponsible;
   contracts?: ClientContract[];
   created_at?: Date;
   updated_at?: Date;
@@ -53,6 +54,22 @@ export interface ClientPolicyDocument {
   file: File | string;
 }
 
+export interface ClientAnalysisContract {
+  validation: 'Accepted' | 'Return' | 'Refused';
+  justification: string;
+}
+
+export interface ClientResponsible {
+  id?: number;
+  cpf: string;
+  fullname: string;
+  birthday: Date;
+  declared_income: number;
+  occupation: string;
+  email: string;
+  phone: string;
+}
+
 export enum PaymentFormEnum {
   INCASH = 'INCASH',
   INVOICED = 'INVOICED',
@@ -65,6 +82,7 @@ export enum ClientStatus {
   WaitingPayment = 'WaitingPayment',
   WaitingContract = 'WaitingContract',
   WaitingAnalysis = 'WaitingAnalysis',
+  WaitingPolicy = 'WaitingPolicy',
   Active = 'Active',
   Inactive = 'Inactive',
 }

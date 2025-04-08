@@ -31,6 +31,10 @@
     background-color: purple;
   }
 
+  &.waitingpolicy{
+    background-color: rgb(0, 128, 107);
+  }
+
   &.disapproved {
     background-color: $red;
   }

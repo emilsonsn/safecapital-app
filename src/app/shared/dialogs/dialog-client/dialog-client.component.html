@@ -189,6 +189,60 @@
         <p style="font-size: 0.9em;">Obs.: Necessário preencher a forma de pagamento e ao menos um valor *</p>
         }
       </div>
+      <div class="col-12 mb-2">
+        <span class="fw-bold fs-6">Corresponsável</span>
+      </div>
+
+      <div class="col-md-7 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome </mat-label>
+          <input matInput type="text" formControlName="corresponding_name">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-5 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>CPF </mat-label>
+          <input matInput type="text" formControlName="corresponding_cpf" mask="000.000.000-00">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Ocupação </mat-label>
+          <input matInput type="text" formControlName="corresponding_occupation">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Renda Declarada </mat-label>
+          <input matInput type="text" formControlName="corresponding_declared_income" currencyMask>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail </mat-label>
+          <input matInput type="email" formControlName="corresponding_email" pattern="{{ utils.patternEmail }}">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone </mat-label>
+          <input type="text" formControlName="corresponding_phone" matInput mask="(00) 00000-0000||(00) 0000-0000" />
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Nascimento </mat-label>
+          <input matInput [matDatepicker]="picker2" formControlName="corresponding_birthday" placeholder="DD/MM/YYYY" appMaskDate >
+          <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+      </div>
     </div>
 
     <div class="mt-3" *ngIf="!isNewClient">

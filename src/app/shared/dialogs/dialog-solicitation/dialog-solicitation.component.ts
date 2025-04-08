@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -18,6 +19,7 @@ import {
   FilesSolicitationEnum,
   Solicitation,
   SolicitationCategoryEnum,
+  SolicitationItem,
 } from '@models/solicitation';
 import { ClientService } from '@services/client.service';
 import { SolicitationService } from '@services/solicitation.service';
@@ -25,6 +27,7 @@ import { UserService } from '@services/user.service';
 import { UtilsService } from '@services/utils.service';
 import { FileUniqueProps } from '@shared/components/file-unique-upload/file-unique-upload.component';
 import { Utils } from '@shared/utils';
+import dayjs from 'dayjs';
 import { ToastrService } from 'ngx-toastr';
 import {
   debounceTime,
@@ -85,9 +88,10 @@ export class DialogSolicitationComponent {
   ngOnInit(): void {
     this.form = this._fb.group({
       contract_number: [null, [Validators.required]],
-      subject: [null, [Validators.required]],
+      subject: ['', [Validators.required]],
       category: [null, [Validators.required]],
       status: [this._data?.solicitation?.status ?? 'Received'],
+      items: this._fb.array([]),
     });
 
     this.requiredFiles = Object.values(FilesSolicitationEnum).map(
@@ -103,6 +107,12 @@ export class DialogSolicitationComponent {
     if (this._data?.solicitation) {
       this.isNewSolicitation = false;
       this.form.patchValue(this._data?.solicitation);
+
+      if (this._data?.solicitation?.items) {
+        this._data?.solicitation?.items?.forEach((item) => {
+          this.items.push(this.createItemFromData(item));
+        });
+      }
 
       this._data?.solicitation?.attachments.forEach((fileFromBack, index) => {
         if (
@@ -138,6 +148,8 @@ export class DialogSolicitationComponent {
         .get('category')
         .patchValue(SolicitationCategoryEnum.Default.toString());
       this.form.get('category').disable();
+
+      this.form.get('subject').removeValidators(Validators.required);
     }
   }
 
@@ -155,6 +167,10 @@ export class DialogSolicitationComponent {
 
   protected post() {
     this._initOrStopLoading();
+
+    for(let id of this.itemsToRemove) {
+      this.deleteItem(id);
+    }
 
     this._solicitationService
       .post(this.prepareFormData(this.form))
@@ -177,13 +193,24 @@ export class DialogSolicitationComponent {
   protected prepareFormData(form: FormGroup) {
     const formData = new FormData();
 
+    const notKeys = [
+      'items'
+    ];
+
     Object.entries(form.controls).forEach(([key, control]) => {
+      if (notKeys.includes(key)) return;
       formData.append(key, control.value);
     });
 
     this.requiredFilesToUpdate.map((file, index) => {
       formData.append(`attachments[${index}][description]`, file.category);
       formData.append(`attachments[${index}][file]`, file.file);
+    });
+
+    this.items.controls.map((item, index) => {
+      formData.append(`items[${index}][description]`, item.get('description')?.value);
+      formData.append(`items[${index}][due_date]`, dayjs(item.get('due_date')?.value).format("YYYY-MM-DD"));
+      formData.append(`items[${index}][value]`, item.get('value')?.value);
     });
 
     return formData;
@@ -213,6 +240,51 @@ export class DialogSolicitationComponent {
     );
   }
 
+  // Itens
+  protected itemsToRemove : number[] = []
+  public get items(): FormArray {
+    return this.form.get('items') as FormArray;
+  }
+
+  private createItemFromData(item: SolicitationItem): FormGroup {
+    return this._fb.group({
+      id: [item?.id],
+      value: [{ value: item?.value }, [Validators.required]],
+      description: [item?.description, [Validators.required]],
+      due_date: [item?.due_date, [Validators.required]],
+    });
+  }
+
+  public onDeleteItem(index: number): void {
+    this.items.removeAt(index);
+    if (this.items.value[index].id) {
+      this.itemsToRemove.push(this.items.value[index].id);
+    }
+  }
+
+  public createItem(): FormGroup {
+    return this._fb.group({
+      id: [null],
+      value: [null, Validators.required],
+      description: [null, Validators.required],
+      due_date: [null, Validators.required],
+    });
+  }
+
+
+  public pushItem(): void {
+    this.items.push(this.createItem());
+  }
+
+  private deleteItem(id : number) {
+    this._solicitationService.deleteItem(id).subscribe({
+      next: () => {},
+      error: (err) => {
+        this._toastr.error(err.error.error);
+      },
+    });
+  }
+
   // Filters
   protected prepareFilterContractNumberCtrl() {
     this.contractNumberFilterCtrl.valueChanges
@@ -239,8 +311,8 @@ export class DialogSolicitationComponent {
   public getClientsFromBack() {
     this._clientService.getList().subscribe((res) => {
       this.contractNumberSelect = res.data
-        .filter((client) => client.policy?.contract_number) // Remove valores nulos ou undefined
-        .map((client) => client.policy.contract_number);
+        .filter((client) => client.policys && client.policys.length > 0)
+        .map((client) => client.policys[0].contract_number);
 
       this.filteredContractNumbers.next(this.contractNumberSelect.slice());
 
