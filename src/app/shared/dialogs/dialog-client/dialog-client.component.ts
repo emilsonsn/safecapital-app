@@ -17,7 +17,7 @@ import {
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RequiredFilesEnum } from '@app/views/session/register/register/register.component';
-import { Client, ClientStatus, PaymentFormEnum } from '@models/client';
+import { Client, ClientStatus, PaymentFormEnum, PropertyTypeEnum } from '@models/client';
 import { User } from '@models/user';
 import { Estados } from '@models/utils';
 import { ClientService } from '@services/client.service';
@@ -67,6 +67,11 @@ export class DialogClientComponent {
       label: 'Faturado',
       value: PaymentFormEnum.INVOICED,
     },
+  ];
+
+  public propertyTypes = [
+    PropertyTypeEnum.Residential,
+    PropertyTypeEnum.Commercial,
   ];
 
   public citys: string[] = [];
@@ -125,6 +130,7 @@ export class DialogClientComponent {
       city: ['', [Validators.required]],
       state: ['', [Validators.required]],
       number: ['', [Validators.required]],
+      property_type: ['', [Validators.required]],
       complement: [''],
 
       // Financeiro
@@ -381,7 +387,7 @@ export class DialogClientComponent {
 
     Object.entries(form.controls).forEach(([key, control]) => {
       if (notKeys.includes(key)) return;
-      formData.append(key, control.value);
+      formData.append(key, control.value ?? '');
     });
 
     formData.append('birthday', dayjs(form.get('birthday').value).format('YYYY-MM-DD'));

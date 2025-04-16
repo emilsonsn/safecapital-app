@@ -75,6 +75,11 @@ export enum PaymentFormEnum {
   INVOICED = 'INVOICED',
 }
 
+export enum PropertyTypeEnum {
+  Residential = 'Residential',
+  Commercial = 'Commercial',
+}
+
 export enum ClientStatus {
   Pending = 'Pending',
   Disapproved = 'Disapproved',
