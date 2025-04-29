@@ -49,6 +49,7 @@ export class DialogClientComponent {
   public loading: boolean = false;
   protected tabIndex: number = 0;
   protected habilitateCondominumFee = false;
+  protected habilitatePropertyTax = false;
   protected clientStatuses = ClientStatus;
   protected requiredFilesEnum = RequiredFilesEnum;
 
@@ -291,6 +292,12 @@ export class DialogClientComponent {
     } else {
       this.form.get('condominium_fee').disable();
     }
+
+    if (this.habilitatePropertyTax) {
+      this.form.get('property_tax').enable();
+    } else {
+      this.form.get('property_tax').disable();
+    }    
   }
 
   public onSubmit(form: FormGroup): void {
@@ -525,6 +532,17 @@ export class DialogClientComponent {
       this.form.get('condominium_fee').setValidators(Validators.required);
     }
   }
+
+  protected togglePropertyTax() {
+    if (this.form.get('property_tax').enabled) {
+      this.form.get('property_tax').patchValue(0);
+      this.form.get('property_tax').disable();
+      this.form.get('property_tax').setValidators([]);
+    } else {
+      this.form.get('property_tax').enable();
+      this.form.get('property_tax').setValidators(Validators.required);
+    }
+  }  
 
   protected getPolicyDescription() {
     const policyValue = this.form?.get('policy_value')?.value;

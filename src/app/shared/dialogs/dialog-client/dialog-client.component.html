@@ -165,14 +165,20 @@
         </mat-form-field>
       </div>
 
-      <div class="col-md-4 mb-3">
-        <mat-form-field appearance="outline">
-          <mat-label>IPTU </mat-label>
-          <input matInput type="text" formControlName="property_tax" currencyMask>
-        </mat-form-field>
+      <div class="col-md-6 mb-3">
+        <div class="d-flex align-items-center gap-md-2 gap-1">
+          <mat-form-field appearance="outline">
+            <mat-label>IPTU </mat-label>
+            <input matInput type="text" formControlName="property_tax" currencyMask>
+          </mat-form-field>
+          <div>
+            <mat-slide-toggle [(ngModel)]="habilitatePropertyTax" (ngModelChange)="togglePropertyTax()"
+              [ngModelOptions]="{standalone: true}" disabled="{{ form.disabled ? true : false }}"></mat-slide-toggle>
+          </div>
+        </div>
       </div>
 
-      <div class="col-md-4 mb-3">
+      <div class="col-md-6 mb-3">
         <div class="d-flex align-items-center gap-md-2 gap-1">
           <mat-form-field appearance="outline">
             <mat-label>Condomínio </mat-label>
@@ -185,7 +191,7 @@
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-12 text-end mb-3">
         <p class="mb-0">Valor da apólice</p>
         <div>
           <p class="mb-0" style="color: #201f1f;">
