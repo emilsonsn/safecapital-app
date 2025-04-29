@@ -54,7 +54,7 @@ export class StatusPipe implements PipeTransform {
       case ClientStatus.WaitingPayment.toString():
         return 'Aguardando Pagamento da Taxa Setup';
       case ClientStatus.WaitingPolicy.toString():
-        return 'Aguardando Apólice';
+        return 'Aguardando assinatura da Apólice';
       case ClientStatus.WaitingAnalysis.toString():
         return 'Aguardando Análise do Contrato';
       case ClientStatus.Inactive.toString():
