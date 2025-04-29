@@ -144,8 +144,6 @@ export class DialogClientComponent {
       corresponding_cpf: ['', []],
       corresponding_name: ['', []],
       corresponding_birthday: ['', []],
-      corresponding_declared_income: ['', []],
-      corresponding_occupation: ['', []],
       corresponding_email: ['', []],
       corresponding_phone: ['', []],
     });
@@ -214,12 +212,6 @@ export class DialogClientComponent {
         this.form
           .get('corresponding_birthday')
           .patchValue(this._data.client.corresponding.birthday);
-        this.form
-          .get('corresponding_declared_income')
-          .patchValue(this._data.client.corresponding.declared_income);
-        this.form
-          .get('corresponding_occupation')
-          .patchValue(this._data.client.corresponding.occupation);
         this.form
           .get('corresponding_email')
           .patchValue(this._data.client.corresponding.email);
@@ -377,8 +369,6 @@ export class DialogClientComponent {
     const notKeys = [
       'corresponding_name',
       'corresponding_cpf',
-      'corresponding_occupation',
-      'corresponding_declared_income',
       'corresponding_email',
       'corresponding_phone',
       'corresponding_birthday',
@@ -399,8 +389,6 @@ export class DialogClientComponent {
     formData.append('corresponding[birthday]', dayjs(form.get('corresponding_birthday').value).format('YYYY-MM-DD'));
     formData.append('corresponding[fullname]', form.get('corresponding_name').value);
     formData.append('corresponding[cpf]', form.get('corresponding_cpf').value);
-    formData.append('corresponding[occupation]', form.get('corresponding_occupation').value);
-    formData.append('corresponding[declared_income]', form.get('corresponding_declared_income').value);
     formData.append('corresponding[email]', form.get('corresponding_email').value);
     formData.append('corresponding[phone]', form.get('corresponding_phone').value);
 
