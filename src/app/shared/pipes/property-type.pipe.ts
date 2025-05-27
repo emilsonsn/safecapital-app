@@ -9,7 +9,7 @@ export class PropertyTypePipe implements PipeTransform {
   transform(value: PropertyTypeEnum) {
     switch (value) {
       case PropertyTypeEnum.Residential:
-        return 'Resindencial';
+        return 'Residencial';
       case PropertyTypeEnum.Commercial:
         return 'Comercial';
       default:
