@@ -60,10 +60,9 @@ export class DialogClientContractsComponent {
     }
 
     if (
-      !this.requiredFiles.some((file) => file.file || file.preview)
-      || (this.requiredFiles.length != 2)
+      this.requiredFiles.some((file) => !(file.file || file.preview))
     ) {
-      this._toastr.error('Nenhum contrato ou documento foi enviado!');
+      this._toastr.error('É necessário enviar ambos os documentos!');
       return;
     }
 
