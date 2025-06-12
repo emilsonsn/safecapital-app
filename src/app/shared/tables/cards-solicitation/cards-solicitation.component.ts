@@ -8,6 +8,7 @@ import {
 import { Order, PageControl } from '@models/application';
 import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
 import { SolicitationService } from '@services/solicitation.service';
+import { SessionQuery } from '@store/session.query';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 
@@ -44,6 +45,8 @@ export class CardsSolicitationComponent {
 
   public solicitations: Solicitation[] = [];
 
+  public user_id;
+
   public pageControl: PageControl = {
     take: 10,
     page: 1,
@@ -55,8 +58,15 @@ export class CardsSolicitationComponent {
 
   constructor(
     private readonly _toastr: ToastrService,
-    private readonly _solicitationService: SolicitationService
+    private readonly _solicitationService: SolicitationService,
+    private readonly _sessionQuery: SessionQuery,
   ) {}
+
+  ngOnInit(){
+    this._sessionQuery.user$.subscribe((user) => {
+      this.user_id = user?.id;
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const { filters, searchTerm, loading } = changes;
@@ -129,5 +139,21 @@ export class CardsSolicitationComponent {
     this.pageControl.page = $event.pageIndex + 1;
     this.pageControl.take = $event.pageSize;
     this.search();
+  }
+
+  protected getUnreadMessageCount(item: Solicitation): number {
+      if (!item.messages?.length) return 0;
+  
+      const currentUserId = this.user_id;
+      const reversedMessages = [...item.messages].reverse();
+  
+      let count = 0;
+  
+      for (const message of reversedMessages) {
+        if (message.user_id === currentUserId) break;
+        count++;
+      }
+  
+      return count;
   }
 }

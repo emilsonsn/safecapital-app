@@ -103,7 +103,7 @@ export class DialogClientComponent {
       },
       error: (err) => {
         this._toastr.error(
-          'Ocorreu um erro ao carregar o dado das taxas! Verificar o suporte, o valor da apólice pode não condizer!' +
+          'Ocorreu um erro ao carregar o dado das taxas! Verificar o suporte, o valor da garantia pode não condizer!' +
             err.error.error
         );
       },

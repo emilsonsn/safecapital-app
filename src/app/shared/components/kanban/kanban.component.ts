@@ -16,6 +16,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Kanban } from '@models/Kanban';
 import { Solicitation, SolicitationStatusEnum } from '@models/solicitation';
+import { SessionQuery } from '@store/session.query';
 
 export interface KanbanSolicitationStatus {
   id: number;
@@ -52,6 +53,18 @@ export class KanbanComponent {
   @Output()
   protected onOpenSolicitationDetails: EventEmitter<Solicitation> =
     new EventEmitter<Solicitation>();
+  
+  public user_id: number;
+  
+  constructor(
+    readonly _sessionQuery: SessionQuery,
+  ){}
+
+  ngOnInit(){
+    this._sessionQuery.user$.subscribe((user) => {
+      this.user_id = user?.id;
+    });
+  }
 
   // Kanban
   protected drop(event: CdkDragDrop<Solicitation[]>) {
@@ -125,5 +138,21 @@ export class KanbanComponent {
 
   protected getBorderColor(status: SolicitationStatusEnum) {
     return this.borderColors[status];
+  }
+
+  protected getUnreadMessageCount(item: Solicitation): number {
+    if (!item.messages?.length) return 0;
+
+    const currentUserId = this.user_id;
+    const reversedMessages = [...item.messages].reverse();
+
+    let count = 0;
+
+    for (const message of reversedMessages) {
+      if (message.user_id === currentUserId) break;
+      count++;
+    }
+
+    return count;
   }
 }

@@ -23,6 +23,9 @@
         <div class="title">
           Atualizado em: <br>{{ (solicitation?.updated_at | date:"dd/MM/YYYY HH:mm:ss") ?? '-'}}
         </div>
+        <div class="title" *ngIf="getUnreadMessageCount(solicitation) > 0">
+          <span class="badge bg-danger"> {{ getUnreadMessageCount(solicitation) }} nova(s) </span>
+        </div>
         <div id="buttons">
           <div matRipple class="buttonTemplate"
             (click)="onOpenSolicitationChat.emit(solicitation); $event.stopPropagation()">
