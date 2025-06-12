@@ -142,8 +142,6 @@ export class FileUniqueUploadComponent {
   }
 
   protected open(e: Event) {
-    if (this.disabled) return;
-
     e.stopPropagation();
 
     let fileUrl;

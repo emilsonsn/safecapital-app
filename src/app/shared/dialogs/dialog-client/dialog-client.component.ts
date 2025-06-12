@@ -15,7 +15,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { RequiredFilesEnum } from '@app/views/session/register/register/register.component';
 import { Client, ClientStatus, PaymentFormEnum, PropertyTypeEnum } from '@models/client';
 import { User } from '@models/user';
@@ -29,6 +29,7 @@ import { SessionQuery } from '@store/session.query';
 import dayjs from 'dayjs';
 import { ToastrService } from 'ngx-toastr';
 import { distinctUntilChanged, finalize, map, ReplaySubject } from 'rxjs';
+import { DialogMailMessageComponent } from '../dialog-email-message/dialog-email-message.component';
 
 @Component({
   selector: 'app-dialog-client',
@@ -84,7 +85,7 @@ export class DialogClientComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    protected readonly _data: { client: Client },
+    public readonly _data: { client: Client },
     private readonly _dialogRef: MatDialogRef<DialogClientComponent>,
     private readonly _fb: FormBuilder,
     private readonly _toastr: ToastrService,
@@ -92,7 +93,8 @@ export class DialogClientComponent {
     private readonly _clientService: ClientService,
     private readonly _taxService: TaxSettingService,
     private readonly _currencyPipe: CurrencyPipe,
-    protected readonly _sessionQuery: SessionQuery
+    protected readonly _sessionQuery: SessionQuery,
+    private readonly _dialog: MatDialog
   ) {
     this._taxService.getList().subscribe({
       next: (res) => {
@@ -622,6 +624,33 @@ export class DialogClientComponent {
 
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = (error) => reject(error);
+    });
+  }
+
+  public openMail(): void {
+    const dialogRef = this._dialog.open(DialogMailMessageComponent, {
+      width: '500px',
+      data: {
+        client_id: this._data.client.id
+      }
+    });
+
+    dialogRef
+    .afterClosed()
+    .subscribe((data) => {
+      if (data) {
+        this.loading = true;
+        this._clientService.sendMail(data)
+          .pipe(finalize(() => this.loading = false))
+          .subscribe({
+            next: (res) => {
+              this._toastr.success(res.message);
+            },
+            error: (error) => {
+              this._toastr.error(error?.message ?? 'Erro inesperado.');
+            }
+        });
+      }
     });
   }
 

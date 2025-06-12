@@ -37,6 +37,7 @@ import { DialogOccurrenceComponent } from './dialog-occurrence/dialog-occurrence
 import { DialogClientApproveComponent } from './dialog-client-approve/dialog-client-approve.component';
 import localePt from '@angular/common/locales/pt';
 import {CustomDateAdapter} from "@app/app.module";
+import { DialogMailMessageComponent } from './dialog-email-message/dialog-email-message.component';
 
 
 registerLocaleData(localePt, 'pt-BR');
@@ -66,6 +67,7 @@ const MY_DATE_FORMATS = {
     DialogSettingComponent,
     DialogOccurrenceComponent,
     DialogClientApproveComponent,
+    DialogMailMessageComponent
   ],
   imports: [
     CommonModule,

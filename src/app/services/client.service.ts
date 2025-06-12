@@ -28,6 +28,10 @@ export class ClientService {
     return this._http.post<ApiResponse<Client>>(`${environment.api}/${this.sessionEndpoint}/create`, client);
   }
 
+  public sendMail(data: any): Observable<ApiResponse<any>> {
+    return this._http.post<ApiResponse<any>>(`${environment.api}/${this.sessionEndpoint}/send-message`, data);
+  }
+
   public patch(id: number, client: Client | FormData): Observable<ApiResponse<Client>> {
     return this._http.post<ApiResponse<Client>>(`${environment.api}/${this.sessionEndpoint}/${id}?_method=PATCH`, client);
   }
