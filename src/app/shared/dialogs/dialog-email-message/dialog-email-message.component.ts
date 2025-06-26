@@ -12,14 +12,15 @@ export class DialogMailMessageComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    private readonly data: { client_id: number },
+    private readonly data: { client_id?: number, contract_number?: string },
     private readonly dialogRef: MatDialogRef<DialogMailMessageComponent>,
     private readonly fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      client_id: [this.data.client_id, Validators.required],
+      client_id: [this.data.client_id],
+      contract_number: [this.data.contract_number],
       subject: ['', Validators.required],
       message: ['', Validators.required],
     });

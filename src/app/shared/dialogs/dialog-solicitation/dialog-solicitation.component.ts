@@ -14,7 +14,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   FilesSolicitationEnum,
   Solicitation,
@@ -37,6 +37,7 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
+import { DialogMailMessageComponent } from '../dialog-email-message/dialog-email-message.component';
 
 @Component({
   selector: 'app-dialog-solicitation',
@@ -78,6 +79,7 @@ export class DialogSolicitationComponent {
     },
     private readonly _dialogRef: MatDialogRef<DialogSolicitationComponent>,
     private readonly _fb: FormBuilder,
+    private readonly _dialog: MatDialog,
     private readonly _toastr: ToastrService,
     private readonly _solicitationService: SolicitationService,
     private readonly _clientService: ClientService
@@ -254,6 +256,33 @@ export class DialogSolicitationComponent {
       due_date: [item?.due_date, [Validators.required]],
     });
   }
+
+  public openMail(): void {
+    const dialogRef = this._dialog.open(DialogMailMessageComponent, {
+      width: '500px',
+      data: {
+        contract_number: this._data.solicitation.contract_number
+      }
+    });
+
+    dialogRef
+    .afterClosed()
+    .subscribe((data) => {
+      if (data) {
+        this.loading = true;
+        this._clientService.sendMail(data)
+          .pipe(finalize(() => this.loading = false))
+          .subscribe({
+            next: (res) => {
+              this._toastr.success(res.message);
+            },
+            error: (error) => {
+              this._toastr.error(error?.message ?? 'Erro inesperado.');
+            }
+        });
+      }
+    });
+  }  
 
   public onDeleteItem(index: number): void {
     this.items.removeAt(index);

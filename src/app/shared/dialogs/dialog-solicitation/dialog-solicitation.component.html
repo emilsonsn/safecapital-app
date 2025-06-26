@@ -8,10 +8,17 @@
 
   <div class="d-flex align-items-center justify-content-between">
     <span class="fw-bold fs-5">{{_data ? "Dados do Chamado" : "Novo Chamado"}}</span>
-    <div matRipple class="close" (click)="onCancel()">
-      <i class="fa-solid fa-close"></i>
+    <div class="d-flex align-items-center">
+        <div *ngIf="_data.default && _data.solicitation.contract_number" matRipple class="btn btn-secondary" (click)="openMail()">
+          <i class="fa-solid fa-paper-plane me-1"></i>
+          Enviar mensagem
+        </div>
+        <div matRipple class="close" (click)="onCancel()">
+          <i class="fa-solid fa-close"></i>
+        </div>
     </div>
   </div>
+  
 
   <mat-divider class="my-3"></mat-divider>
 
