@@ -38,6 +38,8 @@ import {
   takeUntil,
 } from 'rxjs';
 import { DialogMailMessageComponent } from '../dialog-email-message/dialog-email-message.component';
+import { SessionQuery } from '@store/session.query';
+import { UserRole } from '@models/user';
 
 @Component({
   selector: 'app-dialog-solicitation',
@@ -55,6 +57,8 @@ export class DialogSolicitationComponent {
   // Form
   public form: FormGroup;
   public loading: boolean = false;
+
+  public isAdminOrManager = false;
 
   // Filters
   protected contractNumberSelect: string[] = [];
@@ -82,7 +86,8 @@ export class DialogSolicitationComponent {
     private readonly _dialog: MatDialog,
     private readonly _toastr: ToastrService,
     private readonly _solicitationService: SolicitationService,
-    private readonly _clientService: ClientService
+    private readonly _clientService: ClientService,
+    private readonly _sessionQuery: SessionQuery,
   ) {
     this.getClientsFromBack();
   }
@@ -105,6 +110,12 @@ export class DialogSolicitationComponent {
         category,
       })
     );
+
+    this._sessionQuery.user$.subscribe((user) => {
+      if (user) {
+        this.isAdminOrManager = user.role !== UserRole.Client;
+      }
+    });
 
     if (this._data?.solicitation) {
       this.isNewSolicitation = false;
