@@ -41,7 +41,11 @@ export class DialogSettingComponent {
 
   // Form
   public form: FormGroup;
-  public statuses: string[] = Object.keys(ClientStatus).map((key) => key);
+  public statuses: string[] = [
+    ClientStatus.Pending,
+    ClientStatus.Disapproved,
+    ClientStatus.Approved,
+  ];
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
