@@ -66,7 +66,7 @@ export class DialogSettingComponent {
       end_score: [null, [Validators.required]],
       has_pending_issues: [null, [Validators.required]],
       has_law_processes: [null, [Validators.required]],
-      max_pending_value: [null, [Validators.required]],
+      max_pending_value: [null],
       status: [null],
     });
 
@@ -136,18 +136,8 @@ export class DialogSettingComponent {
   }
 
   // Utils
-  protected managePendingLimit(status: boolean) {
-    const pendingLimitControl = this.form.get('max_pending_value');
-
-    if (status) {
-      pendingLimitControl?.setValidators([Validators.required]);
-      this.pendingLimit = true;
-    } else {
-      pendingLimitControl?.clearValidators();
-      this.pendingLimit = false;
-    }
-
-    pendingLimitControl?.updateValueAndValidity();
+  protected managePendingLimit(status: boolean) {    
+    this.pendingLimit = status;
   }
 
   public onCancel(): void {
