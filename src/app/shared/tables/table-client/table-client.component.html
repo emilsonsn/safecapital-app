@@ -86,7 +86,7 @@
                 <i class="fa-solid fa-pen-to-square"></i>
               </div>
 
-              @if(myUser?.role == UserRoleEnum?.Admin || client?.status == clientStatus.Pending) {
+              @if(myUser?.role === UserRoleEnum?.Admin || canDelete.includes(client?.status)){
                 <div matTooltip="Deletar" matRipple class="buttonTemplate cancel" (click)="onDeleteClientClick.emit(client)">
                   <i class="fa-solid fa-trash"></i>
                 </div>

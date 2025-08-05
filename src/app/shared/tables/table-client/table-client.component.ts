@@ -26,6 +26,12 @@ export class TableClientComponent {
 
   protected clientStatus = ClientStatus;
 
+  public canDelete = [
+    ClientStatus.Approved,
+    ClientStatus.Disapproved,
+    ClientStatus.Pending,
+  ];
+
   @Input()
   searchTerm?: string = '';
 
