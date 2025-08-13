@@ -40,6 +40,7 @@ import {
 import { DialogMailMessageComponent } from '../dialog-email-message/dialog-email-message.component';
 import { SessionQuery } from '@store/session.query';
 import { UserRole } from '@models/user';
+import { DialogConfirmComponent } from '../dialog-confirm/dialog-confirm.component';
 
 @Component({
   selector: 'app-dialog-solicitation',
@@ -59,6 +60,7 @@ export class DialogSolicitationComponent {
   public loading: boolean = false;
 
   public isAdminOrManager = false;
+  public isDefault = false;
 
   // Filters
   protected contractNumberSelect: string[] = [];
@@ -94,6 +96,7 @@ export class DialogSolicitationComponent {
 
   ngOnInit(): void {
     this.form = this._fb.group({
+      id: [null],
       contract_number: [null, [Validators.required]],
       subject: ['', [Validators.required]],
       category: [null, [Validators.required]],
@@ -157,6 +160,8 @@ export class DialogSolicitationComponent {
         (status) => status == SolicitationCategoryEnum.Default
       );
 
+      this.isDefault = true;
+
       this.form
         .get('category')
         .patchValue(SolicitationCategoryEnum.Default.toString());
@@ -176,6 +181,30 @@ export class DialogSolicitationComponent {
     if (this.isNewSolicitation) {
       this.post();
     }
+  }
+
+  public openConfirmcloseSolicitation(){      
+      this._dialog
+        .open(DialogConfirmComponent, { data: { } })
+        .afterClosed()
+        .subscribe((res: boolean) => {
+          if (res) {
+            this.closeSolicitation(this.form.get('id').value);
+            this._dialogRef.close(true);
+          }
+        });
+  }
+
+  public closeSolicitation(id){
+    this._solicitationService.close(id)
+      .subscribe({
+        next: (res) => {
+          this._toastr.success(res.message);
+        },
+        error: (error) => {
+          this._toastr.error(error.error.error);
+        }
+      })
   }
 
   protected post() {

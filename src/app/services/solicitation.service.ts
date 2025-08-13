@@ -40,6 +40,10 @@ export class SolicitationService {
     return this._http.post<ApiResponse<Solicitation>>(`${environment.api}/${this.sessionEndpoint}/${id}?_method=PATCH`, solicitation);
   }
 
+  public close(id: number): Observable<ApiResponse<Solicitation>> {
+    return this._http.patch<ApiResponse<Solicitation>>(`${environment.api}/${this.sessionEndpoint}/close/${id}`, {});
+  }  
+
   public createMessage(message: SolicitationMessage | FormData): Observable<ApiResponse<SolicitationMessage>> {
     return this._http.post<ApiResponse<SolicitationMessage>>(`${environment.api}/${this.sessionEndpoint}/create-message`, message);
   }

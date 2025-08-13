@@ -17,8 +17,7 @@ export class DialogConfirmComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(this.data?.text)
-      this.text = this.data.text;
+    this.text = this.data?.text ?? 'Tem certeza? Essa ação não pode ser revertida!';
   }
 
   public onCancel(): void {

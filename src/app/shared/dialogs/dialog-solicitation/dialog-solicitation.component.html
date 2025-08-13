@@ -7,7 +7,19 @@
   }
 
   <div class="d-flex align-items-center justify-content-between">
-    <span class="fw-bold fs-5">{{_data ? "Dados do Chamado" : "Novo Chamado"}}</span>
+    @if(isDefault){
+      <span class="fw-bold fs-5">{{_data ? "Dados do inadimplência" : "Nova inadimplência"}}</span>
+    }
+    @else{
+      <span class="fw-bold fs-5">{{_data ? "Dados do Chamado" : "Novo Chamado"}}</span>
+    }
+
+    @if(isDefault && this.form.get('id').value && this._data?.solicitation?.status!='Completed'){
+      <button class="btn btn-secondary" (click)="openConfirmcloseSolicitation()">
+          Fechar solicitação
+      </button>
+    }
+    
     <div class="d-flex align-items-center">
         <div *ngIf="isAdminOrManager && _data?.default && _data?.solicitation?.contract_number" matRipple class="btn btn-secondary" (click)="openMail()">
           <i class="fa-solid fa-paper-plane me-1"></i>
