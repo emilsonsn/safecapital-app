@@ -6,6 +6,7 @@ export interface Settings {
   start_score: number;
   end_score: number;
   has_pending_issues: boolean;
+  process_categories: [];
   status: ClientStatus;
 }
 

@@ -1,13 +1,12 @@
 <mat-dialog-content>
-
-  @if(loading) {
-  <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
-    <mat-spinner></mat-spinner>
-  </div>
+  @if(loading){
+    <div matRipple class="me-auto me-sm-0 mb-sm-0 mb-2 loading">
+      <mat-spinner></mat-spinner>
+    </div>
   }
 
   <div class="d-flex align-items-center justify-content-between">
-    <span class="fw-bold fs-5">{{title + ('configuração')}}</span>
+    <span class="fw-bold fs-5">{{ title + ('configuração') }}</span>
     <div matRipple class="close" (click)="onCancel()">
       <i class="fa-solid fa-close"></i>
     </div>
@@ -23,58 +22,77 @@
           <input matInput type="text" formControlName="description">
         </mat-form-field>
       </div>
+
       <div class="col-md-6 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Score início</mat-label>
           <input matInput type="text" [mask]="'separator.0'" formControlName="start_score">
         </mat-form-field>
       </div>
+
       <div class="col-md-6 col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Score fim</mat-label>
           <input matInput type="text" [mask]="'separator.0'" formControlName="end_score">
         </mat-form-field>
       </div>
+
       <div class="col-md-{{pendingLimit ? '4' : '6'}} col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Possui pendências</mat-label>
           <mat-select formControlName="has_pending_issues">
-            <mat-option [value]="1">Sim</mat-option>
-            <mat-option [value]="0">Não</mat-option>
+            <mat-option [value]="true">Sim</mat-option>
+            <mat-option [value]="false">Não</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-      @if(pendingLimit) {
+
+      @if(pendingLimit){
       <div class="col-md-2 col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Limite</mat-label>
-          <input matInput type="text" [mask]="'separator.0'" formControlName="min_pending_value">
+          <input matInput type="text" [mask]="'separator.2'" formControlName="max_pending_value">
         </mat-form-field>
       </div>
       }
+
       <div class="col-md-6 col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Possui processos</mat-label>
           <mat-select formControlName="has_law_processes">
-            <mat-option [value]="1">Sim</mat-option>
-            <mat-option [value]="0">Não</mat-option>
+            <mat-option [value]="true">Sim</mat-option>
+            <mat-option [value]="false">Não</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
+
+      @if(form.value.has_law_processes){
+      <div class="col-md-12 col-12 mb-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Categorias de processos permitidas</mat-label>
+          <mat-select formControlName="process_categories" multiple>
+            <mat-option *ngFor="let c of processCategoriesOptions" [value]="c">
+              {{ c }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      }
+
       <div class="col-md-6 col-12 mb-3">
         <mat-form-field appearance="outline">
           <mat-label>Status</mat-label>
           <mat-select formControlName="status">
             <mat-option *ngFor="let status of statuses" [value]="status">
-              {{ status| status }}
+              {{ status | status }}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
     </div>
   </form>
-
 </mat-dialog-content>
+
 <mat-dialog-actions>
   <div class="container">
     <div id="actionsDialog" class="flex-sm-row flex-column">
@@ -83,8 +101,7 @@
           <button matRipple id="cancel" class="button cancel" (click)="onCancel()">Cancelar</button>
         </div>
         <div class="col-auto">
-          <button matRipple id="submit" class="button primary" (click)="onSubmit(form)">{{isNewSetting ? 'Criar' :
-            'Salvar'}}</button>
+          <button matRipple id="submit" class="button primary" (click)="onSubmit(form)">{{ isNewSetting ? 'Criar' : 'Salvar' }}</button>
         </div>
       </div>
     </div>
