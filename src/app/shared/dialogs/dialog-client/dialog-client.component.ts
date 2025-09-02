@@ -28,8 +28,9 @@ import { Utils } from '@shared/utils';
 import { SessionQuery } from '@store/session.query';
 import dayjs from 'dayjs';
 import { ToastrService } from 'ngx-toastr';
-import { distinctUntilChanged, finalize, map, ReplaySubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize, map, ReplaySubject, takeUntil } from 'rxjs';
 import { DialogMailMessageComponent } from '../dialog-email-message/dialog-email-message.component';
+import { UserService } from '@services/user.service';
 
 @Component({
   selector: 'app-dialog-client',
@@ -53,6 +54,12 @@ export class DialogClientComponent {
   protected habilitatePropertyTax = false;
   protected clientStatuses = ClientStatus;
   protected requiredFilesEnum = RequiredFilesEnum;
+  protected partnerFilterCtrl: FormControl<any> = new FormControl<string>('');  
+  protected partnerCtrl: FormControl<any> = new FormControl<any>(null);
+  protected userSelect: User[] = [];
+  protected filteredPartners: ReplaySubject<any[]> = new ReplaySubject<any[]>(
+      1
+  );
 
   // Form
   public form: FormGroup;
@@ -94,6 +101,7 @@ export class DialogClientComponent {
     private readonly _taxService: TaxSettingService,
     private readonly _currencyPipe: CurrencyPipe,
     protected readonly _sessionQuery: SessionQuery,
+    private readonly _userService: UserService,
     private readonly _dialog: MatDialog
   ) {
     this._taxService.getList().subscribe({
@@ -110,6 +118,8 @@ export class DialogClientComponent {
         );
       },
     });
+
+    this.getUsersFromBack();
   }
 
   ngOnInit(): void {
@@ -149,6 +159,8 @@ export class DialogClientComponent {
       corresponding_birthday: ['', []],
       corresponding_email: ['', []],
       corresponding_phone: ['', []],
+
+      user_id: [null, []],
     });
 
     this.form.get('policy_value').disable();
@@ -752,4 +764,44 @@ export class DialogClientComponent {
       }
     );
   }
+
+protected prepareFilterClientCtrl() {
+    this.partnerFilterCtrl.valueChanges
+      .pipe(
+        debounceTime(100),
+        map((search: string | null) => {
+          if (!search) {
+            return this.userSelect
+              .filter((user) => user.role.toLowerCase() == 'client')
+              .slice();
+          } else {
+            search = search.toLowerCase();
+            return this.userSelect.filter(
+              (user) =>
+                user.role.toLowerCase() == 'client' &&
+                user.name.toLowerCase().includes(search)
+            );
+          }
+        })
+      )
+      .subscribe((filtered) => {
+        this.filteredPartners.next(filtered);
+      });
+  }
+
+  // Getters
+
+  public getUsersFromBack() {
+    this._userService.getList().subscribe((res) => {
+      this.userSelect = res.data;
+
+      this.filteredPartners.next(
+        this.userSelect
+          .filter((user) => user.role.toLowerCase() == 'client')
+          .slice()
+      );
+
+      this.prepareFilterClientCtrl();
+    });
+  }  
 }
