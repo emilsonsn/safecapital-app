@@ -448,7 +448,8 @@ export class DialogClientComponent {
       Math.abs(this.condominiumFee) +
       Math.abs(this.propertyTax);
     const taxRate = this.taxPercentage / 100;
-    const newPolicyValue = parseFloat((total * (1 + taxRate)).toFixed(2));
+    const monthlyTax = total * taxRate;
+    const newPolicyValue = parseFloat((monthlyTax * 12).toFixed(2));
 
     if (this.form.get('policy_value')?.value != newPolicyValue) {
       this.form
