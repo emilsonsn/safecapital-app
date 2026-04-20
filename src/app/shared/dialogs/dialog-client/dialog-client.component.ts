@@ -304,12 +304,14 @@ export class DialogClientComponent {
     if (this.habilitateCondominumFee) {
       this.form.get('condominium_fee').enable();
     } else {
+      this.form.get('condominium_fee').patchValue(0);
       this.form.get('condominium_fee').disable();
     }
 
     if (this.habilitatePropertyTax) {
       this.form.get('property_tax').enable();
     } else {
+      this.form.get('property_tax').patchValue(0);
       this.form.get('property_tax').disable();
     }    
   }
@@ -441,7 +443,8 @@ export class DialogClientComponent {
       Math.abs(this.rentalValue) +
       Math.abs(this.condominiumFee) +
       Math.abs(this.propertyTax);
-    const newPolicyValue = parseFloat((total * 1.2).toFixed(2));
+    const taxRate = this.taxPercentage / 100;
+    const newPolicyValue = parseFloat((total * (1 + taxRate)).toFixed(2));
 
     if (this.form.get('policy_value')?.value != newPolicyValue) {
       this.form
