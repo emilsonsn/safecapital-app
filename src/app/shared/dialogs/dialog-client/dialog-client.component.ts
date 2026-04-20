@@ -217,6 +217,10 @@ export class DialogClientComponent {
         this.habilitateCondominumFee = true;
       }
 
+      if (this._data.client.property_tax > 0) {
+        this.habilitatePropertyTax = true;
+      }
+
       if (this._data.client.corresponding) {
         this.form
           .get('corresponding_cpf')
