@@ -100,6 +100,7 @@ export class LayoutPrivateComponent {
           icon: 'fa-solid fa-sliders',
           route: '/painel/settings/credit',
         },
+        { label: 'Integração BTG', icon: 'fa-solid fa-building-columns', route: '/painel/settings/integrations/btg' },
       ],
     },
   ];

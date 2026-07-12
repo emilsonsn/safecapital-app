@@ -12,12 +12,14 @@ import { MatRippleModule } from '@angular/material/core';
 import { SharedModule } from '@shared/shared.module';
 import { TaxComponent } from './tax/tax.component';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { BtgIntegrationComponent } from './btg-integration/btg-integration.component';
 
 
 @NgModule({
   declarations: [
     CreditComponent,
-    TaxComponent
+    TaxComponent,
+    BtgIntegrationComponent
   ],
   imports: [
     CommonModule,
