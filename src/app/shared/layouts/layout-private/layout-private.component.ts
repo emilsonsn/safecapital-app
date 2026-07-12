@@ -85,6 +85,19 @@ export class LayoutPrivateComponent {
       route: '/painel/users',
     },
     {
+      label: 'Financeiro',
+      icon: 'fa-solid fa-wallet',
+      route: '/painel/finance',
+      active: false,
+      children: [
+        {
+          label: 'Faturas',
+          icon: 'fa-solid fa-file-invoice-dollar',
+          route: '/painel/finance',
+        },
+      ],
+    },
+    {
       label: 'Configurações',
       icon: 'fa-solid fa-gear',
       route: '/painel/settings',
