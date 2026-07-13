@@ -99,6 +99,7 @@ export class LayoutPrivateComponent {
         { label: 'Saídas', icon: 'fa-solid fa-arrow-up-from-bracket', route: '/painel/finance/expenses' },
         { label: 'Fornecedores', icon: 'fa-solid fa-truck-field', route: '/painel/finance/suppliers' },
         { label: 'Saldo a resgatar', icon: 'fa-solid fa-scale-balanced', route: '/painel/finance/recoverables' },
+        { label: 'Relatórios', icon: 'fa-solid fa-file-arrow-down', route: '/painel/finance/report-export' },
       ],
     },
     {
@@ -161,6 +162,7 @@ export class LayoutPrivateComponent {
               || item.label == 'Chamados'
               || item.label == 'Inadimplência'
               || item.label == 'Parceiros'
+              || item.label == 'Financeiro'
           );
         } else if (user?.role == 'Client') {
           this.permitedMenuItem = this.menuItem.filter(
