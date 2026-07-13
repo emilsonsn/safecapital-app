@@ -87,14 +87,18 @@ export class LayoutPrivateComponent {
     {
       label: 'Financeiro',
       icon: 'fa-solid fa-wallet',
-      route: '/painel/finance',
+      route: '/painel/finance/reports',
       active: false,
       children: [
+        { label: 'Dashboard', icon: 'fa-solid fa-chart-line', route: '/painel/finance/reports' },
         {
           label: 'Faturas',
           icon: 'fa-solid fa-file-invoice-dollar',
-          route: '/painel/finance',
+          route: '/painel/finance/invoices',
         },
+        { label: 'Saídas', icon: 'fa-solid fa-arrow-up-from-bracket', route: '/painel/finance/expenses' },
+        { label: 'Fornecedores', icon: 'fa-solid fa-truck-field', route: '/painel/finance/suppliers' },
+        { label: 'Saldo a resgatar', icon: 'fa-solid fa-scale-balanced', route: '/painel/finance/recoverables' },
       ],
     },
     {

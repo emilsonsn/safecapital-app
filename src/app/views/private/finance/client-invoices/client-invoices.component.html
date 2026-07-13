@@ -1,4 +1,4 @@
-<button class="back-link" (click)="router.navigate(['/painel/finance'])"><i class="fa-solid fa-arrow-left"></i> Voltar aos clientes</button>
+<button class="back-link" (click)="router.navigate(['/painel/finance/invoices'])"><i class="fa-solid fa-arrow-left"></i> Voltar aos clientes</button>
 @if(client){<div class="client-header"><div class="avatar">{{client.name.charAt(0)}}{{client.surname.charAt(0)}}</div><div><h2>{{client.name}} {{client.surname}}</h2><p>{{client.company_name||'Cliente'}} · {{client.email}}</p></div></div>}
 <div class="finance-panel">
   <div class="status-tabs">@for(item of statuses;track item.value){<button [class.active]="status===item.value" (click)="selectStatus(item.value)">{{item.label}}</button>}</div>
