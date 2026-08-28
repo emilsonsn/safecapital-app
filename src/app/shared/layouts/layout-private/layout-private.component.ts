@@ -85,6 +85,24 @@ export class LayoutPrivateComponent {
       route: '/painel/users',
     },
     {
+      label: 'Financeiro',
+      icon: 'fa-solid fa-wallet',
+      route: '/painel/finance/reports',
+      active: false,
+      children: [
+        { label: 'Dashboard', icon: 'fa-solid fa-chart-line', route: '/painel/finance/reports' },
+        {
+          label: 'Faturas',
+          icon: 'fa-solid fa-file-invoice-dollar',
+          route: '/painel/finance/invoices',
+        },
+        { label: 'Saídas', icon: 'fa-solid fa-arrow-up-from-bracket', route: '/painel/finance/expenses' },
+        { label: 'Fornecedores', icon: 'fa-solid fa-truck-field', route: '/painel/finance/suppliers' },
+        { label: 'Saldo a resgatar', icon: 'fa-solid fa-scale-balanced', route: '/painel/finance/recoverables' },
+        { label: 'Relatórios', icon: 'fa-solid fa-file-arrow-down', route: '/painel/finance/report-export' },
+      ],
+    },
+    {
       label: 'Configurações',
       icon: 'fa-solid fa-gear',
       route: '/painel/settings',
@@ -100,6 +118,7 @@ export class LayoutPrivateComponent {
           icon: 'fa-solid fa-sliders',
           route: '/painel/settings/credit',
         },
+        { label: 'Integração BTG', icon: 'fa-solid fa-building-columns', route: '/painel/settings/integrations/btg' },
         {
           label: 'Termo de Uso',
           icon: 'fa-solid fa-file-signature',
@@ -148,6 +167,8 @@ export class LayoutPrivateComponent {
               || item.label == 'Chamados'
               || item.label == 'Inadimplência'
               || item.label == 'Parceiros'
+              || item.label == 'Financeiro'
+              || item.label == 'Financeiro'
               || item.label == 'Configurações'
           ).map((item) => item.label === 'Configurações'
             ? {

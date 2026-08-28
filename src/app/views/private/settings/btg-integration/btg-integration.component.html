@@ -1,0 +1,17 @@
+<section class="btg-card">
+  @if (loading) { <div class="loading-overlay"><mat-spinner diameter="42"></mat-spinner></div> }
+  <header class="card-header"><div class="provider-icon"><i class="fa-solid fa-building-columns"></i></div><div><h2>BTG Pactual</h2><p>Conexão bancária para os serviços financeiros da plataforma.</p></div><span class="status" [ngClass]="statusClass"><span></span>{{ statusLabel }}</span></header>
+  @if (integration) {
+    <div class="details">
+      <div><small>Ambiente</small><strong>{{ integration.environment === 'PRODUCTION' ? 'Produção' : 'Sandbox' }}</strong></div><div><small>CNPJ</small><strong>{{ integration.company_id || 'Não informado' }}</strong></div>
+      <div><small>Agência</small><strong>{{ integration.account_branch || 'Não informada' }}</strong></div><div><small>Conta</small><strong>{{ integration.account_number || 'Não informada' }}</strong></div>
+      <div><small>Autorizada em</small><strong>{{ integration.authorized_at ? (integration.authorized_at | date:'dd/MM/yyyy HH:mm') : '—' }}</strong></div><div><small>Última renovação</small><strong>{{ integration.last_refreshed_at ? (integration.last_refreshed_at | date:'dd/MM/yyyy HH:mm') : '—' }}</strong></div>
+      <div><small>Token válido até</small><strong>{{ integration.access_token_expires_at ? (integration.access_token_expires_at | date:'dd/MM/yyyy HH:mm') : '—' }}</strong></div><div><small>Conta vinculada</small><strong>{{ integration.account_id || 'Não informada' }}</strong></div>
+    </div>
+    @if (integration.last_error) { <div class="error-message"><i class="fa-solid fa-circle-exclamation"></i>{{ integration.last_error }}</div> }
+  } @else if (!loading) { <div class="empty-state"><i class="fa-solid fa-link-slash"></i><div><strong>Nenhuma conta autorizada</strong><p>Conecte a conta da Safe Capital para habilitar a integração com o BTG.</p></div></div> }
+  <footer><p><i class="fa-solid fa-shield-halved"></i> A autenticação acontece no ambiente seguro do BTG. Nenhuma credencial bancária é armazenada no navegador.</p><div class="actions">
+    @if (integration?.connection_status === 'CONNECTED') { <button class="button cancel" [disabled]="actionLoading" (click)="confirmDisconnect()">Desconectar</button><button class="button secondary" [disabled]="actionLoading" (click)="refresh()">Renovar autorização</button> }
+    <button class="button primary" [disabled]="actionLoading" (click)="connect()">{{ integration?.connection_status === 'CONNECTED' ? 'Autorizar novamente' : 'Conectar conta BTG' }}</button>
+  </div></footer>
+</section>

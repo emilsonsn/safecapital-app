@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutPrivateComponent } from "@shared/layouts/layout-private/layout-private.component";
 import { SessionService } from '../../store/session.service';
 import { permissionGuard } from '@app/guards/permission.guard';
+import { adminGuard } from '@app/guards/admin.guard';
+import { financialGuard } from '@app/guards/financial.guard';
 
 const routes: Routes = [
   {
@@ -66,6 +68,12 @@ const routes: Routes = [
         }
       },
       {
+        path: 'finance',
+        loadChildren: () => import('./finance/finance.module').then(m => m.FinanceModule),
+        canActivate: [financialGuard],
+        data: { page: 'finance' }
+      },
+      {
         path: '**',
         redirectTo: 'home',
         canMatch: []
@@ -85,7 +93,4 @@ export class PrivateRoutingModule {
   ) {}
 
 }
-
-
-
 
