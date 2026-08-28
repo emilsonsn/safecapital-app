@@ -13,13 +13,15 @@ import { SharedModule } from '@shared/shared.module';
 import { TaxComponent } from './tax/tax.component';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { BtgIntegrationComponent } from './btg-integration/btg-integration.component';
+import { TermsComponent } from './terms/terms.component';
 
 
 @NgModule({
   declarations: [
     CreditComponent,
     TaxComponent,
-    BtgIntegrationComponent
+    BtgIntegrationComponent,
+    TermsComponent
   ],
   imports: [
     CommonModule,

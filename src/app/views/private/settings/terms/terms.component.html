@@ -1,0 +1,70 @@
+<div class="terms-page">
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="44"></mat-spinner>
+    </div>
+  } @else {
+    <section class="term-card">
+      <div class="card-heading">
+        <div class="document-icon">
+          <i class="fa-solid fa-file-pdf"></i>
+        </div>
+        <div>
+          <h2>Termo vigente</h2>
+          <p>Este é o documento apresentado no primeiro acesso dos clientes.</p>
+        </div>
+      </div>
+
+      @if (currentTerm) {
+        <div class="term-details">
+          <div>
+            <span>Arquivo</span>
+            <strong>{{ currentTerm.filename }}</strong>
+          </div>
+          <div>
+            <span>Versão</span>
+            <strong>{{ currentTerm.version }}</strong>
+          </div>
+          <div>
+            <span>Atualizado em</span>
+            <strong>{{ currentTerm.updated_at | date:'dd/MM/yyyy HH:mm' }}</strong>
+          </div>
+        </div>
+
+        <a class="button secondary-button" [href]="currentTerm.url" target="_blank" rel="noopener noreferrer">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          Visualizar termo
+        </a>
+      }
+    </section>
+
+    <section class="term-card">
+      <div class="card-heading">
+        <div class="document-icon upload-icon">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+        <div>
+          <h2>Adicionar novo termo</h2>
+          <p>O novo PDF se tornará a versão vigente e deverá ser aceito pelos clientes.</p>
+        </div>
+      </div>
+
+      <label class="file-picker" for="term-document">
+        <i class="fa-solid fa-file-arrow-up"></i>
+        <span>{{ selectedFile?.name || 'Selecionar arquivo PDF' }}</span>
+        <small>PDF de até 10 MB</small>
+      </label>
+      <input id="term-document" type="file" accept="application/pdf,.pdf" (change)="onFileSelected($event)" hidden>
+
+      <div class="actions">
+        <button matRipple class="button primary" type="button" [disabled]="!selectedFile || saving" (click)="save()">
+          @if (saving) {
+            Salvando...
+          } @else {
+            Salvar novo termo
+          }
+        </button>
+      </div>
+    </section>
+  }
+</div>

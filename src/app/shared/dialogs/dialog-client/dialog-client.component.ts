@@ -217,6 +217,10 @@ export class DialogClientComponent {
         this.habilitateCondominumFee = true;
       }
 
+      if (this._data.client.property_tax > 0) {
+        this.habilitatePropertyTax = true;
+      }
+
       if (this._data.client.corresponding) {
         this.form
           .get('corresponding_cpf')
@@ -304,12 +308,14 @@ export class DialogClientComponent {
     if (this.habilitateCondominumFee) {
       this.form.get('condominium_fee').enable();
     } else {
+      this.form.get('condominium_fee').patchValue(0);
       this.form.get('condominium_fee').disable();
     }
 
     if (this.habilitatePropertyTax) {
       this.form.get('property_tax').enable();
     } else {
+      this.form.get('property_tax').patchValue(0);
       this.form.get('property_tax').disable();
     }    
   }
@@ -441,7 +447,9 @@ export class DialogClientComponent {
       Math.abs(this.rentalValue) +
       Math.abs(this.condominiumFee) +
       Math.abs(this.propertyTax);
-    const newPolicyValue = parseFloat((total * 1.2).toFixed(2));
+    const taxRate = this.taxPercentage / 100;
+    const monthlyTax = total * taxRate;
+    const newPolicyValue = parseFloat((monthlyTax * 12).toFixed(2));
 
     if (this.form.get('policy_value')?.value != newPolicyValue) {
       this.form

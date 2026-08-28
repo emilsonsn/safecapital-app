@@ -119,6 +119,11 @@ export class LayoutPrivateComponent {
           route: '/painel/settings/credit',
         },
         { label: 'Integração BTG', icon: 'fa-solid fa-building-columns', route: '/painel/settings/integrations/btg' },
+        {
+          label: 'Termo de Uso',
+          icon: 'fa-solid fa-file-signature',
+          route: '/painel/settings/terms',
+        },
       ],
     },
   ];
@@ -163,6 +168,14 @@ export class LayoutPrivateComponent {
               || item.label == 'Inadimplência'
               || item.label == 'Parceiros'
               || item.label == 'Financeiro'
+              || item.label == 'Financeiro'
+              || item.label == 'Configurações'
+          ).map((item) => item.label === 'Configurações'
+            ? {
+                ...item,
+                children: item.children?.filter((child) => child.route === '/painel/settings/terms'),
+              }
+            : item
           );
         } else if (user?.role == 'Client') {
           this.permitedMenuItem = this.menuItem.filter(

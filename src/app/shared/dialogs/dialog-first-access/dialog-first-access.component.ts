@@ -17,6 +17,8 @@ import { Utils } from '@shared/utils';
 import { SessionQuery } from '@store/session.query';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
+import { TermDocument } from '@models/term-document';
+import { TermDocumentService } from '@services/term-document.service';
 
 @Component({
   selector: 'app-dialog-first-access',
@@ -27,6 +29,8 @@ export class DialogFirstAccessComponent {
   public form: FormGroup;
   protected user : User;
   public loading: boolean = false;
+  protected termLoading: boolean = false;
+  protected currentTerm?: TermDocument;
 
   public utils = Utils;
 
@@ -39,12 +43,16 @@ export class DialogFirstAccessComponent {
     private readonly _utilsService: UtilsService,
     private readonly _sessionQuery: SessionQuery,
     private readonly _userService: UserService,
+    private readonly _termDocumentService: TermDocumentService,
   ) {}
 
   ngOnInit(): void {
     this.form = this._fb.group({
       accept_terms: [null, [Validators.required]],
     });
+    this.form.get('accept_terms')?.disable();
+
+    this.loadCurrentTerm();
 
     this._sessionQuery.user$.subscribe((user) => {
       this.user = user;
@@ -77,6 +85,23 @@ export class DialogFirstAccessComponent {
           this._toastr.error(err.error.error);
         },
       })
+  }
+
+  private loadCurrentTerm(): void {
+    this.termLoading = true;
+
+    this._termDocumentService
+      .getCurrent()
+      .pipe(finalize(() => (this.termLoading = false)))
+      .subscribe({
+        next: (response) => {
+          this.currentTerm = response.data;
+          this.form.get('accept_terms')?.enable();
+        },
+        error: (error) => {
+          this._toastr.error(error.error?.error ?? 'Não foi possível carregar o termo de uso.');
+        },
+      });
   }
 
   // protected prepareFormData(form: FormGroup) {
