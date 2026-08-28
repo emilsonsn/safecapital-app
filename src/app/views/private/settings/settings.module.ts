@@ -12,12 +12,14 @@ import { MatRippleModule } from '@angular/material/core';
 import { SharedModule } from '@shared/shared.module';
 import { TaxComponent } from './tax/tax.component';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { TermsComponent } from './terms/terms.component';
 
 
 @NgModule({
   declarations: [
     CreditComponent,
-    TaxComponent
+    TaxComponent,
+    TermsComponent
   ],
   imports: [
     CommonModule,

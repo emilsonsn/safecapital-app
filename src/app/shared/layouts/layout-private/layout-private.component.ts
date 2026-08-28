@@ -100,6 +100,11 @@ export class LayoutPrivateComponent {
           icon: 'fa-solid fa-sliders',
           route: '/painel/settings/credit',
         },
+        {
+          label: 'Termo de Uso',
+          icon: 'fa-solid fa-file-signature',
+          route: '/painel/settings/terms',
+        },
       ],
     },
   ];
@@ -143,6 +148,13 @@ export class LayoutPrivateComponent {
               || item.label == 'Chamados'
               || item.label == 'Inadimplência'
               || item.label == 'Parceiros'
+              || item.label == 'Configurações'
+          ).map((item) => item.label === 'Configurações'
+            ? {
+                ...item,
+                children: item.children?.filter((child) => child.route === '/painel/settings/terms'),
+              }
+            : item
           );
         } else if (user?.role == 'Client') {
           this.permitedMenuItem = this.menuItem.filter(

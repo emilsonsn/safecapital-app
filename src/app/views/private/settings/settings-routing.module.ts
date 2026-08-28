@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CreditComponent } from './credit/credit.component';
 import { TaxComponent } from './tax/tax.component';
+import { TermsComponent } from './terms/terms.component';
 
 const routes: Routes = [
   {
@@ -11,6 +12,10 @@ const routes: Routes = [
   {
     path: 'tax',
     component: TaxComponent,
+  },
+  {
+    path: 'terms',
+    component: TermsComponent,
   },
 ];
 

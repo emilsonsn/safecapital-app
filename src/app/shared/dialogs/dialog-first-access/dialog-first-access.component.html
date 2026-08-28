@@ -18,9 +18,13 @@
 
   <form [formGroup]="form">
     <div class="d-flex flex-md-row flex-column gap-md-4 gap-1">
-      <a target="_blank" href="https://www.safecapitalgarantias.com.br/_files/ugd/7cc209_5040678c9cd344799f37d37fa9a2e454.pdf" class="link">
-        Termos de Uso
-      </a>
+      @if (currentTerm?.url) {
+        <a target="_blank" [href]="currentTerm.url" rel="noopener noreferrer" class="link">
+          Termos de Uso
+        </a>
+      } @else {
+        <span>Carregando Termos de Uso...</span>
+      }
       <a target="_blank" href="https://www.safecapitalgarantias.com.br/pol%C3%ADtica-de-privacidade" class="link">
         Política de Privacidade
       </a>
