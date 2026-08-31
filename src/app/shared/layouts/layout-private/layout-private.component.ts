@@ -124,6 +124,11 @@ export class LayoutPrivateComponent {
           icon: 'fa-solid fa-file-signature',
           route: '/painel/settings/terms',
         },
+        {
+          label: 'Template do Contrato',
+          icon: 'fa-solid fa-file-word',
+          route: '/painel/settings/policy-template',
+        },
       ],
     },
   ];
@@ -168,12 +173,14 @@ export class LayoutPrivateComponent {
               || item.label == 'Inadimplência'
               || item.label == 'Parceiros'
               || item.label == 'Financeiro'
-              || item.label == 'Financeiro'
               || item.label == 'Configurações'
           ).map((item) => item.label === 'Configurações'
             ? {
                 ...item,
-                children: item.children?.filter((child) => child.route === '/painel/settings/terms'),
+                children: item.children?.filter((child) => [
+                  '/painel/settings/terms',
+                  '/painel/settings/policy-template',
+                ].includes(child.route)),
               }
             : item
           );

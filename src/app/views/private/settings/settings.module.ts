@@ -14,6 +14,7 @@ import { TaxComponent } from './tax/tax.component';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { BtgIntegrationComponent } from './btg-integration/btg-integration.component';
 import { TermsComponent } from './terms/terms.component';
+import { PolicyTemplateComponent } from './policy-template/policy-template.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { TermsComponent } from './terms/terms.component';
     CreditComponent,
     TaxComponent,
     BtgIntegrationComponent,
-    TermsComponent
+    TermsComponent,
+    PolicyTemplateComponent
   ],
   imports: [
     CommonModule,

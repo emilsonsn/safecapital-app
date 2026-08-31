@@ -1,0 +1,93 @@
+<div class="template-page">
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="44"></mat-spinner>
+    </div>
+  } @else {
+    <section class="template-card">
+      <div class="card-heading">
+        <div class="document-icon">
+          <i class="fa-solid fa-file-word"></i>
+        </div>
+        <div>
+          <h2>Template vigente</h2>
+          <p>Este documento é preenchido e enviado para assinatura após a aprovação do pagamento.</p>
+        </div>
+      </div>
+
+      @if (configuration) {
+        <div class="template-details">
+          <div>
+            <span>Arquivo</span>
+            <strong>{{ configuration.template.filename }}</strong>
+          </div>
+          <div>
+            <span>Versão</span>
+            <strong>{{ configuration.template.version }}</strong>
+          </div>
+          <div>
+            <span>Atualizado em</span>
+            <strong>{{ configuration.template.updated_at | date:'dd/MM/yyyy HH:mm' }}</strong>
+          </div>
+        </div>
+
+        <button matRipple class="button secondary-button" type="button" [disabled]="downloading" (click)="download()">
+          <i class="fa-solid fa-download"></i>
+          {{ downloading ? 'Baixando...' : 'Baixar template atual' }}
+        </button>
+      }
+    </section>
+
+    <section class="template-card">
+      <div class="card-heading">
+        <div class="document-icon upload-icon">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+        <div>
+          <h2>Adicionar novo template</h2>
+          <p>O arquivo será validado antes de se tornar a versão usada na geração de contratos.</p>
+        </div>
+      </div>
+
+      <label class="file-picker" for="policy-template-document">
+        <i class="fa-solid fa-file-arrow-up"></i>
+        <span>{{ selectedFile?.name || 'Selecionar arquivo DOCX' }}</span>
+        <small>DOCX de até 20 MB</small>
+      </label>
+      <input
+        #documentInput
+        id="policy-template-document"
+        type="file"
+        accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx"
+        (change)="onFileSelected($event)"
+        hidden
+      >
+
+      <div class="actions">
+        <button matRipple class="button primary" type="button" [disabled]="!selectedFile || saving" (click)="save()">
+          {{ saving ? 'Validando e salvando...' : 'Salvar novo template' }}
+        </button>
+      </div>
+    </section>
+
+    @if (configuration?.required_variables?.length) {
+      <section class="template-card variables-card">
+        <div class="card-heading">
+          <div class="document-icon variables-icon">
+            <i class="fa-solid fa-code"></i>
+          </div>
+          <div>
+            <h2>Campos obrigatórios</h2>
+            <p>O novo documento precisa manter todos estes marcadores no formato <code>{{ '${campo}' }}</code>.</p>
+          </div>
+        </div>
+
+        <div class="variables">
+          @for (variable of configuration!.required_variables; track variable) {
+            <code>{{ '${' + variable + '}' }}</code>
+          }
+        </div>
+      </section>
+    }
+  }
+</div>

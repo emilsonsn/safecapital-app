@@ -5,6 +5,7 @@ import { TaxComponent } from './tax/tax.component';
 import { BtgIntegrationComponent } from './btg-integration/btg-integration.component';
 import { adminGuard } from '@app/guards/admin.guard';
 import { TermsComponent } from './terms/terms.component';
+import { PolicyTemplateComponent } from './policy-template/policy-template.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
   {
     path: 'terms',
     component: TermsComponent,
+  },
+  {
+    path: 'policy-template',
+    component: PolicyTemplateComponent,
   },
 ];
 
