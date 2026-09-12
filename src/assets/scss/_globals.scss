@@ -160,6 +160,21 @@ mat-form-field {
     }
   }
 
+  &.secondary {
+    background-color: $white-500;
+    color: $black-400;
+    border: 1px solid $white-700;
+
+    &:hover {
+      background-color: $white-600;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+  }
+
 }
 
 .carton {

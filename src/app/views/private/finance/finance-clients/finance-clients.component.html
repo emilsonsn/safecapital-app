@@ -1,9 +1,98 @@
 <div class="finance-panel">
-  <div class="toolbar"><div class="search"><i class="fa-solid fa-magnifying-glass"></i><input #query type="search" [value]="search" (input)="onSearch(query.value)" placeholder="Buscar por nome, empresa ou e-mail"></div></div>
-  <div class="table-wrap"><table class="table"><thead><tr><th>Cliente</th><th>Empresa</th><th>E-mail</th><th class="center">Em aberto</th><th class="center">Vencidas</th><th class="center">Pagas</th><th>Total faturado</th><th></th></tr></thead><tbody>
-    @if(loading){<tr><td colspan="8"><div class="table-loading"><mat-spinner diameter="38"></mat-spinner></div></td></tr>}
-    @if(!loading && !clients.length){<tr><td colspan="8" class="empty">Nenhum cliente encontrado.</td></tr>}
-    @for(client of clients;track client.id){<tr class="clickable" (click)="open(client)"><td><strong>{{client.name}} {{client.surname}}</strong><small>{{client.invoices_count}} fatura(s)</small></td><td>{{client.company_name||'—'}}</td><td>{{client.email}}</td><td class="center"><span class="count open">{{client.open_invoices_count}}</span></td><td class="center"><span class="count overdue">{{client.overdue_invoices_count}}</span></td><td class="center"><span class="count paid">{{client.paid_invoices_count}}</span></td><td><strong>{{+(client.invoices_total_amount||0)|currency:'BRL'}}</strong></td><td><button class="icon-button" matTooltip="Ver faturas" (click)="$event.stopPropagation();open(client)"><i class="fa-solid fa-chevron-right"></i></button></td></tr>}
-  </tbody></table></div>
-  <mat-paginator [length]="total" [pageIndex]="page-1" [pageSize]="perPage" [pageSizeOptions]="[15,25,50,100]" (page)="pageEvent($event)" showFirstLastButtons></mat-paginator>
+  <div class="toolbar">
+    <div class="search">
+      <i class="fa-solid fa-magnifying-glass"></i
+      ><input
+        #query
+        type="search"
+        [value]="search"
+        (input)="onSearch(query.value)"
+        placeholder="Buscar por nome, empresa ou e-mail"
+      />
+    </div>
+    <button class="button primary" [disabled]="closing" (click)="closeBatch()">
+      <i
+        class="fa-solid"
+        [class.fa-lock]="!closing"
+        [class.fa-spinner]="closing"
+        [class.fa-spin]="closing"
+      ></i>
+      Fechar lote de faturas
+    </button>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Empresa</th>
+          <th>E-mail</th>
+          <th class="center">Em aberto</th>
+          <th class="center">Vencidas</th>
+          <th class="center">Pagas</th>
+          <th>Total faturado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading) {
+          <tr>
+            <td colspan="8">
+              <div class="table-loading">
+                <mat-spinner diameter="38"></mat-spinner>
+              </div>
+            </td>
+          </tr>
+        }
+        @if (!loading && !clients.length) {
+          <tr>
+            <td colspan="8" class="empty">Nenhum cliente encontrado.</td>
+          </tr>
+        }
+        @for (client of clients; track client.id) {
+          <tr class="clickable" (click)="open(client)">
+            <td>
+              <strong>{{ client.name }} {{ client.surname }}</strong
+              ><small>{{ client.invoices_count }} fatura(s)</small>
+            </td>
+            <td>{{ client.company_name || '—' }}</td>
+            <td>{{ client.email }}</td>
+            <td class="center">
+              <span class="count open">{{ client.open_invoices_count }}</span>
+            </td>
+            <td class="center">
+              <span class="count overdue">{{
+                client.overdue_invoices_count
+              }}</span>
+            </td>
+            <td class="center">
+              <span class="count paid">{{ client.paid_invoices_count }}</span>
+            </td>
+            <td>
+              <strong>{{
+                +(client.invoices_total_amount || 0) | currency: 'BRL'
+              }}</strong>
+            </td>
+            <td>
+              <button
+                class="icon-button"
+                matTooltip="Ver faturas"
+                (click)="$event.stopPropagation(); open(client)"
+              >
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <mat-paginator
+    [length]="total"
+    [pageIndex]="page - 1"
+    [pageSize]="perPage"
+    [pageSizeOptions]="[15, 25, 50, 100]"
+    (page)="pageEvent($event)"
+    showFirstLastButtons
+  ></mat-paginator>
 </div>

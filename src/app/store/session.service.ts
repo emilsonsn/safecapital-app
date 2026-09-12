@@ -2,7 +2,14 @@ import { Injectable } from '@angular/core';
 import { SessionStore } from './session.store';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { tap, map, take, mergeMap, shareReplay, catchError } from 'rxjs/operators';
+import {
+  tap,
+  map,
+  take,
+  mergeMap,
+  shareReplay,
+  catchError,
+} from 'rxjs/operators';
 import { Observable, of, throwError } from 'rxjs';
 import { applyTransaction, resetStores } from '@datorama/akita';
 import { AuthService } from '@services/auth.service';
@@ -22,14 +29,16 @@ export class SessionService {
     private readonly _toastr: ToastrService,
     private readonly _authService: AuthService,
     private readonly _userService: UserService,
-    private readonly _storage: LocalStorageService
+    private readonly _storage: LocalStorageService,
   ) {
-    this.getUserFromBack();
+    if (this.isAuthenticated()) {
+      this.getUserFromBack().subscribe({ error: () => {} });
+    }
   }
 
   public login(email: string, password: string): Promise<any> {
     return firstValueFrom(
-      this._authService.login({ email, password }).pipe(take(1))
+      this._authService.login({ email, password }).pipe(take(1)),
     ).then(
       (res) => {
         this.handleLoginResponse(res);
@@ -38,7 +47,7 @@ export class SessionService {
       (error) => {
         this.handleLoginError(error);
         throw error;
-      }
+      },
     );
   }
 
@@ -81,7 +90,7 @@ export class SessionService {
             return of(user);
           }
           return this.getUserFromBack();
-        })
+        }),
       );
   }
 
@@ -95,7 +104,7 @@ export class SessionService {
         this._toastr.error(err.error.message);
         return throwError(() => err);
       }),
-      shareReplay()
+      shareReplay(),
     );
   }
 

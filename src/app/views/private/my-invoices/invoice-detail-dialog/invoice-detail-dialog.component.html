@@ -1,0 +1,116 @@
+<div class="dialog-title">
+  <div><i class="fa-solid fa-file-invoice-dollar"></i></div>
+  <span>
+    <h2>Fatura #{{ data.invoice.id }}</h2>
+    <p>
+      Vencimento em {{ data.invoice.due_date | date: 'dd/MM/yyyy' : 'UTC' }} ·
+      <span class="invoice-status {{ data.invoice.status.toLowerCase() }}">{{
+        statusLabel(data.invoice.status)
+      }}</span>
+    </p>
+  </span>
+</div>
+<mat-dialog-content>
+  <div class="summary">
+    <div>
+      <small>Valor total</small
+      ><strong>{{ data.invoice.amount | currency: 'BRL' }}</strong>
+    </div>
+    <div>
+      <small>Fechamento</small
+      ><strong>{{
+        data.invoice.closing_date | date: 'dd/MM/yyyy' : 'UTC'
+      }}</strong>
+    </div>
+    @if (data.invoice.paid_at) {
+      <div>
+        <small>Pago em</small
+        ><strong>{{ data.invoice.paid_at | date: 'dd/MM/yyyy HH:mm' }}</strong>
+      </div>
+    }
+  </div>
+
+  @if (data.invoice.digitable_line) {
+    <div class="digitable">
+      <span>{{ data.invoice.digitable_line }}</span>
+      <button (click)="copy(data.invoice.digitable_line)" matTooltip="Copiar">
+        <i class="fa-regular fa-copy"></i>
+      </button>
+    </div>
+  }
+
+  <h3>Comprovante de pagamento</h3>
+  <div class="proof">
+    @if (data.invoice.payment_proof_url) {
+      <div class="proof-sent">
+        <i class="fa-solid fa-circle-check"></i>
+        <div>
+          <strong>Comprovante enviado</strong>
+          <small>{{
+            data.invoice.payment_proof_uploaded_at | date: 'dd/MM/yyyy HH:mm'
+          }}</small>
+        </div>
+        <a
+          [href]="data.invoice.payment_proof_url"
+          target="_blank"
+          class="button secondary"
+          >Ver arquivo</a
+        >
+      </div>
+    }
+    @if (canUploadProof()) {
+      <label class="upload-proof" [class.uploading]="uploading">
+        <input
+          type="file"
+          accept=".pdf,.jpg,.jpeg,.png"
+          [disabled]="uploading"
+          (change)="onProofSelected($event)"
+        />
+        <i
+          class="fa-solid"
+          [class.fa-upload]="!uploading"
+          [class.fa-spinner]="uploading"
+          [class.fa-spin]="uploading"
+        ></i>
+        {{
+          uploading
+            ? 'Enviando...'
+            : data.invoice.payment_proof_url
+              ? 'Enviar outro comprovante'
+              : 'Enviar comprovante de pagamento'
+        }}
+      </label>
+    }
+  </div>
+
+  <h3>Contratos cobrados nesta fatura</h3>
+  @if (!data.invoice.installments.length) {
+    <p class="empty">Nenhum contrato vinculado.</p>
+  }
+  <div class="installments">
+    @for (item of data.invoice.installments; track item.id) {
+      <div class="installment-row">
+        <div>
+          <strong>{{ item.client?.name }} {{ item.client?.surname }}</strong>
+          <small
+            >Parcela #{{ item.installment_number }} · vence
+            {{ item.due_date | date: 'dd/MM/yyyy' : 'UTC' }}</small
+          >
+        </div>
+        <span class="invoice-status {{ item.status.toLowerCase() }}">{{
+          installmentStatusLabel(item.status)
+        }}</span>
+        <strong>{{ item.amount | currency: 'BRL' }}</strong>
+      </div>
+    }
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  @if (data.invoice.boleto_url) {
+    <a [href]="data.invoice.boleto_url" target="_blank" class="button primary"
+      ><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver e pagar
+      boleto</a
+    >
+  }
+  <button class="button cancel" (click)="ref.close()">Fechar</button>
+</mat-dialog-actions>

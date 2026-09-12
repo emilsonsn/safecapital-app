@@ -80,6 +80,11 @@ export class LayoutPrivateComponent {
       route: '/painel/defaulter',
     },
     {
+      label: 'Minhas Faturas',
+      icon: 'fa-solid fa-file-invoice-dollar',
+      route: '/painel/my-invoices',
+    },
+    {
       label: 'Usuários',
       icon: 'fa-solid fa-users',
       route: '/painel/users',
@@ -90,16 +95,36 @@ export class LayoutPrivateComponent {
       route: '/painel/finance/reports',
       active: false,
       children: [
-        { label: 'Dashboard', icon: 'fa-solid fa-chart-line', route: '/painel/finance/reports' },
+        {
+          label: 'Dashboard',
+          icon: 'fa-solid fa-chart-line',
+          route: '/painel/finance/reports',
+        },
         {
           label: 'Faturas',
           icon: 'fa-solid fa-file-invoice-dollar',
           route: '/painel/finance/invoices',
         },
-        { label: 'Saídas', icon: 'fa-solid fa-arrow-up-from-bracket', route: '/painel/finance/expenses' },
-        { label: 'Fornecedores', icon: 'fa-solid fa-truck-field', route: '/painel/finance/suppliers' },
-        { label: 'Saldo a resgatar', icon: 'fa-solid fa-scale-balanced', route: '/painel/finance/recoverables' },
-        { label: 'Relatórios', icon: 'fa-solid fa-file-arrow-down', route: '/painel/finance/report-export' },
+        {
+          label: 'Saídas',
+          icon: 'fa-solid fa-arrow-up-from-bracket',
+          route: '/painel/finance/expenses',
+        },
+        {
+          label: 'Fornecedores',
+          icon: 'fa-solid fa-truck-field',
+          route: '/painel/finance/suppliers',
+        },
+        {
+          label: 'Saldo a resgatar',
+          icon: 'fa-solid fa-scale-balanced',
+          route: '/painel/finance/recoverables',
+        },
+        {
+          label: 'Relatórios',
+          icon: 'fa-solid fa-file-arrow-down',
+          route: '/painel/finance/report-export',
+        },
       ],
     },
     {
@@ -118,7 +143,11 @@ export class LayoutPrivateComponent {
           icon: 'fa-solid fa-sliders',
           route: '/painel/settings/credit',
         },
-        { label: 'Integração BTG', icon: 'fa-solid fa-building-columns', route: '/painel/settings/integrations/btg' },
+        {
+          label: 'Integração BTG',
+          icon: 'fa-solid fa-building-columns',
+          route: '/painel/settings/integrations/btg',
+        },
         {
           label: 'Termo de Uso',
           icon: 'fa-solid fa-file-signature',
@@ -136,7 +165,7 @@ export class LayoutPrivateComponent {
   protected isMobile: boolean = window.innerWidth >= 1000;
   private resizeSubscription: Subscription;
   protected user: User;
-  protected openFirstAcessModal : boolean = false;
+  protected openFirstAcessModal: boolean = false;
 
   constructor(
     private renderer: Renderer2,
@@ -146,14 +175,13 @@ export class LayoutPrivateComponent {
     private readonly _sessionService: SessionService,
     private readonly _sessionQuery: SessionQuery,
     private readonly _dialog: MatDialog,
-    private readonly _toastr: ToastrService
+    private readonly _toastr: ToastrService,
   ) {}
 
   ngOnInit(): void {
     document.getElementById('template').addEventListener('click', () => {
       this._sidebarService.retractSidebar();
     });
-
 
     this._sessionQuery.user$.subscribe((user) => {
       // if(!user) {
@@ -163,34 +191,42 @@ export class LayoutPrivateComponent {
         this.user = user;
 
         if (user?.role == 'Admin') {
-          this.permitedMenuItem = this.menuItem;
-        } else if (user?.role == 'Manager') {
           this.permitedMenuItem = this.menuItem.filter(
-            (item) =>
-              item.label == 'Home'
-              || item.label == 'Clientes'
-              || item.label == 'Chamados'
-              || item.label == 'Inadimplência'
-              || item.label == 'Parceiros'
-              || item.label == 'Financeiro'
-              || item.label == 'Configurações'
-          ).map((item) => item.label === 'Configurações'
-            ? {
-                ...item,
-                children: item.children?.filter((child) => [
-                  '/painel/settings/terms',
-                  '/painel/settings/policy-template',
-                ].includes(child.route)),
-              }
-            : item
+            (item) => item.label !== 'Minhas Faturas',
           );
+        } else if (user?.role == 'Manager') {
+          this.permitedMenuItem = this.menuItem
+            .filter(
+              (item) =>
+                item.label == 'Home' ||
+                item.label == 'Clientes' ||
+                item.label == 'Chamados' ||
+                item.label == 'Inadimplência' ||
+                item.label == 'Parceiros' ||
+                item.label == 'Financeiro' ||
+                item.label == 'Configurações',
+            )
+            .map((item) =>
+              item.label === 'Configurações'
+                ? {
+                    ...item,
+                    children: item.children?.filter((child) =>
+                      [
+                        '/painel/settings/terms',
+                        '/painel/settings/policy-template',
+                      ].includes(child.route),
+                    ),
+                  }
+                : item,
+            );
         } else if (user?.role == 'Client') {
           this.permitedMenuItem = this.menuItem.filter(
             (item) =>
-              item.label == 'Home'
-              || item.label == 'Clientes'
-              || item.label == 'Inadimplência'
-              || item.label == 'Chamados'
+              item.label == 'Home' ||
+              item.label == 'Clientes' ||
+              item.label == 'Inadimplência' ||
+              item.label == 'Chamados' ||
+              item.label == 'Minhas Faturas',
           );
         }
 
@@ -201,7 +237,7 @@ export class LayoutPrivateComponent {
       }
     });
 
-    if(this.openFirstAcessModal) {
+    if (this.openFirstAcessModal) {
       this.openFirstAccessDialog();
     }
   }
@@ -218,7 +254,7 @@ export class LayoutPrivateComponent {
       maxWidth: '725px',
       maxHeight: '90%',
       hasBackdrop: true,
-      disableClose: true
+      disableClose: true,
     };
 
     this._dialog
