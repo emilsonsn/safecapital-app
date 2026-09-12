@@ -1,0 +1,84 @@
+<div class="finance-panel">
+  <div class="toolbar">
+    <label class="year-filter"
+      >Ano
+      <select [ngModel]="year" (ngModelChange)="onYearChange($event)">
+        <option [ngValue]="null">Todos</option>
+        @for (y of years; track y) {
+          <option [ngValue]="y">{{ y }}</option>
+        }
+      </select>
+    </label>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Vencimento</th>
+          <th>Fechamento</th>
+          <th>Valor</th>
+          <th>Status</th>
+          <th>Boleto</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading) {
+          <tr>
+            <td colspan="5">
+              <div class="table-loading">
+                <mat-spinner diameter="38"></mat-spinner>
+              </div>
+            </td>
+          </tr>
+        }
+        @if (!loading && !invoices.length) {
+          <tr>
+            <td colspan="5" class="empty">Nenhuma fatura encontrada.</td>
+          </tr>
+        }
+        @for (invoice of invoices; track invoice.id) {
+          <tr class="clickable" (click)="open(invoice)">
+            <td>{{ invoice.due_date | date: 'dd/MM/yyyy' : 'UTC' }}</td>
+            <td>{{ invoice.closing_date | date: 'dd/MM/yyyy' : 'UTC' }}</td>
+            <td>
+              <strong>{{ invoice.amount | currency: 'BRL' }}</strong>
+            </td>
+            <td>
+              <span class="invoice-status {{ invoice.status.toLowerCase() }}">{{
+                statusLabel(invoice.status)
+              }}</span>
+              @if (invoice.payment_proof_url) {
+                <i
+                  class="fa-solid fa-paperclip proof-icon"
+                  matTooltip="Comprovante enviado"
+                ></i>
+              }
+            </td>
+            <td>
+              @if (invoice.boleto_url) {
+                <a
+                  [href]="invoice.boleto_url"
+                  target="_blank"
+                  class="button secondary"
+                  (click)="$event.stopPropagation()"
+                  ><i class="fa-solid fa-arrow-up-right-from-square"></i> Ver e
+                  pagar</a
+                >
+              } @else {
+                —
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <mat-paginator
+    [length]="total"
+    [pageIndex]="page - 1"
+    [pageSize]="perPage"
+    [pageSizeOptions]="[15, 25, 50, 100]"
+    (page)="pageEvent($event)"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>

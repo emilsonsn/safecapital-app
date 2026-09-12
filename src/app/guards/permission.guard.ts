@@ -1,9 +1,5 @@
 import { inject } from '@angular/core';
-import {
-  CanActivateFn,
-  Router,
-  ActivatedRouteSnapshot,
-} from '@angular/router';
+import { CanActivateFn, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { UserRole } from '@models/user';
 import { SessionQuery } from '@store/session.query';
 import { SessionService } from '@store/session.service';
@@ -19,7 +15,13 @@ const ManagerPermissions = [
   'partners',
 ];
 
-const ClientPermissions = ['home', 'client', 'defaulter', 'solicitation'];
+const ClientPermissions = [
+  'home',
+  'client',
+  'defaulter',
+  'solicitation',
+  'my-invoices',
+];
 
 const permissions = {
   admin: AdminPermissions,
@@ -27,7 +29,9 @@ const permissions = {
   client: ClientPermissions,
 };
 
-export const permissionGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+export const permissionGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+) => {
   const router = inject(Router);
   const sessionService = inject(SessionService);
   const sessionQuery = inject(SessionQuery);
@@ -38,7 +42,7 @@ export const permissionGuard: CanActivateFn = (route: ActivatedRouteSnapshot) =>
     map((user) => {
       if (!sessionService.isAuthenticated()) router.navigate(['/login']);
       else {
-        if(!user) sessionService.getUserFromBack().subscribe();
+        if (!user) sessionService.getUserFromBack().subscribe();
         return true;
       }
 
@@ -58,6 +62,6 @@ export const permissionGuard: CanActivateFn = (route: ActivatedRouteSnapshot) =>
       else router.navigate(['/painel/login']);
 
       return of(false);
-    })
+    }),
   );
 };

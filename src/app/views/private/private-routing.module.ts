@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LayoutPrivateComponent } from "@shared/layouts/layout-private/layout-private.component";
+import { LayoutPrivateComponent } from '@shared/layouts/layout-private/layout-private.component';
 import { SessionService } from '../../store/session.service';
 import { permissionGuard } from '@app/guards/permission.guard';
 import { adminGuard } from '@app/guards/admin.guard';
@@ -13,84 +13,98 @@ const routes: Routes = [
     children: [
       {
         path: 'home',
-        loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+        loadChildren: () =>
+          import('./home/home.module').then((m) => m.HomeModule),
         canActivate: [permissionGuard],
         data: {
-          page: 'home'
-        }
+          page: 'home',
+        },
       },
       {
         path: 'users',
-        loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
+        loadChildren: () =>
+          import('./users/users.module').then((m) => m.UsersModule),
         canActivate: [permissionGuard],
         data: {
-          page: 'users'
-        }
+          page: 'users',
+        },
       },
       {
         path: 'partners',
-        loadChildren: () => import('./partners/partners.module').then(m => m.PartnersModule),
+        loadChildren: () =>
+          import('./partners/partners.module').then((m) => m.PartnersModule),
         canActivate: [permissionGuard],
         data: {
-          page: 'partners'
-        }
+          page: 'partners',
+        },
       },
       {
         path: 'client',
-        loadChildren: () => import('./client/client.module').then(m => m.ClientModule),
+        loadChildren: () =>
+          import('./client/client.module').then((m) => m.ClientModule),
         canActivate: [permissionGuard],
         data: {
-          page: 'client'
-        }
+          page: 'client',
+        },
       },
       {
         path: 'solicitation',
-        loadChildren: () => import('./solicitation/solicitation.module').then(m => m.SolicitationModule),
+        loadChildren: () =>
+          import('./solicitation/solicitation.module').then(
+            (m) => m.SolicitationModule,
+          ),
         canActivate: [permissionGuard],
         data: {
-          page: 'solicitation'
-        }
+          page: 'solicitation',
+        },
       },
       {
         path: 'defaulter',
-        loadChildren: () => import('./defaulter/defaulter.module').then(m => m.DefaulterModule),
+        loadChildren: () =>
+          import('./defaulter/defaulter.module').then((m) => m.DefaulterModule),
         canActivate: [permissionGuard],
         data: {
-          page: 'defaulter'
-        }
+          page: 'defaulter',
+        },
       },
       {
         path: 'settings',
-        loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
+        loadChildren: () =>
+          import('./settings/settings.module').then((m) => m.SettingsModule),
         canActivate: [permissionGuard],
         data: {
-          page: 'settings'
-        }
+          page: 'settings',
+        },
       },
       {
         path: 'finance',
-        loadChildren: () => import('./finance/finance.module').then(m => m.FinanceModule),
+        loadChildren: () =>
+          import('./finance/finance.module').then((m) => m.FinanceModule),
         canActivate: [financialGuard],
-        data: { page: 'finance' }
+        data: { page: 'finance' },
+      },
+      {
+        path: 'my-invoices',
+        loadChildren: () =>
+          import('./my-invoices/my-invoices.module').then(
+            (m) => m.MyInvoicesModule,
+          ),
+        canActivate: [permissionGuard],
+        data: { page: 'my-invoices' },
       },
       {
         path: '**',
         redirectTo: 'home',
-        canMatch: []
-      }
-    ]
-  }
+        canMatch: [],
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class PrivateRoutingModule {
-
-  constructor(
-    private readonly _sessionService: SessionService
-  ) {}
-
+  constructor(private readonly _sessionService: SessionService) {}
 }
-
