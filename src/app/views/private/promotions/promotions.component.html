@@ -1,0 +1,84 @@
+<div class="promotions-panel">
+  <div class="toolbar">
+    <span>{{ total }} promoção(ões)</span>
+    <button class="button primary" (click)="open()">
+      <i class="fa-solid fa-plus"></i> Nova promoção
+    </button>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="order-col">Ordem</th>
+          <th>Imagem</th>
+          <th>Título</th>
+          <th>Texto</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+        @if (loading) {
+          <tr>
+            <td colspan="6">
+              <div class="table-loading">
+                <mat-spinner diameter="38"></mat-spinner>
+              </div>
+            </td>
+          </tr>
+        }
+        @if (!loading && !promotions.length) {
+          <tr>
+            <td colspan="6" class="empty">Nenhuma promoção cadastrada.</td>
+          </tr>
+        }
+        @for (promotion of promotions; track promotion.id; let i = $index) {
+          <tr cdkDrag [cdkDragData]="promotion">
+            <td class="order-col">
+              <i
+                class="fa-solid fa-grip-vertical drag-handle"
+                cdkDragHandle
+              ></i>
+              <span class="order-label">{{ i + 1 }}º</span>
+            </td>
+            <td>
+              @if (promotion.image_url) {
+                <img [src]="promotion.image_url" class="thumb" />
+              } @else {
+                —
+              }
+            </td>
+            <td>{{ promotion.title || '—' }}</td>
+            <td class="text-cell">{{ promotion.text || '—' }}</td>
+            <td>
+              <span
+                class="badge"
+                [class.active]="promotion.active"
+                [class.inactive]="!promotion.active"
+                >{{ promotion.active ? 'Ativa' : 'Inativa' }}</span
+              >
+            </td>
+            <td class="actions">
+              <button
+                [matTooltip]="promotion.active ? 'Desativar' : 'Ativar'"
+                (click)="toggleActive(promotion)"
+              >
+                <i
+                  class="fa-solid"
+                  [class.fa-toggle-on]="promotion.active"
+                  [class.fa-toggle-off]="!promotion.active"
+                ></i>
+              </button>
+              <button matTooltip="Editar" (click)="open(promotion)">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button matTooltip="Remover" (click)="remove(promotion)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

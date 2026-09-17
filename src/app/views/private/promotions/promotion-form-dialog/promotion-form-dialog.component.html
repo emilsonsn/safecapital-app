@@ -1,0 +1,49 @@
+<div class="dialog-head">
+  <h2>{{ data.promotion ? 'Editar' : 'Nova' }} promoção</h2>
+</div>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <label>Título<input formControlName="title" maxlength="150" /></label>
+    <label
+      >Texto
+      <textarea rows="4" formControlName="text" maxlength="2000"></textarea>
+    </label>
+
+    <label class="check"
+      ><input type="checkbox" formControlName="active" /> Promoção ativa</label
+    >
+
+    <div class="image-field">
+      <span class="field-label">Imagem*</span>
+      <label class="image-picker">
+        <input
+          type="file"
+          accept=".jpg,.jpeg,.png,.webp"
+          hidden
+          (change)="onImageSelected($event)"
+        />
+        @if (imagePreview) {
+          <div class="preview">
+            <img [src]="imagePreview" />
+            <span class="overlay"
+              ><i class="fa-solid fa-camera"></i> Trocar imagem</span
+            >
+          </div>
+        } @else {
+          <div class="file-picker">
+            <i class="fa-solid fa-image"></i> Escolher imagem
+          </div>
+        }
+      </label>
+      <small>Obrigatória. JPG, PNG ou WEBP, até 5MB.</small>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="button cancel" [disabled]="loading" (click)="ref.close()">
+    Cancelar
+  </button>
+  <button class="button primary" [disabled]="loading" (click)="submit()">
+    {{ loading ? 'Salvando...' : 'Salvar' }}
+  </button>
+</mat-dialog-actions>

@@ -85,6 +85,11 @@ export class LayoutPrivateComponent {
       route: '/painel/my-invoices',
     },
     {
+      label: 'Promoções',
+      icon: 'fa-solid fa-bullhorn',
+      route: '/painel/promotions',
+    },
+    {
       label: 'Usuários',
       icon: 'fa-solid fa-users',
       route: '/painel/users',

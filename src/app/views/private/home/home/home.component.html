@@ -2,6 +2,39 @@
   <h5>Olá, seja bem vindo {{ user?.name }}!</h5>
 </div>
 
+@if ((user?.role === 'Client' || user?.role === 'Admin') && promotions.length) {
+  <div class="promotions-row">
+    @for (promotion of promotions; track promotion.id) {
+      <div class="promotion-card">
+        @if (promotion.image_url) {
+          <img
+            class="promotion-thumb"
+            [src]="promotion.image_url"
+            [alt]="promotion.title || 'Promoção'"
+          />
+          <div class="promotion-preview-overlay">
+            <img
+              class="promotion-preview-img"
+              [src]="promotion.image_url"
+              [alt]="promotion.title || 'Promoção'"
+            />
+          </div>
+        }
+        @if (promotion.title || promotion.text) {
+          <div class="promotion-body">
+            @if (promotion.title) {
+              <h6>{{ promotion.title }}</h6>
+            }
+            @if (promotion.text) {
+              <p>{{ promotion.text }}</p>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+}
+
 <!-- <div class="row mt-4">
   @for (item of itemsShopping(); track item) {
     <div class="col-lg-3 col-md-6">

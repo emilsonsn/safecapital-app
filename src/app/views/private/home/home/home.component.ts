@@ -10,6 +10,8 @@ import { SessionQuery } from '@store/session.query';
 import { User } from '@models/user';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { Promotion } from '@models/promotion';
+import { PromotionService } from '@services/promotion.service';
 
 @Component({
   selector: 'app-home',
@@ -18,13 +20,15 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class HomeComponent {
   protected user: User;
+  protected promotions: Promotion[] = [];
 
   constructor(
     private readonly _dashboardService: DashboardService,
     private readonly _headerService: HeaderService,
     private readonly _sessionQuery: SessionQuery,
     private readonly _dialog: MatDialog,
-    private readonly _toastr: ToastrService
+    private readonly _toastr: ToastrService,
+    private readonly _promotionService: PromotionService,
   ) {
     this._headerService.setTitle('Home');
     this._headerService.setSubTitle('');
@@ -70,6 +74,16 @@ export class HomeComponent {
 
     this._sessionQuery.user$.subscribe((user) => {
       this.user = user;
+      if (user?.role === 'Client' || user?.role === 'Admin') {
+        this.loadPromotions();
+      }
+    });
+  }
+
+  private loadPromotions(): void {
+    this._promotionService.listActive().subscribe({
+      next: ({ data }) => (this.promotions = data),
+      error: () => (this.promotions = []),
     });
   }
 
@@ -95,7 +109,7 @@ export class HomeComponent {
       title: formatCurrency(
         +this.dashboardCards().ordersByDay.toString(),
         'pt-BR',
-        'R$'
+        'R$',
       ),
       category: 'Compras',
       description: 'Total de compras do dia',
@@ -107,7 +121,7 @@ export class HomeComponent {
       title: formatCurrency(
         +this.dashboardCards().ordersByWeek.toString(),
         'pt-BR',
-        'R$'
+        'R$',
       ),
       category: 'Compras',
       description: 'Total de compras da semana',
@@ -119,7 +133,7 @@ export class HomeComponent {
       title: formatCurrency(
         +this.dashboardCards().ordersByMonth.toString(),
         'pt-BR',
-        'R$'
+        'R$',
       ),
       category: 'Compras',
       description: 'Total de compras do mês',
@@ -131,7 +145,7 @@ export class HomeComponent {
       title: formatCurrency(
         +this.dashboardCards().ordersByYear.toString(),
         'pt-BR',
-        'R$'
+        'R$',
       ),
       category: 'Compras',
       description: 'Total de compras do ano',

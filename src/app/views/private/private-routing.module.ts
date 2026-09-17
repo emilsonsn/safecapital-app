@@ -93,6 +93,14 @@ const routes: Routes = [
         data: { page: 'my-invoices' },
       },
       {
+        path: 'promotions',
+        loadChildren: () =>
+          import('./promotions/promotions.module').then(
+            (m) => m.PromotionsModule,
+          ),
+        canActivate: [adminGuard],
+      },
+      {
         path: '**',
         redirectTo: 'home',
         canMatch: [],

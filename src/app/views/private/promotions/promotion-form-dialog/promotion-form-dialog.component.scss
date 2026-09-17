@@ -1,0 +1,98 @@
+.dialog-head {
+  padding: 22px 24px 10px;
+}
+.dialog-head h2 {
+  margin: 0;
+  color: #172f42;
+  font-size: 1.2rem;
+}
+form {
+  display: grid;
+  gap: 14px;
+}
+label {
+  display: grid;
+  gap: 6px;
+  color: #344b5d;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+input,
+textarea {
+  width: 100%;
+  padding: 10px 11px;
+  border: 1px solid #ccd6dc;
+  border-radius: 7px;
+  background: #fff;
+  font: inherit;
+  font-weight: 400;
+}
+.check {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.check input {
+  width: auto;
+}
+.field-label {
+  color: #344b5d;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.image-field {
+  display: grid;
+  gap: 6px;
+}
+.file-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+  border: 1px dashed #c7d1d8;
+  border-radius: 8px;
+  color: #315d7b;
+  cursor: pointer;
+  font-weight: 600;
+}
+.file-picker:hover {
+  background: #f7f9fa;
+}
+.image-picker {
+  cursor: pointer;
+}
+.preview {
+  position: relative;
+  width: fit-content;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.preview img {
+  max-width: 100%;
+  max-height: 160px;
+  display: block;
+}
+.preview .overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(15, 23, 32, 0.55);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.preview:hover .overlay {
+  opacity: 1;
+}
+mat-dialog-actions {
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 24px 22px !important;
+}
